@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import emailjs from '@emailjs/browser';
 import { ArrowRight, CheckCircle, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useToast } from '@/components/ui/toast';
+import { cn } from '@/lib/utils';
 import { InteractiveHeroSection } from './interactive-hero-section';
 import { NavbarModernBlock } from './navbar-modern';
 import { PricingScrollSection } from './pricing-scroll-section';
 import { SplineSceneLazy } from '@/components/ui/splite';
+import { LazyPortfolioImage } from '@/components/ui/lazy-portfolio-image';
 import { Spotlight } from '@/components/ui/spotlight';
 import { GsapScrollProvider } from '@/components/animations/gsap-scroll-provider';
 import { MarqueeTicker } from '@/components/animations/marquee-ticker';
@@ -269,34 +272,76 @@ function AboutSection() {
 }
 
 function SplineSection() {
+  const { toast } = useToast();
   const [fields, setFields] = useState({ name: '', email: '', website: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
+  useEffect(() => {
+    if (status !== 'success' && status !== 'error') return;
+    const timer = window.setTimeout(() => setStatus('idle'), 4000);
+    return () => window.clearTimeout(timer);
+  }, [status]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (status === 'success' || status === 'error') setStatus('idle');
     setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fields.name || !fields.email || !fields.message) return;
+    if (!fields.name || !fields.email || !fields.message) {
+      setStatus('error');
+      toast({
+        type: 'error',
+        title: 'Missing fields',
+        message: 'Please fill in your name, email, and message.',
+      });
+      return;
+    }
+
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      setStatus('error');
+      toast({
+        type: 'error',
+        title: 'Email not configured',
+        message: 'Please try again later or email us at info@bellops.in.',
+      });
+      return;
+    }
+
     setStatus('sending');
     try {
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        serviceId,
+        templateId,
         {
           from_name: fields.name,
           from_email: fields.email,
+          reply_to: fields.email,
           website: fields.website || '—',
           message: fields.message,
           to_email: 'info@bellops.in',
         },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+        { publicKey },
       );
       setStatus('success');
       setFields({ name: '', email: '', website: '', message: '' });
+      toast({
+        type: 'success',
+        title: 'Message sent!',
+        message: "We'll get back to you within 24 hours.",
+      });
     } catch {
       setStatus('error');
+      toast({
+        type: 'error',
+        title: 'Failed to send',
+        message: 'Something went wrong. Please try again or email info@bellops.in.',
+      });
     }
   };
 
@@ -369,30 +414,32 @@ function SplineSection() {
               />
             </div>
 
-            {status === 'success' && (
-              <div className="flex items-center gap-2 text-green-400 text-sm bg-green-400/10 border border-green-400/20 rounded-xl px-4 py-3">
-                <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                Message sent! We&apos;ll get back to you within 24 hours.
-              </div>
-            )}
-
-            {status === 'error' && (
-              <div className="flex items-center gap-2 text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                Something went wrong. Please try again or email us directly.
-              </div>
-            )}
-
             <div className="form-field">
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="group relative w-full flex items-center justify-center gap-2 bg-white text-black font-semibold py-3.5 rounded-xl text-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_28px_rgba(255,255,255,0.18)] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+                className={cn(
+                  'group relative w-full flex items-center justify-center gap-2 font-semibold py-3.5 rounded-xl text-sm overflow-hidden transition-all duration-300 active:scale-[0.98] disabled:cursor-not-allowed',
+                  status === 'idle' && 'bg-white text-black hover:shadow-[0_0_28px_rgba(255,255,255,0.18)]',
+                  status === 'sending' && 'bg-white/80 text-black opacity-80',
+                  status === 'success' && 'bg-green-500 text-white shadow-[0_0_24px_rgba(34,197,94,0.35)]',
+                  status === 'error' && 'bg-red-500/90 text-white shadow-[0_0_24px_rgba(239,68,68,0.3)]',
+                )}
               >
                 {status === 'sending' ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span>Sending…</span>
+                  </>
+                ) : status === 'success' ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Sent!</span>
+                  </>
+                ) : status === 'error' ? (
+                  <>
+                    <AlertCircle className="w-4 h-4" />
+                    <span>Try Again</span>
                   </>
                 ) : (
                   <>
@@ -400,7 +447,9 @@ function SplineSection() {
                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </>
                 )}
-                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-black/8 to-transparent transition-transform duration-500" />
+                {status === 'idle' && (
+                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-black/8 to-transparent transition-transform duration-500" />
+                )}
               </button>
               <p className="text-white/20 text-[10px] text-center mt-3">We reply within 24 hours. No pitch — just a real conversation.</p>
             </div>
@@ -412,6 +461,7 @@ function SplineSection() {
           <SplineSceneLazy
             scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
             className="w-full h-full"
+            unmountWhenHidden
           />
         </div>
       </div>
@@ -492,11 +542,10 @@ function WorkSection() {
               className="work-card hud-card group relative bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.06] hover:border-white/20 transition-colors duration-300"
             >
               <div className="relative h-40 overflow-hidden bg-white/5">
-                <img
-                  src={`https://api.microlink.io/?url=${site.url}&screenshot=true&meta=false&embed=screenshot.url`}
+                <LazyPortfolioImage
+                  url={site.url}
                   alt={site.name}
                   className="w-full h-full object-cover object-top opacity-70 group-hover:opacity-90 group-hover:scale-[1.03] transition-all duration-500"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <span className="absolute top-3 left-3 text-[10px] text-white/30 font-mono">

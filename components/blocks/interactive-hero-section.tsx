@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
+import { SplineSceneLazy } from '@/components/ui/splite';
 import { ExpandButton } from '@/components/ui/expand-button';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
@@ -16,9 +16,11 @@ export function InteractiveHeroSection() {
         className="absolute inset-0 z-0"
         style={{ transform: 'translateY(-12%) scale(1.12)', transformOrigin: 'top center' }}
       >
-        <InteractiveRobotSpline
+        <SplineSceneLazy
           scene={ROBOT_SCENE_URL}
           className="absolute inset-0 w-full h-full"
+          unmountWhenHidden
+          loadDelay={process.env.NODE_ENV === 'development' ? 1500 : 0}
         />
       </div>
 

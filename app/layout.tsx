@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Exo_2, Orbitron } from "next/font/google";
+import { AppProviders } from "@/components/providers/app-providers";
 import "./globals.css";
 
 const exo2 = Exo_2({
@@ -31,7 +32,7 @@ export default function RootLayout({
       className={`${exo2.variable} ${orbitron.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        {children}
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

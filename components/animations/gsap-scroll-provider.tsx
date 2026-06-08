@@ -22,19 +22,48 @@ export function GsapScrollProvider() {
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const cleanups: Array<() => void> = [];
+
       // ── CURSOR GLOW ─────────────────────────────────────────
       const glowEl = document.getElementById('cursor-glow');
       if (glowEl) {
         gsap.set(glowEl, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
         const xTo = gsap.quickTo(glowEl, 'x', { duration: 0.9, ease: 'power3.out' });
         const yTo = gsap.quickTo(glowEl, 'y', { duration: 0.9, ease: 'power3.out' });
-        window.addEventListener('mousemove', (e) => {
-          gsap.to(glowEl, { autoAlpha: 1, duration: 0.4, overwrite: 'auto' });
-          xTo(e.clientX);
-          yTo(e.clientY);
-        });
-        document.addEventListener('mouseleave', () => {
+
+        let glowVisible = false;
+        let rafId = 0;
+        let lastX = 0;
+        let lastY = 0;
+
+        const onMouseMove = (e: MouseEvent) => {
+          lastX = e.clientX;
+          lastY = e.clientY;
+          if (rafId) return;
+
+          rafId = requestAnimationFrame(() => {
+            rafId = 0;
+            if (!glowVisible) {
+              glowVisible = true;
+              gsap.to(glowEl, { autoAlpha: 1, duration: 0.4, overwrite: 'auto' });
+            }
+            xTo(lastX);
+            yTo(lastY);
+          });
+        };
+
+        const onMouseLeave = () => {
+          glowVisible = false;
           gsap.to(glowEl, { autoAlpha: 0, duration: 0.6, overwrite: 'auto' });
+        };
+
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+        document.addEventListener('mouseleave', onMouseLeave);
+
+        cleanups.push(() => {
+          if (rafId) cancelAnimationFrame(rafId);
+          window.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseleave', onMouseLeave);
         });
       }
 
@@ -91,7 +120,6 @@ export function GsapScrollProvider() {
           ...proofTrigger(document.getElementById('proof-stats'), 'top 88%'),
         });
 
-        // 30x counter
         const ctr30 = document.getElementById('stat-counter-30x');
         if (ctr30) {
           const obj = { val: 0 };
@@ -135,28 +163,46 @@ export function GsapScrollProvider() {
           scrollTrigger: { trigger: workGrid, start: 'top 88%', once: true },
         });
 
-        // Parallax-float hover on work cards
         if (workGrid) {
           (workGrid as HTMLElement).style.perspective = '1000px';
         }
+
         workEl.querySelectorAll<HTMLElement>('.work-card').forEach((card) => {
           const xTo = gsap.quickTo(card, 'rotateY', { duration: 0.5, ease: 'power3.out' });
           const yTo = gsap.quickTo(card, 'rotateX', { duration: 0.5, ease: 'power3.out' });
           const scaleTo = gsap.quickTo(card, 'scale', { duration: 0.4, ease: 'power2.out' });
 
-          card.addEventListener('mousemove', (e) => {
+          let cardRafId = 0;
+          let cardNx = 0;
+          let cardNy = 0;
+
+          const onCardMove = (e: MouseEvent) => {
             const rect = card.getBoundingClientRect();
-            const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-            const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-            xTo(nx * 6);
-            yTo(-ny * 4);
-            scaleTo(1.02);
-          });
-          card.addEventListener('mouseleave', () => {
+            cardNx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            cardNy = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            if (cardRafId) return;
+
+            cardRafId = requestAnimationFrame(() => {
+              cardRafId = 0;
+              xTo(cardNx * 6);
+              yTo(-cardNy * 4);
+              scaleTo(1.02);
+            });
+          };
+
+          const onCardLeave = () => {
             xTo(0); yTo(0); scaleTo(1);
-          });
+          };
+
+          card.addEventListener('mousemove', onCardMove, { passive: true });
+          card.addEventListener('mouseleave', onCardLeave);
           card.style.transformStyle = 'preserve-3d';
-          card.style.willChange = 'transform';
+
+          cleanups.push(() => {
+            if (cardRafId) cancelAnimationFrame(cardRafId);
+            card.removeEventListener('mousemove', onCardMove);
+            card.removeEventListener('mouseleave', onCardLeave);
+          });
         });
       }
 
@@ -192,7 +238,6 @@ export function GsapScrollProvider() {
           autoAlpha: 0, y: 45, duration: 0.85, ...defaults, ...aboutTrigger,
         });
 
-        // Stat counters
         aboutEl.querySelectorAll<HTMLElement>('.stat-number').forEach((el) => {
           const count = parseFloat(el.dataset.count ?? '0');
           const suffix = el.dataset.suffix ?? '';
@@ -246,6 +291,10 @@ export function GsapScrollProvider() {
           scrollTrigger: { trigger: footerEl, start: 'top 95%', once: true },
         });
       }
+
+      return () => {
+        cleanups.forEach((fn) => fn());
+      };
     });
 
     return () => mm.revert();
@@ -259,14 +308,13 @@ export function GsapScrollProvider() {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: 520,
-        height: 520,
+        width: 400,
+        height: 400,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 68%)',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 68%)',
         pointerEvents: 'none',
         zIndex: 9998,
         opacity: 0,
-        willChange: 'transform',
         mixBlendMode: 'screen',
       }}
     />

@@ -12,23 +12,42 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   return (
     <Suspense
       fallback={
-        <div className="w-full h-full flex items-center justify-center">
-          <span className="loader"></span>
+        <div className="w-full h-full flex items-center justify-center bg-black">
+          <span className="loader" />
         </div>
       }
     >
-      <Spline
-        scene={scene}
-        className={className}
-      />
+      <Spline scene={scene} className={className} />
     </Suspense>
   )
 }
 
-/** Loads Spline only when the section enters the viewport (avoids duplicate runtime init on page load). */
-export function SplineSceneLazy({ scene, className }: SplineSceneProps) {
+interface SplineSceneLazyProps extends SplineSceneProps {
+  /** Unmount WebGL when scrolled out of view to free GPU memory */
+  unmountWhenHidden?: boolean
+  /** Delay before first load (ms) — spreads startup work in dev */
+  loadDelay?: number
+}
+
+/**
+ * Loads Spline only when the section is near the viewport.
+ * Unmounts when scrolled away so only one WebGL context runs at a time.
+ */
+export function SplineSceneLazy({
+  scene,
+  className,
+  unmountWhenHidden = true,
+  loadDelay = 0,
+}: SplineSceneLazyProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const [ready, setReady] = useState(loadDelay === 0)
+
+  useEffect(() => {
+    if (loadDelay <= 0) return
+    const timer = window.setTimeout(() => setReady(true), loadDelay)
+    return () => window.clearTimeout(timer)
+  }, [loadDelay])
 
   useEffect(() => {
     const el = ref.current
@@ -38,19 +57,22 @@ export function SplineSceneLazy({ scene, className }: SplineSceneProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true)
-          observer.disconnect()
+        } else if (unmountWhenHidden) {
+          setVisible(false)
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '120px', threshold: 0.05 }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [unmountWhenHidden])
+
+  const shouldRender = ready && visible
 
   return (
     <div ref={ref} className={className ?? 'w-full h-full'}>
-      {visible ? (
+      {shouldRender ? (
         <SplineScene scene={scene} className="w-full h-full" />
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-black">
