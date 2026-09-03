@@ -12,7 +12,7 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   return (
     <Suspense
       fallback={
-        <div className="w-full h-full flex items-center justify-center bg-black">
+        <div className="w-full h-full flex items-center justify-center bg-paper">
           <span className="loader" />
         </div>
       }
@@ -75,7 +75,7 @@ export function SplineSceneLazy({
       {shouldRender ? (
         <SplineScene scene={scene} className="w-full h-full" />
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-black">
+        <div className="w-full h-full flex items-center justify-center bg-paper">
           <span className="loader" />
         </div>
       )}

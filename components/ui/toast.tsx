@@ -88,17 +88,17 @@ function ToastCard({
     <div
       role="status"
       className={cn(
-        'pointer-events-auto flex items-start gap-3 rounded-xl border px-4 py-3 shadow-2xl backdrop-blur-md transition-all duration-300',
+        'pointer-events-auto flex items-start gap-3 rounded-lg border bg-white px-4 py-3 shadow-[0_12px_32px_-18px_rgba(11,26,43,0.35)] transition-all duration-300',
         visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
         isSuccess
-          ? 'border-green-400/25 bg-green-950/90 text-green-50'
-          : 'border-red-400/25 bg-red-950/90 text-red-50'
+          ? 'border-green-600/25 text-green-900'
+          : 'border-red-600/25 text-red-900'
       )}
     >
       {isSuccess ? (
-        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
       ) : (
-        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
       )}
 
       <div className="min-w-0 flex-1">

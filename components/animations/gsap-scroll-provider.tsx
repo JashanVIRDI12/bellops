@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { onEnterOnce } from '@/lib/reveal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,59 +19,25 @@ function splitWords(el: Element) {
 }
 
 export function GsapScrollProvider() {
+  // Lenis and the GSAP ticker are wired together in SmoothScrollProvider,
+  // which owns the instance. This component only declares the animations.
   useEffect(() => {
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const cleanups: Array<() => void> = [];
+      const watch = (el: Element | null, play: () => void, rootMargin?: string) => {
+        if (!el) return;
+        cleanups.push(onEnterOnce(el, play, rootMargin));
+      };
 
-      // ── CURSOR GLOW ─────────────────────────────────────────
-      const glowEl = document.getElementById('cursor-glow');
-      if (glowEl) {
-        gsap.set(glowEl, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
-        const xTo = gsap.quickTo(glowEl, 'x', { duration: 0.9, ease: 'power3.out' });
-        const yTo = gsap.quickTo(glowEl, 'y', { duration: 0.9, ease: 'power3.out' });
-
-        let glowVisible = false;
-        let rafId = 0;
-        let lastX = 0;
-        let lastY = 0;
-
-        const onMouseMove = (e: MouseEvent) => {
-          lastX = e.clientX;
-          lastY = e.clientY;
-          if (rafId) return;
-
-          rafId = requestAnimationFrame(() => {
-            rafId = 0;
-            if (!glowVisible) {
-              glowVisible = true;
-              gsap.to(glowEl, { autoAlpha: 1, duration: 0.4, overwrite: 'auto' });
-            }
-            xTo(lastX);
-            yTo(lastY);
-          });
-        };
-
-        const onMouseLeave = () => {
-          glowVisible = false;
-          gsap.to(glowEl, { autoAlpha: 0, duration: 0.6, overwrite: 'auto' });
-        };
-
-        window.addEventListener('mousemove', onMouseMove, { passive: true });
-        document.addEventListener('mouseleave', onMouseLeave);
-
-        cleanups.push(() => {
-          if (rafId) cancelAnimationFrame(rafId);
-          window.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseleave', onMouseLeave);
-        });
-      }
-
-      // ── HERO ENTRANCE ────────────────────────────────────────
       const defaults = { ease: 'power3.out' };
 
-      gsap.from('#hero-tagline', { autoAlpha: 0, y: -20, duration: 0.7, delay: 0.5, ...defaults });
+      // ── HERO ENTRANCE ────────────────────────────────────────
+      const heroTagline = document.getElementById('hero-tagline');
+      if (heroTagline) {
+        gsap.from(heroTagline, { autoAlpha: 0, y: -20, duration: 0.7, delay: 0.5, ...defaults });
+      }
 
       const heroH1 = document.getElementById('hero-headline');
       if (heroH1) {
@@ -81,216 +48,172 @@ export function GsapScrollProvider() {
         });
       }
 
-      gsap.from('#hero-services', { autoAlpha: 0, y: 18, duration: 0.6, delay: 1.15, ...defaults });
-      gsap.from('#hero-cta', { autoAlpha: 0, scale: 0.88, duration: 0.5, delay: 1.45, ease: 'back.out(1.7)' });
-      gsap.from('#hero-scroll', { autoAlpha: 0, y: 12, duration: 0.5, delay: 2.0, ...defaults });
+      const heroServices = document.getElementById('hero-services');
+      if (heroServices) {
+        gsap.from(heroServices, { autoAlpha: 0, y: 18, duration: 0.6, delay: 1.15, ...defaults });
+      }
 
-      // ── CASE STUDIES ─────────────────────────────────────────
-      const proofEl = document.getElementById('case-studies');
-      if (proofEl) {
-        const proofTrigger = (el: Element | null, start = 'top 80%') => ({
-          scrollTrigger: { trigger: el ?? proofEl, start, once: true },
-        });
+      const heroCta = document.getElementById('hero-cta');
+      if (heroCta) {
+        gsap.from(heroCta, { autoAlpha: 0, scale: 0.88, duration: 0.5, delay: 1.45, ease: 'back.out(1.7)' });
+      }
 
-        gsap.from(proofEl.querySelector('.anim-eyebrow'), {
-          autoAlpha: 0, y: 20, duration: 0.5, ...defaults, ...proofTrigger(proofEl, 'top 82%'),
-        });
+      const heroScroll = document.getElementById('hero-scroll');
+      if (heroScroll) {
+        gsap.from(heroScroll, { autoAlpha: 0, y: 12, duration: 0.5, delay: 2.0, ...defaults });
+      }
 
-        const proofH2 = proofEl.querySelector('h2');
-        if (proofH2) {
-          splitWords(proofH2);
-          gsap.from(proofEl.querySelectorAll('.gsap-word'), {
-            yPercent: 105, duration: 0.75, stagger: 0.055, ...defaults,
-            ...proofTrigger(proofH2, 'top 82%'),
+      // ── GENERIC SECTION REVEAL ───────────────────────────────
+      // Any section marked .reveal-section gets: eyebrow fade, split-word h2
+      // reveal (via .split-h2), and a staggered fade for .reveal-stagger.
+      document.querySelectorAll<HTMLElement>('.reveal-section').forEach((section) => {
+        const eyebrow = section.querySelector('.anim-eyebrow');
+        const h2 = section.querySelector('h2.split-h2');
+        if (h2) splitWords(h2);
+
+        watch(section, () => {
+          const tl = gsap.timeline({ defaults });
+          if (eyebrow) tl.from(eyebrow, { autoAlpha: 0, y: 20, duration: 0.5 }, 0);
+          if (h2) {
+            tl.from(h2.querySelectorAll('.gsap-word'), {
+              yPercent: 105, duration: 0.75, stagger: 0.055,
+            }, 0.08);
+          }
+        }, '0px 0px -18% 0px');
+
+        const staggerGroup = section.querySelector('.reveal-stagger');
+        watch(staggerGroup, () => {
+          gsap.from(staggerGroup!.children, {
+            autoAlpha: 0, y: 36, duration: 0.6, stagger: 0.1, ...defaults,
           });
-        }
+        }, '0px 0px -12% 0px');
+      });
 
-        gsap.from(proofEl.querySelectorAll('.anim-tag'), {
-          autoAlpha: 0, y: 14, x: -10, stagger: 0.07, duration: 0.45, ...defaults,
-          ...proofTrigger(proofEl, 'top 78%'),
-        });
+      // ── STAT COUNTERS (any section) ──────────────────────────
+      document.querySelectorAll<HTMLElement>('.stat-number[data-count]').forEach((el) => {
+        const count = parseFloat(el.dataset.count ?? '0');
+        const suffix = el.dataset.suffix ?? '';
+        if (isNaN(count)) return;
 
-        gsap.from('#proof-story', {
-          autoAlpha: 0, x: -50, duration: 0.85, ...defaults,
-          ...proofTrigger(document.getElementById('proof-story'), 'top 88%'),
-        });
-
-        gsap.from('#proof-stats', {
-          autoAlpha: 0, x: 50, duration: 0.85, ...defaults,
-          ...proofTrigger(document.getElementById('proof-stats'), 'top 88%'),
-        });
-
-        const ctr30 = document.getElementById('stat-counter-30x');
-        if (ctr30) {
+        watch(el, () => {
           const obj = { val: 0 };
-          ScrollTrigger.create({
-            trigger: ctr30, start: 'top 88%', once: true,
-            onEnter: () =>
-              gsap.to(obj, {
-                val: 30, duration: 2.8, ease: 'power2.out',
-                onUpdate: () => { ctr30.textContent = Math.ceil(obj.val) + 'x'; },
-              }),
+          gsap.to(obj, {
+            val: count, duration: 2, ease: 'power2.out',
+            onUpdate: () => { el.textContent = Math.ceil(obj.val) + suffix; },
           });
-        }
+        }, '0px 0px -8% 0px');
+      });
 
-        gsap.from(proofEl.querySelectorAll('.anim-proof-bottom'), {
-          autoAlpha: 0, y: 40, duration: 0.65, stagger: 0.15, ...defaults,
-          ...proofTrigger(proofEl.querySelector('.proof-bottom-grid'), 'top 90%'),
-        });
+      // ── FRAMEWORK: the four steps land one after another ──────
+      // Each card arrives tilted and low, then its contents cascade: rule
+      // draws, icon pops, step number slides in, thumbnail settles out of an
+      // over-scale, copy rises. Reads as four things being built, in order.
+      const frameworkGrid = document.querySelector<HTMLElement>('.framework-grid');
+      if (frameworkGrid) {
+        const cards = gsap.utils.toArray<HTMLElement>('.framework-card', frameworkGrid);
+
+        gsap.set(frameworkGrid, { perspective: 1100 });
+        gsap.set(cards, { autoAlpha: 0, y: 64, rotateX: 12, scale: 0.94, transformOrigin: '50% 0%' });
+        gsap.set('.framework-rule', { scaleX: 0 });
+        gsap.set('.framework-icon', { autoAlpha: 0, scale: 0.5, rotate: -25 });
+        gsap.set('.framework-step', { autoAlpha: 0, x: 18 });
+        gsap.set('.framework-thumb', { scale: 1.45 });
+        gsap.set('.framework-copy', { autoAlpha: 0, y: 14 });
+
+        watch(frameworkGrid, () => {
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+          cards.forEach((card, i) => {
+            const at = i * 0.13;
+            tl.to(card, { autoAlpha: 1, y: 0, rotateX: 0, scale: 1, duration: 0.85 }, at)
+              .to(card.querySelector('.framework-rule'), { scaleX: 1, duration: 0.7, ease: 'power2.inOut' }, at + 0.12)
+              .to(card.querySelector('.framework-icon'), { autoAlpha: 1, scale: 1, rotate: 0, duration: 0.55, ease: 'back.out(2)' }, at + 0.2)
+              .to(card.querySelector('.framework-step'), { autoAlpha: 1, x: 0, duration: 0.5 }, at + 0.26)
+              .to(card.querySelector('.framework-thumb'), { scale: 1.05, duration: 1.15, ease: 'power2.out' }, at + 0.18)
+              .to(card.querySelectorAll('.framework-copy'), { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.07 }, at + 0.3);
+          });
+        }, '0px 0px -14% 0px');
       }
 
-      // ── WORK SECTION ─────────────────────────────────────────
-      const workEl = document.getElementById('work');
-      if (workEl) {
-        const workH2 = workEl.querySelector('h2');
-        if (workH2) {
-          splitWords(workH2);
-          gsap.from(workEl.querySelectorAll('.gsap-word'), {
-            yPercent: 105, duration: 0.75, stagger: 0.06, ...defaults,
-            scrollTrigger: { trigger: workEl, start: 'top 80%', once: true },
-          });
-        }
-
-        gsap.from(workEl.querySelector('.anim-eyebrow'), {
-          autoAlpha: 0, y: 20, duration: 0.5, ...defaults,
-          scrollTrigger: { trigger: workEl, start: 'top 82%', once: true },
-        });
-
-        const workGrid = workEl.querySelector('.work-grid');
-        gsap.from(workEl.querySelectorAll('.work-card'), {
-          autoAlpha: 0, y: 60, duration: 0.7,
-          stagger: { amount: 0.55, from: 'start' }, ...defaults,
-          scrollTrigger: { trigger: workGrid, start: 'top 88%', once: true },
-        });
-
-        if (workGrid) {
-          (workGrid as HTMLElement).style.perspective = '1000px';
-        }
-
-        workEl.querySelectorAll<HTMLElement>('.work-card').forEach((card) => {
-          const xTo = gsap.quickTo(card, 'rotateY', { duration: 0.5, ease: 'power3.out' });
-          const yTo = gsap.quickTo(card, 'rotateX', { duration: 0.5, ease: 'power3.out' });
-          const scaleTo = gsap.quickTo(card, 'scale', { duration: 0.4, ease: 'power2.out' });
-
-          let cardRafId = 0;
-          let cardNx = 0;
-          let cardNy = 0;
-
-          const onCardMove = (e: MouseEvent) => {
-            const rect = card.getBoundingClientRect();
-            cardNx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-            cardNy = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-            if (cardRafId) return;
-
-            cardRafId = requestAnimationFrame(() => {
-              cardRafId = 0;
-              xTo(cardNx * 6);
-              yTo(-cardNy * 4);
-              scaleTo(1.02);
-            });
-          };
-
-          const onCardLeave = () => {
-            xTo(0); yTo(0); scaleTo(1);
-          };
-
-          card.addEventListener('mousemove', onCardMove, { passive: true });
-          card.addEventListener('mouseleave', onCardLeave);
-          card.style.transformStyle = 'preserve-3d';
-
-          cleanups.push(() => {
-            if (cardRafId) cancelAnimationFrame(cardRafId);
-            card.removeEventListener('mousemove', onCardMove);
-            card.removeEventListener('mouseleave', onCardLeave);
-          });
-        });
-      }
-
-      // ── AUDIT CTA ────────────────────────────────────────────
-      const auditEl = document.getElementById('free-audit');
-      if (auditEl) {
-        const auditTrigger = { scrollTrigger: { trigger: auditEl, start: 'top 78%', once: true } };
-        gsap.from('#audit-left', { autoAlpha: 0, x: -60, duration: 0.85, ...defaults, ...auditTrigger });
-        gsap.from('#audit-right', { autoAlpha: 0, x: 60, duration: 0.85, delay: 0.1, ...defaults, ...auditTrigger });
-        gsap.from(auditEl.querySelectorAll('.audit-list-item'), {
-          autoAlpha: 0, x: 22, duration: 0.4, stagger: 0.1, ...defaults,
-          scrollTrigger: { trigger: document.getElementById('audit-right'), start: 'top 86%', once: true },
-        });
-      }
-
-      // ── ABOUT SECTION ────────────────────────────────────────
+      // ── ABOUT ────────────────────────────────────────────────
+      // The narrative card wipes open from the top while the KPI tiles slide
+      // in from the right, so the eye reads the story first, numbers second.
       const aboutEl = document.getElementById('about');
       if (aboutEl) {
-        const aboutTrigger = { scrollTrigger: { trigger: aboutEl, start: 'top 80%', once: true } };
-        gsap.from(aboutEl.querySelector('.anim-eyebrow'), {
-          autoAlpha: 0, y: 20, duration: 0.5, ...defaults, ...aboutTrigger,
-        });
-
+        const badge = aboutEl.querySelector('.about-badge');
         const aboutH2 = aboutEl.querySelector('h2');
-        if (aboutH2) {
-          splitWords(aboutH2);
-          gsap.from(aboutEl.querySelectorAll('.gsap-word'), {
-            yPercent: 105, duration: 0.75, stagger: 0.06, ...defaults, ...aboutTrigger,
+        if (aboutH2) splitWords(aboutH2);
+
+        const mainCard = aboutEl.querySelector('#about-main-card');
+        const copy = aboutEl.querySelectorAll('#about-main-card p');
+        const avatars = aboutEl.querySelectorAll('.about-avatars > *');
+        const tiles = aboutEl.querySelectorAll('.stat-card');
+
+        if (badge) gsap.set(badge, { autoAlpha: 0, y: 16 });
+        if (mainCard) {
+          gsap.set(mainCard, {
+            autoAlpha: 0, y: 40,
+            clipPath: 'inset(0% 0% 100% 0%)',
           });
         }
+        gsap.set(copy, { autoAlpha: 0, y: 16 });
+        gsap.set(avatars, { autoAlpha: 0, scale: 0.4 });
+        gsap.set(tiles, { autoAlpha: 0, x: 46, scale: 0.96 });
 
-        gsap.from('#about-main-card', {
-          autoAlpha: 0, y: 45, duration: 0.85, ...defaults, ...aboutTrigger,
-        });
+        watch(aboutEl, () => {
+          const tl = gsap.timeline({ defaults });
 
-        aboutEl.querySelectorAll<HTMLElement>('.stat-number').forEach((el) => {
-          const count = parseFloat(el.dataset.count ?? '0');
-          const suffix = el.dataset.suffix ?? '';
-          if (isNaN(count)) return;
-          const obj = { val: 0 };
-          ScrollTrigger.create({
-            trigger: el, start: 'top 90%', once: true,
-            onEnter: () =>
-              gsap.to(obj, {
-                val: count, duration: 2, ease: 'power2.out',
-                onUpdate: () => { el.textContent = Math.ceil(obj.val) + suffix; },
-              }),
-          });
-        });
-
-        gsap.from(aboutEl.querySelectorAll('.stat-card'), {
-          autoAlpha: 0, y: 44, scale: 0.94, duration: 0.65,
-          stagger: 0.12, ease: 'power3.out',
-          scrollTrigger: { trigger: aboutEl, start: 'top 78%', once: true },
-        });
+          if (badge) tl.to(badge, { autoAlpha: 1, y: 0, duration: 0.5 }, 0);
+          if (aboutH2) {
+            tl.from(aboutH2.querySelectorAll('.gsap-word'), {
+              yPercent: 105, duration: 0.75, stagger: 0.06,
+            }, 0.1);
+          }
+          if (mainCard) {
+            tl.to(mainCard, {
+              autoAlpha: 1, y: 0,
+              clipPath: 'inset(0% 0% 0% 0%)',
+              duration: 0.95, ease: 'power4.out',
+            }, 0.25);
+          }
+          tl.to(copy, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.09 }, 0.55)
+            .to(avatars, { autoAlpha: 1, scale: 1, duration: 0.45, stagger: 0.08, ease: 'back.out(2.4)' }, 0.9)
+            .to(tiles, { autoAlpha: 1, x: 0, scale: 1, duration: 0.7, stagger: 0.12 }, 0.45);
+        }, '0px 0px -16% 0px');
       }
 
       // ── CONTACT SECTION ──────────────────────────────────────
       const contactEl = document.getElementById('contact');
       if (contactEl) {
         const contactH2 = contactEl.querySelector('h2');
-        if (contactH2) {
-          splitWords(contactH2);
-          gsap.from(contactEl.querySelectorAll('.gsap-word'), {
-            yPercent: 105, duration: 0.75, stagger: 0.05, ...defaults,
-            scrollTrigger: { trigger: contactEl, start: 'top 78%', once: true },
-          });
-        }
+        if (contactH2) splitWords(contactH2);
+        const contactEyebrow = contactEl.querySelector('.anim-eyebrow');
+        const fields = contactEl.querySelectorAll('.form-field');
 
-        gsap.from(contactEl.querySelector('.anim-eyebrow'), {
-          autoAlpha: 0, y: 18, duration: 0.5, ...defaults,
-          scrollTrigger: { trigger: contactEl, start: 'top 80%', once: true },
-        });
-
-        gsap.from(contactEl.querySelectorAll('.form-field'), {
-          autoAlpha: 0, y: 28, duration: 0.5, stagger: 0.08, ...defaults,
-          scrollTrigger: { trigger: contactEl.querySelector('form'), start: 'top 88%', once: true },
-        });
+        watch(contactEl, () => {
+          const tl = gsap.timeline({ defaults });
+          if (contactEyebrow) tl.from(contactEyebrow, { autoAlpha: 0, y: 18, duration: 0.5 }, 0);
+          if (contactH2) {
+            tl.from(contactH2.querySelectorAll('.gsap-word'), {
+              yPercent: 105, duration: 0.75, stagger: 0.05,
+            }, 0.08);
+          }
+          if (fields.length) {
+            tl.from(fields, { autoAlpha: 0, y: 28, duration: 0.5, stagger: 0.08 }, 0.3);
+          }
+        }, '0px 0px -14% 0px');
       }
 
       // ── FOOTER ───────────────────────────────────────────────
-      const footerEl = document.querySelector('footer');
-      if (footerEl) {
-        gsap.from(footerEl.children, {
+      // Scoped to .footer-reveal on purpose: the footer's other child is the
+      // gradient band, which is position:fixed. Transforming it would capture
+      // that fixed positioning and drag the glow out of the viewport.
+      const footerContent = document.querySelector<HTMLElement>('footer .footer-reveal');
+      watch(footerContent, () => {
+        gsap.from(footerContent!.children, {
           autoAlpha: 0, y: 22, duration: 0.6, stagger: 0.1, ...defaults,
-          scrollTrigger: { trigger: footerEl, start: 'top 95%', once: true },
         });
-      }
+      }, '0px');
 
       return () => {
         cleanups.forEach((fn) => fn());
@@ -300,23 +223,5 @@ export function GsapScrollProvider() {
     return () => mm.revert();
   }, []);
 
-  return (
-    <div
-      id="cursor-glow"
-      aria-hidden="true"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: 400,
-        height: 400,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 68%)',
-        pointerEvents: 'none',
-        zIndex: 9998,
-        opacity: 0,
-        mixBlendMode: 'screen',
-      }}
-    />
-  );
+  return null;
 }
