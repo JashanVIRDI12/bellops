@@ -172,7 +172,8 @@ function updateGlass(mesh: THREE.Mesh) {
   uniforms.uTime!.value = glassTime;
 }
 
-export function Office() {
+/** The office model; `url` picks the full or the phone-sized textures. */
+export function Office({ url = OFFICE_URL }: { url?: string }) {
   const ceilingLights = useRef<(THREE.SpotLight | null)[]>([]);
   const panels = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
   const originalPanels = useRef<THREE.MeshBasicMaterial[]>([]);
@@ -183,7 +184,7 @@ export function Office() {
     () => CEILING_LIGHTS.map(() => new THREE.Object3D()),
     [],
   );
-  const gltf = useGLTF(OFFICE_URL);
+  const gltf = useGLTF(url);
   // A private copy, so remounts never stack material swaps on the cached original.
   const { office, materials, glass } = useMemo(() => {
     const copy = gltf.scene.clone(true);
@@ -296,4 +297,4 @@ export function Office() {
   );
 }
 
-useGLTF.preload(OFFICE_URL);
+// Each tier preloads its own model as soon as it's chosen (see Stage).

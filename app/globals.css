@@ -1079,6 +1079,22 @@ body {
   border-radius: 4px;
 }
 
+/* Phones render the studio without the post-processing pass; this is the
+   desktop vignette (OfficeScene, offset 0.3, darkness 0.32) drawn in CSS, so
+   the stills and the live scene still match. */
+.stage-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse farthest-corner at center,
+    transparent 55%,
+    rgb(0 0 0 / 0.02) 71%,
+    rgb(0 0 0 / 0.067) 85%,
+    rgb(0 0 0 / 0.143)
+  );
+}
+
 /* Film grain over everything, so the 3D, the stills and the text share one surface. */
 .grain {
   position: fixed;

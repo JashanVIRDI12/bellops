@@ -28,10 +28,17 @@ const fragment = /* glsl */ `
 `;
 
 /** Rain stays beyond the window wall, so no particles fall inside the office. */
-export function Precipitation({ kind }: { kind: "rain" | "snow" }) {
+export function Precipitation({
+  kind,
+  count: rainDrops = 1500,
+}: {
+  kind: "rain" | "snow";
+  /** Raindrops; snow uses a fifth as many flakes. */
+  count?: number;
+}) {
   const shader = useRef<THREE.ShaderMaterial>(null);
   const geometry = useMemo(() => {
-    const count = kind === "snow" ? 320 : 1500;
+    const count = kind === "snow" ? Math.round(rainDrops / 5) : rainDrops;
     const positions = new Float32Array(count * 2 * 3);
     const seeds = new Float32Array(count * 2);
     const opacity = new Float32Array(count * 2);
@@ -59,7 +66,7 @@ export function Precipitation({ kind }: { kind: "rain" | "snow" }) {
     result.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 1));
     result.setAttribute("aOpacity", new THREE.BufferAttribute(opacity, 1));
     return result;
-  }, [kind]);
+  }, [kind, rainDrops]);
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },

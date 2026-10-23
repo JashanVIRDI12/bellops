@@ -39,7 +39,7 @@ const stillSrc = (
   beat: number,
   orientation: "landscape" | "portrait",
   mood: StillMood,
-) => `/experience/atmosphere-v4/${mood}/shot-${beat}-${orientation}.webp`;
+) => `/experience/atmosphere-v5/${mood}/shot-${beat}-${orientation}.webp`;
 
 function Still({
   beat,

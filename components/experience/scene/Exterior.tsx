@@ -161,7 +161,7 @@ const fragment = /* glsl */ `
   float fbm(vec2 p) {
     float value = 0.0, amplitude = 0.5;
     mat2 rotate = mat2(0.8, -0.6, 0.6, 0.8);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < OCTAVES; i++) {
       value += amplitude * noise(p);
       p = rotate * p * 2.02 + 3.1;
       amplitude *= 0.5;
@@ -336,8 +336,17 @@ function targetFor(atmosphere: Atmosphere): Target {
   };
 }
 
-/** The sky and the sea of clouds outside the windows. Also lights the reflections. */
-export function Exterior({ atmosphere }: { atmosphere: Atmosphere }) {
+/**
+ * The sky and the sea of clouds outside the windows. Also lights the
+ * reflections. `octaves` sets the cloud detail: 5 on desktop, fewer on phones.
+ */
+export function Exterior({
+  atmosphere,
+  octaves = 5,
+}: {
+  atmosphere: Atmosphere;
+  octaves?: number;
+}) {
   const material = useRef<THREE.ShaderMaterial>(null);
   const invalidate = useThree((state) => state.invalidate);
   const target = useMemo(() => targetFor(atmosphere), [atmosphere]);
@@ -408,6 +417,7 @@ export function Exterior({ atmosphere }: { atmosphere: Atmosphere }) {
         vertexShader={vertex}
         fragmentShader={fragment}
         uniforms={uniforms}
+        defines={{ OCTAVES: octaves }}
         side={THREE.BackSide}
         depthWrite={false}
         fog={false}

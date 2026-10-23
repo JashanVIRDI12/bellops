@@ -28,21 +28,53 @@ const INTRO_SWEEP = 0.55; // radians the sun swings across the logo wall at load
 /* ════════════════════════════════════════════════════════════════════════ */
 
 const SUN_TARGET = new THREE.Vector3(4.6, -0.8, 0); // middle of the room
+// Frames the shadows keep redrawing after the sun settles, so the last one
+// lands on a frame with the whole room in it.
+const SHADOW_SETTLE_FRAMES = 3;
 const SUN_DISTANCE = 22;
 const UP = new THREE.Vector3(0, 1, 0);
 const direction = new THREE.Vector3();
 
-/** The sun and the sky's fill light. Dims with each shot's exposure. */
-export function Daylight({ atmosphere }: { atmosphere: Atmosphere }) {
+/**
+ * The sun and the sky's fill light. Dims with each shot's exposure.
+ *
+ * Nothing in the room moves and the sun only moves during the load sequence,
+ * so the shadows are drawn while it sweeps in and then kept: every later frame
+ * skips a whole extra pass over the scene.
+ */
+export function Daylight({
+  atmosphere,
+  shadowMapSize = 2048,
+}: {
+  atmosphere: Atmosphere;
+  shadowMapSize?: number;
+}) {
   const sun = useRef<THREE.DirectionalLight>(null);
   const fill = useRef<THREE.HemisphereLight>(null);
   const invalidate = useThree((state) => state.invalidate);
+  const getState = useThree((state) => state.get);
   const target = useMemo(() => lightingFor(atmosphere), [atmosphere]);
+  const shadowFrames = useRef(SHADOW_SETTLE_FRAMES);
   useEffect(() => invalidate(), [target, invalidate]);
+
+  useEffect(() => {
+    const { shadowMap } = getState().gl;
+    shadowMap.autoUpdate = false;
+    shadowMap.needsUpdate = true;
+    return () => {
+      shadowMap.autoUpdate = true;
+    };
+  }, [getState]);
 
   useFrame((state, delta) => {
     const light = sun.current;
     if (!light) return;
+    // Redraw the shadows while the sun sweeps in, then a few frames more.
+    if (rig.intro < 1) shadowFrames.current = SHADOW_SETTLE_FRAMES;
+    if (shadowFrames.current > 0) {
+      shadowFrames.current--;
+      state.gl.shadowMap.needsUpdate = true;
+    }
     // The sun swings into place and brightens at load, sweeping light across the logo.
     direction
       .copy(SUN_DIRECTION)
@@ -89,7 +121,7 @@ export function Daylight({ atmosphere }: { atmosphere: Atmosphere }) {
         color={SUN_COLOR}
         intensity={SUN_INTENSITY}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[shadowMapSize, shadowMapSize]}
         shadow-bias={-0.0004}
         shadow-normalBias={0.035}
         shadow-radius={3}

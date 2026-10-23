@@ -171,15 +171,42 @@ query.
 The page scrolls normally. A fixed stage behind it plays the camera shot that matches each section.
 
 - **Desktop:** the live 3D scene. It loads in its own chunk after the page and renders only while something moves.
-- **Phones, low-end devices and reduced motion:** pre-rendered stills of the same shots, crossfading as you scroll.
+- **Phones and tablets:** the same live scene, tuned for phone graphics chips
+  (see "On phones" below).
+- **Slow devices and reduced motion:** pre-rendered stills of the same shots, crossfading as you scroll.
+
+**On phones.** The camera flies through the studio exactly as on desktop,
+with framings composed for a tall screen: on the work shots the sign sits on
+top, the laptop in the middle and the project name below. The view also
+answers to the hand: dragging a finger sideways turns it (it springs back on
+release), and on Android tilting the phone shifts it like a view through a
+window. iOS only shares tilt after a permission prompt, so it's skipped there.
+Everywhere, the camera banks slightly into turns and the lens widens a touch at
+speed; both settle to nothing as it lands on a shot.
+
+To stay smooth, phones load an office model with smaller textures (a quarter
+of the graphics memory), skip the post-processing pass (they antialias
+natively instead and draw the vignette in CSS), use smaller shadow and
+reflection maps and a lighter sky, and cap the pixel count. On every device
+the sun's shadows are drawn while it sweeps in and then kept, since nothing in
+the room moves.
+
+Which devices get 3D: phones with a known budget graphics chip, under 4 GB of
+memory, Data Saver or a 3G connection get the stills straight away, and so do
+computers with 4 CPU cores or fewer. Everyone else gets the live scene, which
+only fades in once it holds a smooth frame rate: a slower device first renders
+fewer pixels, then hands over to the stills, and is remembered for the rest of
+the visit. To test a renderer on a real device, add `?render=live`
+(this device's 3D settings), `?render=mobile`, `?render=desktop` or
+`?render=stills`. Tilt needs HTTPS, so it only works on the deployed site.
 
 **Start-up loader.** A counter covers the first paint and climbs as the
 studio really loads: fonts, the local weather, the first image and, on
-desktop, the 3D models. Then it lifts like a window blind. It waits at most
+devices that get 3D, the models. Then it lifts like a window blind. It waits at most
 2 seconds for the weather and 6 for the 3D (which otherwise keeps fading in
 behind), skips itself for the rest of the browser session, and never shows
-without JavaScript. Desktops that pass the 3D check download the models
-alongside the 3D code; phones never download them.
+without JavaScript. Devices that pass the 3D check download their models
+alongside the 3D code; devices that get the stills never download them.
 
 The studio matches each visitor's world automatically, with no controls and
 no prompts. Their device clock sets the time of day. Their area comes from
@@ -212,33 +239,36 @@ The forecast changes the scene's appearance; it is not an observed weather stati
 The automatic IP response is private; coordinate-based responses can be cached.
 
 To preview a mood directly, open `/?scene=night` (also `day`, `dusk`, `overcast`
-or `rain`). Phones use matching images from `public/experience/atmosphere-v4/`;
+or `rain`). Slow devices use matching images from `public/experience/atmosphere-v5/`;
 re-capture them with `STILLS_URL=http://localhost:3000 node scripts/capture-stills.mjs`
 after changing the scene, and bump the folder version so no stale images are served.
 
 What to edit, and where:
 
-| Change                                      | File                                                                                          |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Copy, WhatsApp, social links, cookie notice | `lib/content.ts`                                                                              |
-| Enquiry form and floating WhatsApp button   | `components/contact/`, `components/experience/ContactDock.tsx`                                |
-| Admin portal                                | `app/admin/`, `lib/admin/session.ts`, `lib/leads/`                                            |
-| Analytics: tracking, sources, report        | `components/analytics/`, `lib/analytics/`, `app/admin/analytics/`                             |
-| Database tables                             | `supabase/schema.sql`                                                                         |
-| Projects shown on the laptop                | `lib/work.ts` and `public/work/`                                                              |
-| Camera shots, lighting per shot             | `components/experience/scene/shots.ts`                                                        |
-| Sky and sea of clouds, per time and weather | `components/experience/scene/Exterior.tsx`                                                    |
-| Sun and room lighting                       | `components/experience/scene/lighting.ts` and `scene/Daylight.tsx`                            |
-| Ceiling and wall lights                     | `components/experience/scene/Office.tsx`                                                      |
-| Local time, sun position and weather        | `lib/atmosphere.ts`, `components/experience/environment-store.ts`, `app/api/weather/route.ts` |
-| Logo sign size, glow, power-on              | `components/experience/scene/LogoSign.tsx` and `scene/rig.ts`                                 |
-| Bloom, fog, scroll feel, parallax           | `components/experience/scene/OfficeScene.tsx`                                                 |
-| Start-up loader: wait limits, wording       | `components/experience/SiteLoader.tsx`, `lib/content.ts`                                      |
-| Section heights (how long each shot holds)  | `components/experience/Chapters.tsx`                                                          |
+| Change                                        | File                                                                                          |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Copy, WhatsApp, social links, cookie notice   | `lib/content.ts`                                                                              |
+| Enquiry form and floating WhatsApp button     | `components/contact/`, `components/experience/ContactDock.tsx`                                |
+| Admin portal                                  | `app/admin/`, `lib/admin/session.ts`, `lib/leads/`                                            |
+| Analytics: tracking, sources, report          | `components/analytics/`, `lib/analytics/`, `app/admin/analytics/`                             |
+| Database tables                               | `supabase/schema.sql`                                                                         |
+| Projects shown on the laptop                  | `lib/work.ts` and `public/work/`                                                              |
+| Camera shots (and phone framings), lighting   | `components/experience/scene/shots.ts`                                                        |
+| Sky and sea of clouds, per time and weather   | `components/experience/scene/Exterior.tsx`                                                    |
+| Sun and room lighting                         | `components/experience/scene/lighting.ts` and `scene/Daylight.tsx`                            |
+| Ceiling and wall lights                       | `components/experience/scene/Office.tsx`                                                      |
+| Local time, sun position and weather          | `lib/atmosphere.ts`, `components/experience/environment-store.ts`, `app/api/weather/route.ts` |
+| Logo sign size, glow, power-on                | `components/experience/scene/LogoSign.tsx` and `scene/rig.ts`                                 |
+| Bloom, scroll feel, banking, frame-rate check | `components/experience/scene/OfficeScene.tsx`                                                 |
+| Quality settings for phones and desktops      | `components/experience/scene/profile.ts`                                                      |
+| Cursor, finger drag and tilt                  | `components/experience/scene/look.ts`                                                         |
+| Which devices get 3D                          | `components/three/utils/use3DSupport.ts`                                                      |
+| Start-up loader: wait limits, wording         | `components/experience/SiteLoader.tsx`, `lib/content.ts`                                      |
+| Section heights (how long each shot holds)    | `components/experience/Chapters.tsx`                                                          |
 
 Every tweakable value has a comment next to it.
 
-**After changing shots, lighting or the models, re-capture the stills** so phones see the same thing:
+**After changing shots, lighting or the models, re-capture the stills** so slow devices see the same thing:
 
 ```bash
 pnpm build && pnpm start   # in one terminal
@@ -246,13 +276,14 @@ pnpm stills                # in another (needs Google Chrome)
 ```
 
 The capture includes all eight shots in landscape and portrait for five moods.
-Use `STILLS_MOODS=night` or `STILLS_SHOTS=0` to limit a refresh. If the server is
+Use `STILLS_MOODS=night`, `STILLS_SHOTS=0` or `STILLS_SIZES=portrait` to limit a refresh. If the server is
 on another port, set `STILLS_URL=http://localhost:3002`.
 
 **Models.** The scene loads compressed copies in `public/models/`. To re-compress after replacing a source model:
 
 ```bash
 npx @gltf-transform/cli optimize public/minimalistic_modern_office.glb public/models/office.glb --compress meshopt --texture-compress webp --texture-size 2048
+npx @gltf-transform/cli optimize public/minimalistic_modern_office.glb public/models/office-mobile.glb --compress meshopt --texture-compress webp --texture-size 1024
 npx @gltf-transform/cli optimize public/macbook_pro_m3_16_inch_2024.glb public/models/macbook.glb --compress meshopt --texture-compress webp --texture-size 1024
 ```
 

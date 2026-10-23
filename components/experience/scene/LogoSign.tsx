@@ -19,7 +19,6 @@ const PANEL_WIDTH = 2.28;
 const PANEL_HEIGHT = 0.83;
 const LETTER_Z = 0.19;
 const PROBE_POSITION: [number, number, number] = [8.4, HEIGHT, 0];
-const PROBE_RESOLUTION = 256;
 
 type Probe = { camera: THREE.CubeCamera; target: THREE.WebGLCubeRenderTarget };
 type SignFont = ReturnType<typeof useFont>;
@@ -132,8 +131,15 @@ function panelGrain() {
   return new THREE.CanvasTexture(canvas);
 }
 
-/** Opal LED channel letters, metal returns and a standoff-mounted signboard. */
-export function LogoSign() {
+/**
+ * Opal LED channel letters, metal returns and a standoff-mounted signboard.
+ * `probeResolution` is the size of the cube map its metal reflects.
+ */
+export function LogoSign({
+  probeResolution = 256,
+}: {
+  probeResolution?: number;
+}) {
   const sign = useRef<THREE.Group>(null);
   const bell = useRef<THREE.MeshPhysicalMaterial>(null);
   const ops = useRef<THREE.MeshPhysicalMaterial>(null);
@@ -158,7 +164,7 @@ export function LogoSign() {
   const reflectionMood = useRef("");
 
   useEffect(() => {
-    const target = new THREE.WebGLCubeRenderTarget(PROBE_RESOLUTION, {
+    const target = new THREE.WebGLCubeRenderTarget(probeResolution, {
       type: THREE.HalfFloatType,
     });
     const camera = new THREE.CubeCamera(0.05, 260, target);
@@ -171,14 +177,14 @@ export function LogoSign() {
       reflections.current = null;
       target.dispose();
     };
-  }, []);
+  }, [probeResolution]);
 
   useEffect(
     () => () => Object.values(textures).forEach((texture) => texture.dispose()),
     [textures],
   );
 
-  useFrame(() => {
+  useFrame((state) => {
     // A smooth driver fade, with no flashing or flicker at startup.
     const power = THREE.MathUtils.smoothstep(rig.intro, 0.08, 0.8);
     if (bell.current) bell.current.emissiveIntensity = 0.08 + power * 0.8;
@@ -208,6 +214,8 @@ export function LogoSign() {
     current.camera.update(gl, scene);
     current.target.texture.needsPMREMUpdate = true;
     if (group) group.visible = true;
+    // The probe may have drawn the kept shadows without the sign: redraw them.
+    state.gl.shadowMap.needsUpdate = true;
   });
 
   return (
