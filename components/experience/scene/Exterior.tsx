@@ -294,6 +294,22 @@ const COLOR_KEYS = [
   "glow",
 ] as const;
 
+// Uniform names, worked out once instead of every frame.
+const COLOR_UNIFORMS = COLOR_KEYS.map(
+  (key) => [key, `u${key[0]!.toUpperCase()}${key.slice(1)}`] as const,
+);
+const NUMBER_UNIFORMS = [
+  ["uSun", "sun"],
+  ["uStars", "stars"],
+  ["uCity", "city"],
+  ["uCover", "cover"],
+  ["uLayerY", "layerY"],
+  ["uHaze", "haze"],
+  ["uDeckCover", "deckCover"],
+  ["uDeckDark", "deckDark"],
+  ["uOvercast", "overcast"],
+] as const;
+
 function targetFor(atmosphere: Atmosphere): Target {
   const phase = PHASES[atmosphere.phase];
   const rain = atmosphere.precipitation === "rain" ? 1 : 0;
@@ -380,22 +396,12 @@ export function Exterior({
     const dt = Math.min(delta, 1 / 30);
     const factor = 1 - Math.exp(-3 * dt);
     let changing = false;
-    for (const key of COLOR_KEYS) {
-      const uniform = `u${key[0]!.toUpperCase()}${key.slice(1)}`;
+    for (const [key, uniform] of COLOR_UNIFORMS) {
       const value = u[uniform]!.value as THREE.Color;
       value.lerp(target[key], factor);
     }
-    for (const [uniform, value] of [
-      ["uSun", target.sun],
-      ["uStars", target.stars],
-      ["uCity", target.city],
-      ["uCover", target.cover],
-      ["uLayerY", target.layerY],
-      ["uHaze", target.haze],
-      ["uDeckCover", target.deckCover],
-      ["uDeckDark", target.deckDark],
-      ["uOvercast", target.overcast],
-    ] as const) {
+    for (const [uniform, key] of NUMBER_UNIFORMS) {
+      const value = target[key];
       const current = u[uniform]!.value as number;
       const next = THREE.MathUtils.lerp(current, value, factor);
       u[uniform]!.value = next;

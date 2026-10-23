@@ -9,18 +9,31 @@ export type SceneSignals = {
   source: "live" | "stills" | null;
   /** 0–100: the 3D models and textures downloaded so far. */
   progress: number;
-  /** The 3D studio has rendered its first frame. */
+  /** 0–1: shots drawn while the studio warms up (shaders, textures, light). */
+  warmup: number;
+  /** The 3D studio is warmed up and holds a smooth frame rate. */
   ready: boolean;
 };
 
 export const sceneSignals: SceneSignals = {
   source: null,
   progress: 0,
+  warmup: 0,
   ready: false,
 };
 
 export function reportScene(next: Partial<SceneSignals>) {
   Object.assign(sceneSignals, next);
+}
+
+/**
+ * Whether the start-up loader has gone (or never showed). The studio holds
+ * its opening sun sweep until then, so it plays as the loader lifts.
+ */
+export const loaderState = { lifted: false };
+
+export function markLoaderLifted() {
+  loaderState.lifted = true;
 }
 
 /** Stills that have finished loading, as "mood:shot", e.g. "night:0". */

@@ -1,59 +1,40 @@
 "use client";
 
-import { useLayoutEffect, useRef, useSyncExternalStore } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { loader as copy } from "@/lib/content";
 import { getEnvironment } from "./environment-store";
-import { loadedStills, sceneSignals } from "./loader-store";
+import { loadedStills, markLoaderLifted, sceneSignals } from "./loader-store";
 import { lockScroll } from "./SmoothScroll";
 import { experience } from "./store";
 
 /*
  * The start-up screen. It's in the page's HTML, so it covers the first paint,
  * and counts up as the parts of the studio actually arrive: fonts, the
- * visitor's local weather, the first image and, on desktop, the 3D models.
- * Then it lifts like a blind on the studio's window.
+ * visitor's local weather, the first image and, on devices that get 3D, the
+ * models and the warm-up (every shot drawn once, hidden, so the camera never
+ * stalls on something new mid-flight). Then it lifts like a blind on the
+ * studio's window, and the sun sweeps in.
  *
- * It never holds the page for long: it lifts anyway after the limits below,
- * and the 3D carries on fading in over the image. Visitors who already saw it
- * this browser session skip it; without JavaScript it removes itself.
+ * It shows on every visit (cached visits take about a second) but never holds
+ * the page for long: it lifts anyway after the limits below, and the 3D carries
+ * on fading in over the image, already warmed up. Without JavaScript it
+ * removes itself.
  */
 
-const SEEN_KEY = "bellops:intro-seen";
 const WEATHER_WAIT = 2000; // Tweakable (ms): longest wait for the local weather…
-const LIVE_WAIT = 6000; // …for the 3D studio's first frame…
-const GIVE_UP = 9000; // …and for anything at all, from the moment the page opened.
-
-// Runs as the HTML arrives, before the first paint: returning visitors skip it.
-const skipScript = `try{if(sessionStorage.getItem("${SEEN_KEY}"))document.currentScript.previousElementSibling.dataset.state="skip"}catch(e){}`;
-
-// True only while hydrating the server's HTML, where the inline script runs.
-const noop = () => () => {};
-const useFromServerHtml = () =>
-  useSyncExternalStore(
-    noop,
-    () => false,
-    () => true,
-  );
+const LIVE_WAIT = 15000; // …for the 3D studio, downloaded and warmed up…
+const GIVE_UP = 18000; // …and for anything at all, from the moment the page opened.
 
 export function SiteLoader() {
-  const fromServerHtml = useFromServerHtml();
   const rootRef = useRef<HTMLDivElement>(null);
   const countRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLParagraphElement>(null);
 
-  // A layout effect, so a skipped loader never shows for a frame.
+  // A layout effect, so the count takes over before the next paint.
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root || root.dataset.state !== "boot") return;
-    try {
-      if (sessionStorage.getItem(SEEN_KEY)) {
-        root.dataset.state = "skip";
-        return;
-      }
-    } catch {
-      /* storage blocked: show the loader */
-    }
 
     root.dataset.state = "tracking";
     lockScroll(true);
@@ -75,11 +56,7 @@ export function SiteLoader() {
     const leave = () => {
       root.dataset.state = "leaving";
       lockScroll(false);
-      try {
-        sessionStorage.setItem(SEEN_KEY, "1");
-      } catch {
-        /* fine: it shows again next time */
-      }
+      markLoaderLifted();
       root.addEventListener("transitionend", (event) => {
         if (event.target === root) finish();
       });
@@ -94,17 +71,18 @@ export function SiteLoader() {
       const stillReady = loadedStills.has(
         `${environment.atmosphere.still}:${shot}`,
       );
-      const { source, progress, ready } = sceneSignals;
+      const { source, progress, warmup, ready } = sceneSignals;
       const live = source === "live";
 
       // Each part's share of the count.
-      let target = (fontsReady ? 15 : 0) + (weatherReady ? 10 : 0);
+      let target = (fontsReady ? 10 : 0) + (weatherReady ? 5 : 0);
       if (live)
         target +=
-          (stillReady ? 15 : 0) +
-          Math.min(progress, 100) * 0.55 +
+          (stillReady ? 10 : 0) +
+          Math.min(progress, 100) * 0.5 +
+          Math.min(warmup, 1) * 20 +
           (ready ? 5 : 0);
-      else target += stillReady ? 75 : 0;
+      else target += stillReady ? 85 : 0;
 
       const waitingForScene = live && !ready && now < LIVE_WAIT;
       const done =
@@ -179,9 +157,6 @@ export function SiteLoader() {
           </p>
         </div>
       </div>
-      {fromServerHtml && (
-        <script dangerouslySetInnerHTML={{ __html: skipScript }} />
-      )}
       <noscript
         dangerouslySetInnerHTML={{
           __html: "<style>.site-loader{display:none}</style>",

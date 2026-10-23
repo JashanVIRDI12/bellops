@@ -28,6 +28,9 @@ const LEAVE_ZOOM = 0.05; // the still being left pushes in by 5% as it goes
 const ARRIVE_ZOOM = 0.08; // the next still lands from 8% zoomed in to rest
 
 const SETTLE_EPSILON = 0.0004;
+// Once the live scene has faded in over them, the stills stop being drawn at
+// all, which frees their full-screen layers (a lot of graphics memory on phones).
+const HIDE_AFTER_MS = 1200;
 const LAST_SHOT = SHOT_COUNT - 1;
 
 /**
@@ -146,6 +149,13 @@ export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
   /** The still being travelled away from; it and the next are on screen. */
   const [from, setFrom] = useState(0);
   const fromRef = useRef(0);
+  /** The mode whose fade has finished. */
+  const [settled, setSettled] = useState<StillsMode>("show");
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSettled(mode), HIDE_AFTER_MS);
+    return () => window.clearTimeout(timer);
+  }, [mode]);
 
   const paint = useCallback(() => {
     paintStills(
@@ -209,6 +219,7 @@ export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
       className={cx(
         "absolute inset-0 transition-opacity duration-1000 ease-out",
         mode === "hide" && "opacity-0",
+        mode === "hide" && settled === "hide" && "hidden",
       )}
     >
       {mounted.map((index) => (

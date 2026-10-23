@@ -56,6 +56,10 @@
 .scene-scrim {
   position: absolute;
   inset: 0;
+  /* Frames are one small screen tall (100svh), but when a phone's toolbar
+     shrinks the screen grows to 100lvh: reach down to its real bottom edge,
+     so no band of unshaded scene shows under the copy. */
+  bottom: calc(100svh - 100lvh);
   z-index: -1;
   pointer-events: none;
   background: linear-gradient(

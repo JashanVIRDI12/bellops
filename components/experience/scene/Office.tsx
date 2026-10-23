@@ -204,12 +204,11 @@ export function Office({ url = OFFICE_URL }: { url?: string }) {
     ceilingLights.current.forEach((light) => {
       if (light) light.intensity = rig.indoor * 32;
     });
-    for (const material of [...panels.current, ...originalPanels.current]) {
-      if (material)
-        material.color
-          .setRGB(1, 0.9, 0.75)
-          .multiplyScalar(0.45 + rig.indoor * 1.0);
-    }
+    const panelLevel = 0.45 + rig.indoor * 1.0;
+    for (const material of panels.current)
+      material?.color.setRGB(1, 0.9, 0.75).multiplyScalar(panelLevel);
+    for (const material of originalPanels.current)
+      material.color.setRGB(1, 0.9, 0.75).multiplyScalar(panelLevel);
     wallPanels.current.forEach((material) => {
       if (material) {
         material.opacity = rig.indoor;

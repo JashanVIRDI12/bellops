@@ -47,8 +47,10 @@ export const PROFILES: Record<LiveTier, RenderProfile> = {
   },
   mobile: {
     tier: "mobile",
-    maxDpr: 1.6,
-    maxPixels: 1_150_000, // about a 390 × 844 phone at 1.6×
+    // Smoothness first: a phone screen at 1.5× with native antialiasing is
+    // still crisp, and the frame-rate guard steps down from here if needed.
+    maxDpr: 1.5,
+    maxPixels: 1_000_000, // about a 390 × 844 phone at 1.5×
     composer: false,
     shadowMapSize: 1024,
     reflectionSize: 128,

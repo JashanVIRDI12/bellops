@@ -88,6 +88,10 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   const [retired, setRetired] = useState<"no" | "fading" | "off">("no");
   const [loaded, setLoaded] = useState(0);
   const markReady = useCallback(() => setReady(true), []);
+  const reportWarmup = useCallback(
+    (fraction: number) => reportScene({ warmup: fraction }),
+    [],
+  );
   const markFailed = useCallback(() => setRetired("off"), []);
   const markTooSlow = useCallback(() => {
     try {
@@ -155,6 +159,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
               active
               onReady={markReady}
               onProgress={setLoaded}
+              onWarmup={reportWarmup}
               onContextLost={markFailed}
               onTooSlow={markTooSlow}
             />

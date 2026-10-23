@@ -16,6 +16,14 @@ export const rig = {
   wet: 0,
   environmentKey: "",
   lightingSettled: false,
+  /**
+   * While the scene warms up behind the loader, the shot the camera is posed
+   * at (null afterwards). Every shot is drawn once before the visitor sees
+   * any of them, so nothing has to be prepared mid-flight.
+   */
+  warmShot: null as number | null,
+  /** The camera moved this frame. Occasional heavy work waits for it to rest. */
+  moving: true,
 };
 
 /* Tweakable: how long the load sequence (sun sweep + camera ease-in) takes, in seconds. */

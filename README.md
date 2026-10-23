@@ -200,13 +200,21 @@ the visit. To test a renderer on a real device, add `?render=live`
 (this device's 3D settings), `?render=mobile`, `?render=desktop` or
 `?render=stills`. Tilt needs HTTPS, so it only works on the deployed site.
 
-**Start-up loader.** A counter covers the first paint and climbs as the
-studio really loads: fonts, the local weather, the first image and, on
-devices that get 3D, the models. Then it lifts like a window blind. It waits at most
-2 seconds for the weather and 6 for the 3D (which otherwise keeps fading in
-behind), skips itself for the rest of the browser session, and never shows
-without JavaScript. Devices that pass the 3D check download their models
-alongside the 3D code; devices that get the stills never download them.
+**Start-up loader.** A counter covers the first paint on every visit and
+climbs as the studio really loads: fonts, the local weather, the first image
+and, on devices that get 3D, the models and the warm-up. The warm-up uploads
+every texture, compiles every shader and draws each shot once, hidden, with
+nothing skipped for being out of view, so the camera never stalls on
+something new mid-flight. Then the loader lifts like a window blind and the
+sun sweeps in. It waits at most 2 seconds for the weather and 15 for the 3D
+(which otherwise fades in later over the image, already warmed up), takes
+about a second on a cached visit, and never shows without JavaScript.
+Devices that pass the 3D check download their models alongside the 3D code;
+devices that get the stills never download them.
+
+While the tour runs, anything heavy waits for the camera to rest: the sign's
+reflection updates, and a lower resolution if the frame-rate check asks for
+one (resizing the 3D costs a frame).
 
 The studio matches each visitor's world automatically, with no controls and
 no prompts. Their device clock sets the time of day. Their area comes from

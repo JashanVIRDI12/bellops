@@ -54,6 +54,7 @@ export function Daylight({
   const invalidate = useThree((state) => state.invalidate);
   const getState = useThree((state) => state.get);
   const target = useMemo(() => lightingFor(atmosphere), [atmosphere]);
+  const environmentKey = `${atmosphere.phase}:${atmosphere.cloudCover.toFixed(2)}`;
   const shadowFrames = useRef(SHADOW_SETTLE_FRAMES);
   useEffect(() => invalidate(), [target, invalidate]);
 
@@ -91,7 +92,7 @@ export function Daylight({
     rig.night = THREE.MathUtils.damp(rig.night, target.night, 3, dt);
     rig.indoor = THREE.MathUtils.damp(rig.indoor, target.indoor, 3, dt);
     rig.wet = THREE.MathUtils.damp(rig.wet, target.wet, 3, dt);
-    rig.environmentKey = `${atmosphere.phase}:${atmosphere.cloudCover.toFixed(2)}`;
+    rig.environmentKey = environmentKey;
     rig.lightingSettled =
       Math.abs(rig.night - target.night) < 0.002 &&
       Math.abs(rig.indoor - target.indoor) < 0.002 &&

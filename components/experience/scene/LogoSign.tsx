@@ -131,6 +131,16 @@ function panelGrain() {
   return new THREE.CanvasTexture(canvas);
 }
 
+/** Points a panel material at the probe's reflections once they exist. */
+function attachReflections(
+  material: THREE.MeshStandardMaterial | null,
+  reflections: THREE.Texture | null,
+) {
+  if (!material || material.envMap === reflections) return;
+  material.envMap = reflections;
+  material.needsUpdate = true;
+}
+
 /**
  * Opal LED channel letters, metal returns and a standoff-mounted signboard.
  * `probeResolution` is the size of the cube map its metal reflects.
@@ -192,16 +202,15 @@ export function LogoSign({
     if (letterLight.current) letterLight.current.opacity = power * 0.72;
     if (wallLight.current) wallLight.current.opacity = power * 0.24;
 
-    for (const material of [panelRim.current, panelFace.current]) {
-      if (material && material.envMap !== reflections.current) {
-        material.envMap = reflections.current;
-        material.needsUpdate = true;
-      }
-    }
+    attachReflections(panelRim.current, reflections.current);
+    attachReflections(panelFace.current, reflections.current);
 
     // Reflect the actual windows and room twice, then stop updating the probe.
+    // A capture draws the room six times, so after the first one (during the
+    // warm-up) they wait for the camera to come to rest.
     const current = probe.current;
     if (!current) return;
+    if (captured.current > 0 && rig.moving && rig.warmShot === null) return;
     if (reflectionMood.current !== rig.environmentKey) {
       reflectionMood.current = rig.environmentKey;
       captured.current = 0;

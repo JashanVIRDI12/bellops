@@ -161,7 +161,31 @@ function createTrack(framings: Framing[], reference?: { yaw: number }[]) {
 const portraitWeight = (aspect: number) =>
   1 - THREE.MathUtils.smoothstep(aspect, PORTRAIT_FROM, LANDSCAPE_FROM);
 
+type Track = ReturnType<typeof createTrack>;
+type View = { yaw: number; pitch: number; fov: number };
+
+// Scratch values, reused every frame so sampling never allocates.
 const portraitPoint = new THREE.Vector3();
+const wideView: View = { yaw: 0, pitch: 0, fov: 0 };
+const tallView: View = { yaw: 0, pitch: 0, fov: 0 };
+
+/** One track's camera at `index + t` along the tour. */
+function sampleTrack(
+  track: Track,
+  index: number,
+  t: number,
+  along: number,
+  position: THREE.Vector3,
+  view: View,
+) {
+  track.curve.getPoint(along, position);
+  const from = track.angles[index]!;
+  const to = track.angles[index + 1] ?? from;
+  const fromFov = track.fovs[index]!;
+  view.yaw = THREE.MathUtils.lerp(from.yaw, to.yaw, t);
+  view.pitch = THREE.MathUtils.lerp(from.pitch, to.pitch, t);
+  view.fov = THREE.MathUtils.lerp(fromFov, track.fovs[index + 1] ?? fromFov, t);
+}
 
 /**
  * Builds a sampler: progress (0 … shots-1) and screen aspect → camera state.
@@ -189,32 +213,16 @@ export function createShotSampler(shots: Shot[]) {
     const along = (index + t) / last;
     const w = portraitWeight(aspect);
 
-    const sampleTrack = (track: typeof landscape, position: THREE.Vector3) => {
-      track.curve.getPoint(along, position);
-      const from = track.angles[index]!;
-      const to = track.angles[index + 1] ?? from;
-      return {
-        yaw: THREE.MathUtils.lerp(from.yaw, to.yaw, t),
-        pitch: THREE.MathUtils.lerp(from.pitch, to.pitch, t),
-        fov: THREE.MathUtils.lerp(
-          track.fovs[index]!,
-          track.fovs[index + 1] ?? track.fovs[index]!,
-          t,
-        ),
-      };
-    };
-
-    const wide = sampleTrack(landscape, out.position);
+    sampleTrack(landscape, index, t, along, out.position, wideView);
+    out.yaw = wideView.yaw;
+    out.pitch = wideView.pitch;
+    out.fov = wideView.fov;
     if (w > 0) {
-      const tall = sampleTrack(portrait, portraitPoint);
+      sampleTrack(portrait, index, t, along, portraitPoint, tallView);
       out.position.lerp(portraitPoint, w);
-      out.yaw = THREE.MathUtils.lerp(wide.yaw, tall.yaw, w);
-      out.pitch = THREE.MathUtils.lerp(wide.pitch, tall.pitch, w);
-      out.fov = THREE.MathUtils.lerp(wide.fov, tall.fov, w);
-    } else {
-      out.yaw = wide.yaw;
-      out.pitch = wide.pitch;
-      out.fov = wide.fov;
+      out.yaw = THREE.MathUtils.lerp(out.yaw, tallView.yaw, w);
+      out.pitch = THREE.MathUtils.lerp(out.pitch, tallView.pitch, w);
+      out.fov = THREE.MathUtils.lerp(out.fov, tallView.fov, w);
     }
     out.exposure = THREE.MathUtils.lerp(a.exposure, b.exposure, t);
     out.screen = THREE.MathUtils.lerp(a.screen, b.screen, t);

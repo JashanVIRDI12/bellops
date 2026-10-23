@@ -7,6 +7,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -30,6 +31,7 @@ import type { WorkProject } from "@/lib/work";
 import type { Atmosphere } from "@/lib/atmosphere";
 import { SceneSignals } from "@/components/three/scenes/shared";
 import { MAX_FRAME_DELTA, SCROLL_DAMPING } from "../camera-motion";
+import { loaderState } from "../loader-store";
 import { experience, subscribeProgress } from "../store";
 import { Daylight, SUN_DIRECTION } from "./Daylight";
 import { Exterior } from "./Exterior";
@@ -63,6 +65,7 @@ const TILT_PITCH = 0.035;
 const LOOK_FREQUENCY = 6; // higher = snappier
 const LOOK_DAMPING = 0.78; // 1 = no overshoot
 const INTRO_DOLLY = 0.9; // meters the camera eases forward during the load sequence
+const MAX_INTRO_HOLD = 20; // seconds the load sequence waits for the start-up loader, at most
 
 // Camera dynamics while travelling between shots. Both fade to nothing as it lands.
 const BANK = 0.032; // radians the view rolls into a turn, at most (~1.8°)
@@ -77,10 +80,12 @@ const BLOOM_THRESHOLD = 1.05;
 const VIGNETTE_DARKNESS = 0.32; // phones draw the same vignette in CSS (Stage)
 
 // The frame-rate guard. The live scene only fades in once it holds a frame
-// rate; a slow device first renders fewer pixels, then gets the stills.
+// rate; a slower device first renders fewer pixels, then gets the stills.
+// Frame times are averaged with the slowest tenth left out, so one hiccup
+// doesn't count but a steady struggle does.
 const GUARD_SAMPLES = 20; // frames per check
-const GUARD_WARMUP = 8; // first frames skipped (shaders compiling, textures uploading)
-const SLOW_FRAME_MS = 36; // slower than ~28 fps: render fewer pixels
+const GUARD_WARMUP = 8; // first frames skipped after the warm-up and after each change
+const SLOW_FRAME_MS = 22; // slower than ~45 fps: render fewer pixels
 const GIVE_UP_FRAME_MS = 52; // still slower than ~19 fps at the lowest ratio: stills
 const HOPELESS_FRAME_MS = 100; // under 10 fps: stills straight away
 const IDLE_GAP_MS = 200; // a longer gap means the loop was resting, not slow
@@ -97,9 +102,11 @@ export type OfficeSceneProps = {
   atmosphere: Atmosphere;
   /** False while the tab or page hides the canvas: rendering stops. */
   active: boolean;
-  /** The scene is drawing and holds a smooth frame rate: show it. */
+  /** The scene is warmed up and holds a smooth frame rate: show it. */
   onReady?: () => void;
   onProgress?: (percent: number) => void;
+  /** 0–1: shots drawn during the warm-up. */
+  onWarmup?: (fraction: number) => void;
   onContextLost?: () => void;
   /** The device can't hold a usable frame rate even at the lowest resolution. */
   onTooSlow?: () => void;
@@ -112,6 +119,7 @@ export default function OfficeScene({
   active,
   onReady,
   onProgress,
+  onWarmup,
   onContextLost,
   onTooSlow,
 }: OfficeSceneProps) {
@@ -122,11 +130,14 @@ export default function OfficeScene({
   const [dpr, setDpr] = useState(() => startingDpr(profile));
   const dprRef = useRef(dpr);
   const passed = useRef(false);
+  /** A lower resolution waiting for the camera to rest (resizing stalls a frame). */
+  const pendingDpr = useRef<number | null>(null);
 
-  // Each check's median frame time. A smooth one reveals the scene; a slow
+  // Each check's typical frame time. A smooth one reveals the scene; a slow
   // device trades sharpness for frame rate before giving up on 3D.
   const handleFrameTime = useCallback(
     (frameMs: number) => {
+      if (pendingDpr.current !== null) return;
       const pass = () => {
         if (passed.current) return;
         passed.current = true;
@@ -136,16 +147,23 @@ export default function OfficeScene({
       const lowest = dprRef.current <= MIN_DPR + 0.01;
       if (frameMs > HOPELESS_FRAME_MS || (lowest && frameMs > GIVE_UP_FRAME_MS))
         return onTooSlow?.();
-      if (lowest) return pass(); // 19–28 fps: still a smooth glide
+      if (lowest) return pass(); // 19–45 fps at the lowest ratio: still a steady glide
       const next =
         frameMs > SLOW_FRAME_MS * 2
           ? MIN_DPR
           : Math.max(MIN_DPR, dprRef.current - DPR_STEP);
       dprRef.current = next;
-      setDpr(next);
+      // Hidden, it can switch straight away; on screen, at the next rest.
+      if (passed.current) pendingDpr.current = next;
+      else setDpr(next);
     },
     [onReady, onTooSlow],
   );
+  const applyPendingDpr = useCallback(() => {
+    if (pendingDpr.current === null) return;
+    setDpr(pendingDpr.current);
+    pendingDpr.current = null;
+  }, []);
 
   const gl = useMemo(
     () =>
@@ -197,7 +215,9 @@ export default function OfficeScene({
           />
         )}
         <CameraRig profile={profile} />
+        <Warmup onProgress={onWarmup} />
         <FrameGuard onFrameTime={handleFrameTime} />
+        <AtRest onRest={applyPendingDpr} />
         <SceneSignals active={active} onContextLost={onContextLost} />
       </Suspense>
 
@@ -266,10 +286,11 @@ function LoadProgress({
 }
 
 /**
- * Times frames while the scene is moving and reports the median of each batch.
- * With an on-demand loop, a long gap between frames usually means the scene
- * was at rest, so those only count during the load sequence, which always
- * runs (and is when the first verdict lands).
+ * Times frames while the scene is moving and reports each batch's typical
+ * frame time. With an on-demand loop, a long gap between frames usually means
+ * the scene was at rest, so those only count during the load sequence, which
+ * always runs (and is when the first verdict lands). The warm-up's frames are
+ * slow on purpose and never count.
  */
 function FrameGuard({
   onFrameTime,
@@ -289,6 +310,11 @@ function FrameGuard({
   }, [dpr]);
 
   useFrame(() => {
+    if (rig.warmShot !== null) {
+      skip.current = GUARD_WARMUP;
+      last.current = 0;
+      return;
+    }
     const now = performance.now();
     const gap = last.current ? now - last.current : 0;
     last.current = now;
@@ -301,11 +327,91 @@ function FrameGuard({
     samples.current.push(gap);
     if (samples.current.length < GUARD_SAMPLES) return;
     const sorted = samples.current.sort((a, b) => a - b);
-    const median = sorted[sorted.length >> 1]!;
+    const kept = sorted.slice(0, Math.ceil(sorted.length * 0.9));
+    const typical = kept.reduce((sum, gap) => sum + gap, 0) / kept.length;
     samples.current = [];
-    onFrameTime(median);
+    onFrameTime(typical);
   });
 
+  return null;
+}
+
+/**
+ * Prepares everything the tour shows before the visitor sees any of it: every
+ * texture goes to the GPU and every shader compiles, then each shot is drawn
+ * once, hidden, with nothing skipped for being out of view (some things, like
+ * the sign's screws, only appear between shots). Without this, the first
+ * visit to each shot stalls the camera while the device prepares what just
+ * came into view.
+ */
+function Warmup({ onProgress }: { onProgress?: (fraction: number) => void }) {
+  const getState = useThree((state) => state.get);
+  const flying = useRef(false);
+  const culled = useRef<THREE.Object3D[]>([]);
+
+  const restoreCulling = useCallback(() => {
+    for (const object of culled.current) object.frustumCulled = true;
+    culled.current = [];
+  }, []);
+
+  // Before the first frame: hold the camera on the first shot.
+  useLayoutEffect(() => {
+    rig.warmShot = 0;
+    return () => {
+      rig.warmShot = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const { gl, scene, camera, invalidate } = getState();
+    let cancelled = false;
+    scene.traverse((object) => {
+      const material = (object as THREE.Mesh).material;
+      if (!material) return;
+      for (const entry of [material].flat())
+        for (const value of Object.values(entry))
+          if (value instanceof THREE.Texture) gl.initTexture(value);
+    });
+    gl.compileAsync(scene, camera)
+      .catch(() => {})
+      .then(() => {
+        if (cancelled) return;
+        scene.traverse((object) => {
+          if (!object.frustumCulled) return;
+          object.frustumCulled = false;
+          culled.current.push(object);
+        });
+        flying.current = true;
+        invalidate();
+      });
+    return () => {
+      cancelled = true;
+      restoreCulling();
+    };
+  }, [getState, restoreCulling]);
+
+  useFrame((state) => {
+    if (!flying.current || rig.warmShot === null) return;
+    // The camera rig posed this frame at rig.warmShot; it's drawn after this.
+    const next = rig.warmShot + 1;
+    onProgress?.(next / SHOTS.length);
+    rig.warmShot = next < SHOTS.length ? next : null;
+    if (rig.warmShot === null) {
+      flying.current = false;
+      // This last frame still draws everything; culling is back from the next.
+      requestAnimationFrame(restoreCulling);
+    }
+    state.invalidate();
+  });
+
+  return null;
+}
+
+/** Calls `onRest` on every frame where the camera has come to rest. */
+function AtRest({ onRest }: { onRest: () => void }) {
+  useFrame(() => {
+    if (!rig.moving && rig.warmShot === null) onRest();
+  });
   return null;
 }
 
@@ -350,6 +456,7 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
   const lastYaw = useRef<number | null>(null);
   const turnRate = useRef(0);
   const speed = useRef(0);
+  const introHold = useRef(0);
 
   // Scroll changes, the cursor, fingers and tilt wake the render loop.
   useEffect(() => subscribeProgress(() => invalidate()), [invalidate]);
@@ -366,6 +473,25 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
     const dt = Math.min(delta, MAX_FRAME_DELTA);
     const camera = state.camera as THREE.PerspectiveCamera;
     const aspect = state.size.width / state.size.height;
+
+    // Warming up: stand exactly on the shot being prepared, nothing else.
+    if (rig.warmShot !== null) {
+      const shot = Math.min(rig.warmShot, SHOTS.length - 1);
+      sampler(shot, sample, aspect);
+      fitShot(sample, aspect);
+      rig.progress = shot;
+      rig.exposure = sample.exposure;
+      rig.screen = sample.screen;
+      rig.moving = true;
+      aim(camera, sample.yaw, sample.pitch, 0, sample.position);
+      setFov(camera, sample.fov);
+      // Afterwards the camera picks up from the visitor's scroll position.
+      progress.current = null;
+      lastYaw.current = null;
+      turnRate.current = speed.current = 0;
+      return;
+    }
+
     const goal = experience.progress;
     const p = THREE.MathUtils.damp(
       progress.current ?? goal,
@@ -381,8 +507,11 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
     rig.exposure = sample.exposure;
     rig.screen = sample.screen;
 
-    // Load sequence: the sun sweeps in across the logo while the camera eases in.
-    introClock.current += dt;
+    // Load sequence: the sun sweeps in across the logo while the camera eases
+    // in. It waits for the start-up loader, so it plays as the loader lifts.
+    if (loaderState.lifted || introHold.current > MAX_INTRO_HOLD)
+      introClock.current += dt;
+    else introHold.current += dt;
     rig.intro = introAt(introClock.current);
     const introRunning = introClock.current < INTRO_DELAY + INTRO_DURATION;
     const dolly = INTRO_DOLLY * (1 - rig.intro);
@@ -413,30 +542,19 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
     const yawMoving = stepSpring(yawSpring.current, lookX, dt);
     const pitchMoving = stepSpring(pitchSpring.current, lookY, dt);
 
-    const yaw = sample.yaw - yawSpring.current.x;
-    const pitch = THREE.MathUtils.clamp(
-      sample.pitch + pitchSpring.current.x,
-      -1.555,
-      1.555,
-    );
-    lookDirection.set(
-      Math.sin(yaw) * Math.cos(pitch),
-      Math.sin(pitch),
-      Math.cos(yaw) * Math.cos(pitch),
-    );
-    camera.position
-      .copy(sample.position)
-      .addScaledVector(lookDirection, -dolly);
-    camera.lookAt(lookTarget.copy(camera.position).add(lookDirection));
     // Bank into the turn: turning left rolls the view left, like a drone.
-    camera.rotateZ(BANK * Math.tanh(turnRate.current * BANK_RESPONSE));
-
-    const fov =
-      sample.fov + RUSH_FOV * Math.tanh(speed.current * RUSH_RESPONSE);
-    if (Math.abs(camera.fov - fov) > 0.001) {
-      camera.fov = fov;
-      camera.updateProjectionMatrix();
-    }
+    aim(
+      camera,
+      sample.yaw - yawSpring.current.x,
+      sample.pitch + pitchSpring.current.x,
+      BANK * Math.tanh(turnRate.current * BANK_RESPONSE),
+      sample.position,
+      dolly,
+    );
+    setFov(
+      camera,
+      sample.fov + RUSH_FOV * Math.tanh(speed.current * RUSH_RESPONSE),
+    );
 
     const moving =
       introRunning ||
@@ -445,8 +563,38 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
       speed.current > 0.002 ||
       yawMoving ||
       pitchMoving;
+    rig.moving = moving;
     if (moving) state.invalidate();
   }, -1);
 
   return null;
+}
+
+/**
+ * Points the camera along a yaw and pitch, rolled by `roll`. With a `from`
+ * position, it stands there, eased back `dolly` meters along the view.
+ */
+function aim(
+  camera: THREE.PerspectiveCamera,
+  yaw: number,
+  rawPitch: number,
+  roll: number,
+  from?: THREE.Vector3,
+  dolly = 0,
+) {
+  const pitch = THREE.MathUtils.clamp(rawPitch, -1.555, 1.555);
+  lookDirection.set(
+    Math.sin(yaw) * Math.cos(pitch),
+    Math.sin(pitch),
+    Math.cos(yaw) * Math.cos(pitch),
+  );
+  if (from) camera.position.copy(from).addScaledVector(lookDirection, -dolly);
+  camera.lookAt(lookTarget.copy(camera.position).add(lookDirection));
+  if (roll) camera.rotateZ(roll);
+}
+
+function setFov(camera: THREE.PerspectiveCamera, fov: number) {
+  if (Math.abs(camera.fov - fov) <= 0.001) return;
+  camera.fov = fov;
+  camera.updateProjectionMatrix();
 }
