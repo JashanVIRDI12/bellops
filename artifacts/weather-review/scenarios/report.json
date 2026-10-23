@@ -1,0 +1,87 @@
+[
+  {
+    "name": "local-clock-night",
+    "queries": [
+      "",
+      ""
+    ],
+    "passed": true
+  },
+  {
+    "name": "delhi-weather-night",
+    "queries": [
+      "",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "delhi-weather-rain",
+    "queries": [
+      "",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "location-opt-in",
+    "queries": [
+      "",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "location-denied",
+    "queries": [
+      "",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "weather-offline",
+    "queries": [
+      "",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "city-request-race",
+    "queries": [
+      "",
+      "?lat=51.51&lon=-0.13",
+      "?lat=28.61&lon=77.21"
+    ],
+    "passed": true
+  },
+  {
+    "name": "location-request-race",
+    "queries": [
+      ""
+    ],
+    "passed": true
+  },
+  {
+    "name": "small-phone-controls",
+    "queries": [
+      ""
+    ],
+    "passed": true
+  },
+  {
+    "name": "landscape-controls",
+    "queries": [
+      ""
+    ],
+    "passed": true
+  },
+  {
+    "name": "preview-back-to-auto",
+    "queries": [
+      ""
+    ],
+    "passed": true
+  }
+]

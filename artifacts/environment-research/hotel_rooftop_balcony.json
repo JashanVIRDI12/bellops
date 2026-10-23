@@ -1,0 +1,86 @@
+{
+  "tonemapped": {
+    "size": 35748089,
+    "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/hotel_rooftop_balcony.jpg",
+    "md5": "011c91d352fc924987b8948b5e93ef4e"
+  },
+  "hdri": {
+    "8k": {
+      "hdr": {
+        "size": 99130238,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/8k/hotel_rooftop_balcony_8k.hdr",
+        "md5": "8e36aee692a830823e250dc123f41451"
+      },
+      "exr": {
+        "size": 383552779,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/8k/hotel_rooftop_balcony_8k.exr",
+        "md5": "ab90d09ad9358d34f14280df07d812f3"
+      }
+    },
+    "16k": {
+      "hdr": {
+        "size": 379284710,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/16k%2B/hotel_rooftop_balcony_16k.hdr",
+        "md5": "d7e3fe1752eeadd99ab5dbdef2c3c2f6"
+      },
+      "exr": {
+        "size": 1520026085,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/16k%2B/hotel_rooftop_balcony_16k.exr",
+        "md5": "e5b7dae152094a277f73e72a637b2240"
+      }
+    },
+    "4k": {
+      "hdr": {
+        "size": 25338031,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/4k/hotel_rooftop_balcony_4k.hdr",
+        "md5": "407f51285059320889ac78fe20b6ed61"
+      },
+      "exr": {
+        "size": 96258096,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/hotel_rooftop_balcony_4k.exr",
+        "md5": "c0a1167940ef6513ff69e820aa86a696"
+      }
+    },
+    "2k": {
+      "hdr": {
+        "size": 6365020,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/hotel_rooftop_balcony_2k.hdr",
+        "md5": "8d24106d8abe2417ac7ccdf17a3d865d"
+      },
+      "exr": {
+        "size": 24197608,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/2k/hotel_rooftop_balcony_2k.exr",
+        "md5": "b20e07887f11b17a3c1b57ac584eee2d"
+      }
+    },
+    "1k": {
+      "hdr": {
+        "size": 1590972,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/hotel_rooftop_balcony_1k.hdr",
+        "md5": "c0f7086137185ca810de91b965c7678c"
+      },
+      "exr": {
+        "size": 6081024,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/hotel_rooftop_balcony_1k.exr",
+        "md5": "62e44c0efb364422b3f6a06e2c019dad"
+      }
+    },
+    "20k": {
+      "hdr": {
+        "size": 583477015,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/16k%2B/hotel_rooftop_balcony_20k.hdr",
+        "md5": "036b46f27075342d963eba5ed6de19b2"
+      },
+      "exr": {
+        "size": 2350570463,
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/16k%2B/hotel_rooftop_balcony_20k.exr",
+        "md5": "93c686531496bdcb8564f7e4cbe5da7d"
+      }
+    }
+  },
+  "colorchart": {
+    "size": 193391014,
+    "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Color%20Charts/hotel_rooftop_balcony.zip",
+    "md5": "56bc9fbd50fb2f65daf73982a82e1ab1"
+  }
+}

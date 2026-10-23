@@ -1,0 +1,69 @@
+{
+  "hdri": {
+    "16k": {
+      "hdr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/16k%2B/shanghai_riverside_16k.hdr",
+        "size": 347078868,
+        "md5": "ccc46a6adc5fc9fbccc375d27380cef7"
+      },
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/16k%2B/shanghai_riverside_16k.exr",
+        "size": 250143818,
+        "md5": "19cc5ccf1deab1108383efe8638f6eeb"
+      }
+    },
+    "8k": {
+      "hdr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/8k/shanghai_riverside_8k.hdr",
+        "size": 97511063,
+        "md5": "0b991843ff4a041eb554e1f5d23477f5"
+      },
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/8k/shanghai_riverside_8k.exr",
+        "size": 73954365,
+        "md5": "48757b144d854daef0613971ed3e0dc1"
+      }
+    },
+    "4k": {
+      "hdr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/4k/shanghai_riverside_4k.hdr",
+        "size": 25272079,
+        "md5": "bd7da3b2a62cb3282c5524a5818d510b"
+      },
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/shanghai_riverside_4k.exr",
+        "size": 19554694,
+        "md5": "21de9a83d6ff752fbf026aee1d6569c9"
+      }
+    },
+    "2k": {
+      "hdr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/shanghai_riverside_2k.hdr",
+        "size": 6407854,
+        "md5": "8ba399d225cea90bac35c29dee96a77f"
+      },
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/2k/shanghai_riverside_2k.exr",
+        "size": 4942502,
+        "md5": "48491eada24d98ff2a563ae787040b89"
+      }
+    },
+    "1k": {
+      "hdr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/shanghai_riverside_1k.hdr",
+        "size": 1596163,
+        "md5": "cf279ed72ec5e8a02f6959523f42aa49"
+      },
+      "exr": {
+        "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/shanghai_riverside_1k.exr",
+        "size": 1240233,
+        "md5": "30f064221c58db730338bf051d37411b"
+      }
+    }
+  },
+  "tonemapped": {
+    "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/shanghai_riverside.jpg",
+    "size": 40878044,
+    "md5": "b0bd28065e08d6230c6f71be24c25aa1"
+  }
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "size": {
+      "width": 320,
+      "height": 568
+    },
+    "fonts": {
+      "body": "Manrope, \"Manrope Fallback\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "\"Space Grotesk\", \"Space Grotesk Fallback\", ui-sans-serif, system-ui, sans-serif"
+    },
+    "services": {
+      "top": 92.375,
+      "bottom": 637.875,
+      "height": 545.5,
+      "overflow": false,
+      "frameHeight": 681.5,
+      "framePosition": "relative",
+      "sectionHeight": 937.1875
+    }
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "fonts": {
+      "body": "Manrope, \"Manrope Fallback\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "\"Space Grotesk\", \"Space Grotesk Fallback\", ui-sans-serif, system-ui, sans-serif"
+    },
+    "services": {
+      "top": 326.75,
+      "bottom": 804,
+      "height": 477.25,
+      "overflow": false,
+      "frameHeight": 844,
+      "framePosition": "sticky",
+      "sectionHeight": 1392.59375
+    }
+  },
+  {
+    "size": {
+      "width": 768,
+      "height": 600
+    },
+    "fonts": {
+      "body": "Manrope, \"Manrope Fallback\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "\"Space Grotesk\", \"Space Grotesk Fallback\", ui-sans-serif, system-ui, sans-serif"
+    },
+    "services": {
+      "top": 127.0625,
+      "bottom": 528.9375,
+      "height": 401.875,
+      "overflow": false,
+      "frameHeight": 600,
+      "framePosition": "sticky",
+      "sectionHeight": 990
+    }
+  },
+  {
+    "size": {
+      "width": 1440,
+      "height": 900
+    },
+    "fonts": {
+      "body": "Manrope, \"Manrope Fallback\", ui-sans-serif, system-ui, sans-serif",
+      "heading": "\"Space Grotesk\", \"Space Grotesk Fallback\", ui-sans-serif, system-ui, sans-serif"
+    },
+    "services": {
+      "top": 271.546875,
+      "bottom": 684.453125,
+      "height": 412.90625,
+      "overflow": false,
+      "frameHeight": 900,
+      "framePosition": "sticky",
+      "sectionHeight": 1485
+    }
+  }
+]

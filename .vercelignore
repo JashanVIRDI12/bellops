@@ -1,0 +1,23 @@
+# Files Vercel doesn't need to build or serve the site.
+
+# Secrets and local data stay on this computer.
+.env*
+!.env.example
+.data
+supabase/.temp
+
+# Build output and dependencies (Vercel installs and builds fresh).
+node_modules
+.next
+
+# Design research, source assets and agent skills.
+artifacts
+assets
+.claude
+
+# Uncompressed source models; the site loads public/models/ instead.
+public/macbook_pro_m3_16_inch_2024.glb
+public/minimalistic_modern_office.glb
+
+# The project uses pnpm (pnpm-lock.yaml); skip npm's lockfile.
+package-lock.json

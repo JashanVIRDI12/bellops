@@ -8,14 +8,32 @@ import {
   useFont,
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { ACESFilmicToneMapping, MathUtils, type Group } from "three";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type Ref,
+  type RefObject,
+} from "react";
+import {
+  ACESFilmicToneMapping,
+  MathUtils,
+  type Group,
+  type Mesh,
+  type MeshPhysicalMaterial,
+  type Texture,
+} from "three";
+import { SceneSignals } from "@/components/three/scenes/shared";
 
-const FONT_URL = "/fonts/outfit-bold.typeface.json";
+export const WORDMARK_FONT_URL = "/fonts/outfit-bold.typeface.json";
+const FONT_URL = WORDMARK_FONT_URL;
 const STUDIO_HDR = "/hdri/studio_small_03_1k.hdr";
 
 const TEXT_SIZE = 1;
-const LETTER_SPACING = -0.015;
+export const WORDMARK_LETTER_SPACING = -0.015;
+const LETTER_SPACING = WORDMARK_LETTER_SPACING;
 const EXTRUDE = {
   height: 0.34,
   bevelEnabled: true,
@@ -35,6 +53,12 @@ export type Logo3DProps = {
   /** Tilt toward the pointer. Defaults to on. */
   interactive?: boolean;
   className?: string;
+  /** Stops rendering entirely, e.g. while scrolled off screen. */
+  paused?: boolean;
+  /** Fired once the wordmark's first frame is on screen. */
+  onReady?: () => void;
+  /** Fired if the browser drops the WebGL context. */
+  onContextLost?: () => void;
 };
 
 type FontMetrics = {
@@ -53,46 +77,156 @@ function measure(font: FontMetrics, text: string) {
   return width;
 }
 
-function Wordmark() {
+/*
+ * Materials, made to read as real sign metal rather than plastic: no clear
+ * plastic-like coat, fully metallic surfaces whose look comes from what they
+ * reflect, and a brushed grain that stretches highlights sideways.
+ * "Bell" is brushed stainless steel; "Ops" is deep-violet anodized aluminium.
+ */
+const BELL_STEEL = "#CDD0D4";
+const OPS_COLOR = "#4A2FC4";
+const OPS_GLOW = "#2A1580";
+
+/** The extruded "BellOps" wordmark. Also used as the wall sign in the studio scene. */
+export function Wordmark({
+  glow = 0.12,
+  opsReflections = 0.7,
+  envMap,
+  envMapRef,
+  illuminated = false,
+  receiveShadow = true,
+  bellMaterialRef,
+  opsMaterialRef,
+}: {
+  glow?: number;
+  /**
+   * How strongly "Ops" mirrors its surroundings. Lower keeps it darker under
+   * bright studio light; dimmer scenes can raise it.
+   */
+  opsReflections?: number;
+  /** What the letters reflect. The studio sign passes a capture of the real room. */
+  envMap?: Texture | null;
+  /** A scene can fill its reflection probe after mounting without a React render. */
+  envMapRef?: RefObject<Texture | null>;
+  /** Opal LED faces with separate metal returns for a mounted channel-letter sign. */
+  illuminated?: boolean;
+  receiveShadow?: boolean;
+  bellMaterialRef?: Ref<MeshPhysicalMaterial>;
+  /** Lets a scene animate the "Ops" glow. */
+  opsMaterialRef?: Ref<MeshPhysicalMaterial>;
+}) {
   const font = useFont(FONT_URL) as FontMetrics;
   const bellWidth = measure(font, "Bell");
 
+  // three.js ignores a material's envMapIntensity when it's lit by the shared
+  // scene.environment (it uses scene.environmentIntensity instead). Pointing
+  // the letters at their environment directly makes their own strength count.
+  const bellMesh = useRef<Mesh>(null);
+  const opsMesh = useRef<Mesh>(null);
+  useFrame(({ scene }) => {
+    const reflections = envMapRef?.current ?? envMap ?? scene.environment;
+    for (const mesh of [bellMesh.current, opsMesh.current]) {
+      const materials = mesh
+        ? Array.isArray(mesh.material)
+          ? mesh.material
+          : [mesh.material]
+        : [];
+      for (const entry of materials) {
+        const material = entry as MeshPhysicalMaterial;
+        if (material.envMap !== reflections) {
+          material.envMap = reflections;
+          material.needsUpdate = true;
+        }
+      }
+    }
+  });
+
   return (
     <>
-      <Text3D font={FONT_URL} size={TEXT_SIZE} {...EXTRUDE}>
+      <Text3D
+        ref={bellMesh}
+        font={FONT_URL}
+        size={TEXT_SIZE}
+        castShadow
+        receiveShadow={receiveShadow}
+        {...EXTRUDE}
+      >
         Bell
-        <meshPhysicalMaterial
-          color="#f4f4f7"
-          metalness={1}
-          roughness={0.16}
-          anisotropy={0.4}
-          anisotropyRotation={Math.PI / 2}
-          clearcoat={0.6}
-          clearcoatRoughness={0.25}
-          reflectivity={1}
-          envMapIntensity={1.8}
-        />
+        {illuminated ? (
+          <>
+            <meshPhysicalMaterial
+              attach="material-0"
+              ref={bellMaterialRef}
+              color="#D9DEEA"
+              metalness={0.35}
+              roughness={0.24}
+              emissive="#DEE5FF"
+              emissiveIntensity={0.8}
+              envMapIntensity={0.65}
+            />
+            <meshPhysicalMaterial
+              attach="material-1"
+              color="#868D9D"
+              metalness={1}
+              roughness={0.26}
+              envMapIntensity={1.2}
+            />
+          </>
+        ) : (
+          <meshPhysicalMaterial
+            ref={bellMaterialRef}
+            color={BELL_STEEL}
+            metalness={1}
+            roughness={0.3}
+            anisotropy={0.75}
+            anisotropyRotation={0}
+            envMapIntensity={1}
+          />
+        )}
       </Text3D>
       <Text3D
+        ref={opsMesh}
         font={FONT_URL}
         size={TEXT_SIZE}
         position={[bellWidth, 0, 0]}
+        castShadow
+        receiveShadow={receiveShadow}
         {...EXTRUDE}
       >
         Ops
-        <meshPhysicalMaterial
-          color="#7B5CFF"
-          metalness={0.22}
-          roughness={0.16}
-          clearcoat={1}
-          clearcoatRoughness={0.06}
-          emissive="#7B5CFF"
-          emissiveIntensity={0.32}
-          envMapIntensity={1.15}
-          sheen={0.45}
-          sheenRoughness={0.35}
-          sheenColor="#d9ceff"
-        />
+        {illuminated ? (
+          <>
+            <meshPhysicalMaterial
+              attach="material-0"
+              ref={opsMaterialRef}
+              color="#6329DC"
+              metalness={0.2}
+              roughness={0.24}
+              emissive="#7533FF"
+              emissiveIntensity={glow}
+              envMapIntensity={opsReflections}
+            />
+            <meshPhysicalMaterial
+              attach="material-1"
+              color="#3E286A"
+              metalness={0.9}
+              roughness={0.27}
+              envMapIntensity={opsReflections}
+            />
+          </>
+        ) : (
+          <meshPhysicalMaterial
+            ref={opsMaterialRef}
+            color={OPS_COLOR}
+            metalness={1}
+            roughness={0.34}
+            anisotropy={0.55}
+            anisotropyRotation={0}
+            emissive={OPS_GLOW}
+            emissiveIntensity={glow}
+            envMapIntensity={opsReflections}
+          />
+        )}
       </Text3D>
     </>
   );
@@ -222,6 +356,9 @@ export function Logo3D({
   autoRotate = true,
   interactive = true,
   className,
+  paused = false,
+  onReady,
+  onContextLost,
 }: Logo3DProps) {
   const reducedMotion = usePrefersReducedMotion();
   const animate = !reducedMotion && (autoRotate || interactive);
@@ -235,8 +372,8 @@ export function Logo3D({
     >
       <Canvas
         camera={{ position: [0, 0, 8], fov: 32 }}
-        dpr={[1, 2]}
-        frameloop={animate ? "always" : "demand"}
+        dpr={[1, 1.75]}
+        frameloop={paused ? "never" : animate ? "always" : "demand"}
         gl={{
           antialias: true,
           alpha: false,
@@ -253,6 +390,11 @@ export function Logo3D({
             autoRotate={autoRotate}
             interactive={interactive}
             reducedMotion={reducedMotion}
+          />
+          <SceneSignals
+            active={!paused}
+            onReady={onReady}
+            onContextLost={onContextLost}
           />
         </Suspense>
       </Canvas>

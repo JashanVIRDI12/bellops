@@ -3,6 +3,7 @@ import { LogoPreview } from "./view";
 
 export const metadata: Metadata = {
   title: "Logo preview",
+  robots: { index: false, follow: false },
 };
 
 export default function LogoPreviewPage() {

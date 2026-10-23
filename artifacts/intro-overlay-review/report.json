@@ -1,0 +1,163 @@
+[
+  {
+    "size": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900,
+      "touch": false
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "31.68px",
+    "align": "center",
+    "overflow": false,
+    "bounds": {
+      "x": 368,
+      "y": 723.6875,
+      "width": 704,
+      "height": 96.8125
+    },
+    "cue": {
+      "y": 847.5,
+      "bottom": 864
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "large-desktop",
+      "width": 1920,
+      "height": 1080,
+      "touch": false
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "32px",
+    "align": "center",
+    "overflow": false,
+    "bounds": {
+      "x": 608,
+      "y": 898.3125,
+      "width": 704,
+      "height": 97.1875
+    },
+    "cue": {
+      "y": 1023.5,
+      "bottom": 1040
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "touch": true
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "24px",
+    "align": "center",
+    "overflow": false,
+    "bounds": {
+      "x": 24,
+      "y": 652.046875,
+      "width": 342,
+      "height": 116.390625
+    },
+    "cue": {
+      "y": 793.75,
+      "bottom": 810.25
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "small-mobile",
+      "width": 320,
+      "height": 568,
+      "touch": true
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "24px",
+    "align": "center",
+    "overflow": false,
+    "bounds": {
+      "x": 24,
+      "y": 391.109375,
+      "width": 272,
+      "height": 116.390625
+    },
+    "cue": {
+      "y": 527.5,
+      "bottom": 544
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "tablet",
+      "width": 768,
+      "height": 600,
+      "touch": true
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "24px",
+    "align": "center",
+    "overflow": false,
+    "bounds": {
+      "x": 48,
+      "y": 451.90625,
+      "width": 672,
+      "height": 87.59375
+    },
+    "cue": {
+      "y": 559.5,
+      "bottom": 576
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "landscape",
+      "width": 844,
+      "height": 390,
+      "touch": true
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "17.55px",
+    "align": "left",
+    "overflow": false,
+    "bounds": {
+      "x": 48,
+      "y": 353.359375,
+      "width": 603.34375,
+      "height": 21.046875
+    },
+    "cue": {
+      "y": 357.90625,
+      "bottom": 374.40625
+    },
+    "imageReady": true
+  },
+  {
+    "size": {
+      "name": "small-landscape",
+      "width": 568,
+      "height": 320,
+      "touch": true
+    },
+    "color": "rgb(255, 255, 255)",
+    "titleSize": "14.4px",
+    "align": "left",
+    "overflow": false,
+    "bounds": {
+      "x": 24,
+      "y": 289.921875,
+      "width": 375.34375,
+      "height": 17.28125
+    },
+    "cue": {
+      "y": 290.703125,
+      "bottom": 307.203125
+    },
+    "imageReady": true
+  }
+]

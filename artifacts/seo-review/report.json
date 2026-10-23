@@ -1,0 +1,205 @@
+{
+  "metadata": {
+    "title": "Bellops — Websites, 3D Experiences & Motion",
+    "description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+    "canonical": "https://bellops.in/",
+    "og": {
+      "og:title": "Bellops — Websites, 3D Experiences & Motion",
+      "og:description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+      "og:url": "https://bellops.in",
+      "og:site_name": "Bellops",
+      "og:image": "https://bellops.in/brand/share-banner.jpg",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:alt": "Bellops — Websites. 3D. Motion.",
+      "og:type": "website"
+    },
+    "twitter": {
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Bellops — Websites, 3D Experiences & Motion",
+      "twitter:description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+      "twitter:image": "https://bellops.in/brand/share-banner.jpg",
+      "twitter:image:alt": "Bellops — Websites. 3D. Motion.",
+      "twitter:image:width": "1200",
+      "twitter:image:height": "630"
+    },
+    "robots": "index, follow",
+    "icons": [
+      {
+        "rel": "icon",
+        "href": "http://localhost:3003/favicon.ico?favicon.3eam66k5xgsvx.ico",
+        "sizes": "48x48"
+      },
+      {
+        "rel": "icon",
+        "href": "http://localhost:3003/icon.png?icon.046am4c3-6f7z.png",
+        "sizes": "48x48"
+      },
+      {
+        "rel": "apple-touch-icon",
+        "href": "http://localhost:3003/apple-icon.png?apple-icon.0v99dst0bze4r.png",
+        "sizes": "180x180"
+      }
+    ],
+    "manifest": "http://localhost:3003/manifest.webmanifest",
+    "schema": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://bellops.in/#organization",
+          "name": "Bellops",
+          "url": "https://bellops.in",
+          "description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+          "email": "hello@bellops.in",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://bellops.in/brand/bellops-wordmark.png"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Design and development services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Marketing websites",
+                  "description": "Launch sites and product pages, designed and built in Next.js.",
+                  "provider": {
+                    "@id": "https://bellops.in/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "WebGL and 3D",
+                  "description": "Interactive scenes, product viewers and configurators in three.js.",
+                  "provider": {
+                    "@id": "https://bellops.in/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Motion and interaction",
+                  "description": "Scroll stories, transitions and the small details in between.",
+                  "provider": {
+                    "@id": "https://bellops.in/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Design systems",
+                  "description": "Type, color and components that keep every page consistent.",
+                  "provider": {
+                    "@id": "https://bellops.in/#organization"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://bellops.in/#website",
+          "name": "Bellops",
+          "url": "https://bellops.in",
+          "description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+          "inLanguage": "en",
+          "publisher": {
+            "@id": "https://bellops.in/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://bellops.in/#webpage",
+          "url": "https://bellops.in",
+          "name": "Bellops — Websites, 3D Experiences & Motion",
+          "description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+          "isPartOf": {
+            "@id": "https://bellops.in/#website"
+          },
+          "about": {
+            "@id": "https://bellops.in/#organization"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://bellops.in/brand/share-banner.jpg",
+            "width": 1200,
+            "height": 630
+          }
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "id": "/",
+    "name": "Bellops",
+    "short_name": "Bellops",
+    "description": "Bellops is an independent studio designing and building websites, WebGL scenes and motion for brands that want to be remembered.",
+    "lang": "en",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#0b0b10",
+    "theme_color": "#0b0b10",
+    "icons": [
+      {
+        "src": "/brand/icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/brand/icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/brand/icon-maskable-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ]
+  },
+  "robots": "User-Agent: *\nAllow: /\n\nSitemap: https://bellops.in/sitemap.xml\n",
+  "sitemap": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n<url>\n<loc>https://bellops.in/</loc>\n<changefreq>monthly</changefreq>\n<priority>1</priority>\n</url>\n</urlset>\n",
+  "viewports": [
+    {
+      "size": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "logoSrc": "http://localhost:3003/_next/image?url=%2Fbrand%2Fbellops-wordmark.png&w=128&q=75",
+      "logoWidth": 112,
+      "logoHeight": 35,
+      "gap": 995.125,
+      "overflow": false,
+      "h1Count": 1
+    },
+    {
+      "size": {
+        "name": "mobile",
+        "width": 320,
+        "height": 568
+      },
+      "logoSrc": "http://localhost:3003/_next/image?url=%2Fbrand%2Fbellops-wordmark.png&w=96&q=75",
+      "logoWidth": 80,
+      "logoHeight": 25,
+      "gap": 11.125,
+      "overflow": false,
+      "h1Count": 1
+    }
+  ]
+}

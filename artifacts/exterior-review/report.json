@@ -1,0 +1,32 @@
+[
+  {
+    "mood": "night",
+    "errors": [],
+    "panoramaLoads": 4
+  },
+  {
+    "mood": "day",
+    "errors": [],
+    "panoramaLoads": 4
+  },
+  {
+    "mood": "dusk",
+    "errors": [],
+    "panoramaLoads": 4
+  },
+  {
+    "mood": "overcast",
+    "errors": [],
+    "panoramaLoads": 4
+  },
+  {
+    "mood": "rain",
+    "errors": [],
+    "panoramaLoads": 4
+  },
+  {
+    "mood": "night",
+    "errors": [],
+    "panoramaLoads": 4
+  }
+]

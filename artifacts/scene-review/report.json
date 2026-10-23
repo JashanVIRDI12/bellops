@@ -1,0 +1,290 @@
+[
+  {
+    "name": "desktop-0-intro",
+    "heading": "Premium websites and 3D experiences for brands that want to be remembered.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 688,
+      "width": 512,
+      "height": 156
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-1-studio",
+    "heading": "A small studio for considered work.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 638.40625,
+      "width": 576,
+      "height": 205.59375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-2-approach",
+    "heading": "Fewer pages. Better ones.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 253.296875,
+      "width": 384,
+      "height": 393.40625
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-3-work",
+    "heading": "Baba Luxury Cars",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 662.8125,
+      "width": 448,
+      "height": 181.1875
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-4-work-2",
+    "heading": "PUSHWebb",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 689.15625,
+      "width": 448,
+      "height": 154.84375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-5-work-3",
+    "heading": "Chase Healthcare & Wellness",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 651,
+      "width": 448,
+      "height": 193
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-6-services",
+    "heading": "From launch to growth.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 800,
+      "y": 310.546875,
+      "width": 576,
+      "height": 334.90625
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "desktop-7-contact",
+    "heading": "Have a project in mind?",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 64,
+      "y": 597.03125,
+      "width": 672,
+      "height": 246.96875
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-0-intro",
+    "heading": "Premium websites and 3D experiences for brands that want to be remembered.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 669,
+      "width": 342,
+      "height": 135
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-1-studio",
+    "heading": "A small studio for considered work.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 614.625,
+      "width": 342,
+      "height": 189.375
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-2-approach",
+    "heading": "Fewer pages. Better ones.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 459.78125,
+      "width": 342,
+      "height": 344.21875
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-3-work",
+    "heading": "Baba Luxury Cars",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 633.84375,
+      "width": 342,
+      "height": 170.15625
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-4-work-2",
+    "heading": "PUSHWebb",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 633.84375,
+      "width": 342,
+      "height": 170.15625
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-5-work-3",
+    "heading": "Chase Healthcare & Wellness",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 633.84375,
+      "width": 342,
+      "height": 170.15625
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-6-services",
+    "heading": "From launch to growth.",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 392.75,
+      "width": 342,
+      "height": 411.25
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  },
+  {
+    "name": "mobile-7-contact",
+    "heading": "Have a project in mind?",
+    "color": "rgb(255, 255, 255)",
+    "opacity": "1",
+    "visible": "visible",
+    "bounds": {
+      "x": 24,
+      "y": 568.75,
+      "width": 342,
+      "height": 235.03125
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false
+  }
+]

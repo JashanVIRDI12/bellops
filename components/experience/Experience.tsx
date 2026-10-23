@@ -1,0 +1,43 @@
+"use client";
+
+import { useRef } from "react";
+import { Tracker } from "@/components/analytics/Tracker";
+import { projects } from "@/lib/work";
+import { Chapters } from "./Chapters";
+import { ContactDock } from "./ContactDock";
+import { CookieNotice } from "./CookieNotice";
+import { Header } from "./Header";
+import { SiteLoader } from "./SiteLoader";
+import { SmoothScroll } from "./SmoothScroll";
+import { Stage } from "./Stage";
+import { useBeatTracker } from "./useBeatTracker";
+import { useReveals } from "./useReveals";
+
+/**
+ * The home page: a scroll-driven walk through the Bellops studio, shown in the
+ * visitor's own time of day and weather.
+ * The page scrolls normally; a fixed stage behind it plays the camera shot
+ * that matches each section. `main` has no z-index on purpose: a stacking
+ * context there would stop the intro headline blending with the stage.
+ */
+export function Experience() {
+  const content = useRef<HTMLElement>(null);
+  useBeatTracker(content);
+  useReveals(content);
+
+  return (
+    <>
+      <SmoothScroll />
+      <Stage projects={projects} />
+      <Header />
+      <main ref={content} className="relative">
+        <Chapters />
+      </main>
+      <ContactDock />
+      <CookieNotice />
+      <SiteLoader />
+      <Tracker />
+      <div aria-hidden className="grain" />
+    </>
+  );
+}
