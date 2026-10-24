@@ -37,7 +37,8 @@ Apple touch icon, install icons and the social sharing banner. Assets live in
 `public/brand/`; Next.js serves the browser icons from `app/`.
 
 Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the final
-public origin before building. It defaults to `https://bellops.in`. The same
+public origin before building. It defaults to `https://www.bellops.in` (the
+bare domain redirects there, so www is the canonical host). The same
 origin drives canonical URLs, Open Graph and Twitter cards, structured data,
 `/robots.txt` and `/sitemap.xml`. The sitemap includes only the public home page;
 `/playground` and `/logo-preview` carry `noindex` metadata.
@@ -150,7 +151,7 @@ or 90 days:
 Each enquiry also records where its visit came from, its city and device.
 
 **Campaigns.** Tag ad links so campaigns show by name, for example
-`https://bellops.in/?utm_source=meta&utm_medium=paid&utm_campaign=diwali`.
+`https://www.bellops.in/?utm_source=meta&utm_medium=paid&utm_campaign=diwali`.
 Google Ads auto-tagging (gclid) is recognised without tags.
 
 **Privacy.** Analytics use no cookies and no third-party scripts (the only

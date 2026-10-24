@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import { site } from "@/lib/content";
-import { siteTitle, siteUrl, socialImage } from "@/lib/seo";
+import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -28,20 +28,7 @@ export const metadata: Metadata = {
   creator: site.name,
   publisher: site.name,
   category: "design",
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: site.name,
-    title: siteTitle,
-    description: site.description,
-    images: [socialImage],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteTitle,
-    description: site.description,
-    images: [socialImage],
-  },
+  ...shareMetadata({ title: siteTitle, description: site.description }),
   robots: {
     index: true,
     follow: true,
