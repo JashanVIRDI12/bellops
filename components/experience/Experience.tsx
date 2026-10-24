@@ -7,7 +7,6 @@ import { Chapters } from "./Chapters";
 import { ContactDock } from "./ContactDock";
 import { CookieNotice } from "./CookieNotice";
 import { Header } from "./Header";
-import { SiteLoader } from "./SiteLoader";
 import { SmoothScroll } from "./SmoothScroll";
 import { Stage } from "./Stage";
 import { useBeatTracker } from "./useBeatTracker";
@@ -35,7 +34,6 @@ export function Experience() {
       </main>
       <ContactDock />
       <CookieNotice />
-      <SiteLoader />
       <Tracker />
       <div aria-hidden className="grain" />
     </>

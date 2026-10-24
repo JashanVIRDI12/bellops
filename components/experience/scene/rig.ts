@@ -24,6 +24,8 @@ export const rig = {
   warmShot: null as number | null,
   /** The camera moved this frame. Occasional heavy work waits for it to rest. */
   moving: true,
+  /** The live scene is on screen; the opening sun sweep waits for this. */
+  revealed: false,
 };
 
 /* Tweakable: how long the load sequence (sun sweep + camera ease-in) takes, in seconds. */

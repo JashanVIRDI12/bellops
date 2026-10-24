@@ -201,17 +201,18 @@ the visit. To test a renderer on a real device, add `?render=live`
 (this device's 3D settings), `?render=mobile`, `?render=desktop` or
 `?render=stills`. Tilt needs HTTPS, so it only works on the deployed site.
 
-**Start-up loader.** A counter covers the first paint on every visit and
-climbs as the studio really loads: fonts, the local weather, the first image
-and, on devices that get 3D, the models and the warm-up. The warm-up uploads
-every texture, compiles every shader and draws each shot once, hidden, with
-nothing skipped for being out of view, so the camera never stalls on
-something new mid-flight. Then the loader lifts like a window blind and the
-sun sweeps in. It waits at most 2 seconds for the weather and 15 for the 3D
-(which otherwise fades in later over the image, already warmed up), takes
-about a second on a cached visit, and never shows without JavaScript.
-Devices that pass the 3D check download their models alongside the 3D code;
-devices that get the stills never download them.
+**Loading.** Nothing holds the page up: the opening copy is in the page's
+HTML and paints straight away (in light colors over the dark backdrop),
+then eases into its mood's colors as the first still fades in behind it. A
+tiny inline script picks that still from the visitor's clock (the same hours
+as `lib/atmosphere.ts`, or a `?scene=` preview) and preloads it at high
+priority before any JavaScript runs; the other stills load later, and only
+where the stills carry the tour. On devices that get 3D, the live studio
+downloads, warms up out of sight (every texture uploaded, every shader
+compiled, each shot drawn once with nothing skipped for being out of view,
+so the camera never stalls on something new mid-flight), then crossfades in
+and the sun sweeps in. A thin line along the top of the screen tracks it.
+Devices that get the stills never download the models.
 
 While the tour runs, anything heavy waits for the camera to rest: the sign's
 reflection updates, and a lower resolution if the frame-rate check asks for
@@ -272,7 +273,7 @@ What to edit, and where:
 | Quality settings for phones and desktops      | `components/experience/scene/profile.ts`                                                      |
 | Cursor, finger drag and tilt                  | `components/experience/scene/look.ts`                                                         |
 | Which devices get 3D                          | `components/three/utils/use3DSupport.ts`                                                      |
-| Start-up loader: wait limits, wording         | `components/experience/SiteLoader.tsx`, `lib/content.ts`                                      |
+| First still preload, 3D progress line         | `components/experience/Stage.tsx`, `components/experience/Stills.tsx`                         |
 | Section heights (how long each shot holds)    | `components/experience/Chapters.tsx`                                                          |
 
 Every tweakable value has a comment next to it.

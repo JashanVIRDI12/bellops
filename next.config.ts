@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  images: {
+    // Widths offered for full-screen images. The stills are at most 1920 px
+    // wide, so larger versions would only cost bytes.
+    deviceSizes: [640, 828, 1080, 1280, 1920],
+  },
   // 3D models and laptop screenshots keep their names when replaced, so they
   // are cached for a day (not forever), then refreshed in the background.
   async headers() {

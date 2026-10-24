@@ -10,6 +10,7 @@ import {
 } from "react";
 import { cx } from "@/components/three/utils/cx";
 import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersReducedMotion";
+import { whenIdle } from "@/components/three/utils/whenIdle";
 import type { StillMood } from "@/lib/atmosphere";
 import { SHOT_COUNT } from "./beats";
 import {
@@ -18,7 +19,6 @@ import {
   damp,
   easeShot,
 } from "./camera-motion";
-import { reportStill } from "./loader-store";
 import { experience, subscribeProgress } from "./store";
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -33,66 +33,79 @@ const SETTLE_EPSILON = 0.0004;
 const HIDE_AFTER_MS = 1200;
 const LAST_SHOT = SHOT_COUNT - 1;
 
+export type StillOrientation = "landscape" | "portrait";
+
+const STILL_SIZE: Record<StillOrientation, { width: number; height: number }> =
+  {
+    landscape: { width: 1920, height: 1080 },
+    portrait: { width: 860, height: 1864 },
+  };
+
 /**
  * Pre-rendered frames of every camera shot, captured from the live scene.
- * Shown on phones, low-end devices and with reduced motion, and as the first
- * paint everywhere while the 3D loads.
+ * Shown on low-end devices and with reduced motion, and as the backdrop
+ * everywhere while the 3D loads.
  */
 const stillSrc = (
   beat: number,
-  orientation: "landscape" | "portrait",
+  orientation: StillOrientation,
   mood: StillMood,
 ) => `/experience/atmosphere-v5/${mood}/shot-${beat}-${orientation}.webp`;
+
+/**
+ * The image props for one still. The start-of-page preload (Stage) asks for
+ * exactly these URLs, so the first still is already downloading before any
+ * JavaScript runs.
+ */
+export function stillImage(
+  beat: number,
+  orientation: StillOrientation,
+  mood: StillMood,
+  priority: boolean,
+) {
+  return getImageProps({
+    alt: "",
+    src: stillSrc(beat, orientation, mood),
+    ...STILL_SIZE[orientation],
+    sizes: "100vw",
+    fetchPriority: priority ? "high" : "low",
+  }).props;
+}
 
 function Still({
   beat,
   priority,
   mood,
+  onLoad,
 }: {
   beat: number;
   priority: boolean;
   mood: StillMood;
+  onLoad?: () => void;
 }) {
-  // Stills near the current one load straight away (not lazily), so each is
-  // ready before the scroll starts bringing it in.
-  const common = {
-    alt: "",
-    sizes: "100vw",
-    loading: "eager" as const,
-    fetchPriority: priority ? ("high" as const) : ("low" as const),
-  };
-  const {
-    props: { srcSet: portrait },
-  } = getImageProps({
-    ...common,
-    src: stillSrc(beat, "portrait", mood),
-    width: 860,
-    height: 1864,
-  });
-  const {
-    props: { srcSet: landscape, ...rest },
-  } = getImageProps({
-    ...common,
-    src: stillSrc(beat, "landscape", mood),
-    width: 1920,
-    height: 1080,
-  });
+  const portrait = stillImage(beat, "portrait", mood, priority);
+  const landscape = stillImage(beat, "landscape", mood, priority);
 
   return (
     <picture>
-      <source media="(orientation: portrait)" srcSet={portrait} />
-      <source media="(orientation: landscape)" srcSet={landscape} />
+      <source
+        media="(orientation: portrait)"
+        srcSet={portrait.srcSet}
+        sizes={portrait.sizes}
+      />
       <img
-        {...rest}
+        {...landscape}
         alt=""
         className="h-full w-full object-cover"
-        // Tell the start-up loader which image is on screen; it may have
-        // finished before the page's JavaScript arrived.
+        // It may have finished (from the preload) before React attached onLoad.
         ref={(img) => {
-          if (img?.complete && img.naturalWidth > 0)
-            reportStill(img.currentSrc);
+          if (img?.complete && img.naturalWidth > 0) onLoad?.();
         }}
-        onLoad={(event) => reportStill(event.currentTarget.currentSrc)}
+        onLoad={onLoad}
+        // A still that fails to load leaves the dark backdrop, not a broken icon.
+        onError={(event) => {
+          event.currentTarget.style.visibility = "hidden";
+        }}
       />
     </picture>
   );
@@ -130,6 +143,12 @@ function paintStills(
   });
 }
 
+/** The orientation the page shows stills in right now. */
+const currentOrientation = (): StillOrientation =>
+  window.matchMedia("(orientation: portrait)").matches
+    ? "portrait"
+    : "landscape";
+
 /**
  * - "show": the stills follow the scroll
  * - "hide": the live scene has taken over
@@ -137,20 +156,78 @@ function paintStills(
 export type StillsMode = "show" | "hide";
 
 /**
- * The stills, moving with the scroll the way the 3D camera does. Only the
- * pair on screen and one still either side are in the DOM. Scrolling never
- * re-renders React: styles are written straight to the layers each frame.
+ * The stills, moving with the scroll the way the 3D camera does. Only browser
+ * code renders them (the server can't know the visitor's mood).
+ *
+ * The still on screen loads first, with high priority. Its neighbours load
+ * once it has arrived and the browser is idle, and only where the stills
+ * carry the tour (`primary`); elsewhere just the next one joins while the
+ * page travels to it. Scrolling never re-renders React: styles are written
+ * straight to the layers each frame.
  */
-export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
+export function Stills({
+  mode,
+  mood,
+  primary,
+  onFirstLoad,
+}: {
+  mode: StillsMode;
+  mood: StillMood;
+  /** The stills carry the whole tour (no live scene on the way). */
+  primary: boolean;
+  /** The first still is on screen. */
+  onFirstLoad?: () => void;
+}) {
   const reducedMotion = usePrefersReducedMotion();
   const layers = useRef(new Map<number, HTMLDivElement>());
   /** Smoothed scroll progress in beats; null until the first frame. */
   const shown = useRef<number | null>(null);
   /** The still being travelled away from; it and the next are on screen. */
-  const [from, setFrom] = useState(0);
-  const fromRef = useRef(0);
+  const [from, setFrom] = useState(() =>
+    Math.min(Math.floor(experience.progress), LAST_SHOT),
+  );
+  const fromRef = useRef(from);
+  /** Between two stills: the next one must be in the DOM. */
+  const [travelling, setTravelling] = useState(false);
+  const travellingRef = useRef(false);
   /** The mode whose fade has finished. */
   const [settled, setSettled] = useState<StillsMode>("show");
+  /** The first still has loaded and the browser had a moment: neighbours may load. */
+  const [neighbours, setNeighbours] = useState(false);
+  const [firstLoaded, setFirstLoaded] = useState(false);
+  /** The mood drawn now; a new one takes over once its still has loaded. */
+  const [shownMood, setShownMood] = useState(mood);
+
+  const handleFirstLoad = useCallback(() => {
+    setFirstLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!firstLoaded) return;
+    onFirstLoad?.();
+    return whenIdle(() => setNeighbours(true));
+  }, [firstLoaded, onFirstLoad]);
+
+  // The weather can change the mood after the first still is up: fetch the
+  // new one in the background, then switch, so the backdrop never goes blank.
+  useEffect(() => {
+    if (mood === shownMood) return;
+    let cancelled = false;
+    const props = stillImage(fromRef.current, currentOrientation(), mood, true);
+    const image = new Image();
+    image.sizes = props.sizes ?? "100vw";
+    image.srcset = props.srcSet ?? "";
+    image.src = props.src;
+    image
+      .decode()
+      .catch(() => {})
+      .then(() => {
+        if (!cancelled) setShownMood(mood);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [mood, shownMood]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setSettled(mode), HIDE_AFTER_MS);
@@ -191,6 +268,11 @@ export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
         fromRef.current = nextFrom;
         setFrom(nextFrom);
       }
+      const nextTravelling = p - nextFrom > SETTLE_EPSILON;
+      if (nextTravelling !== travellingRef.current) {
+        travellingRef.current = nextTravelling;
+        setTravelling(nextTravelling);
+      }
 
       last = now;
       frame = settled ? 0 : requestAnimationFrame(step);
@@ -210,9 +292,13 @@ export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
     };
   }, [mode, paint]);
 
-  const mounted = [from - 1, from, from + 1, from + 2].filter(
-    (index) => index >= 0 && index <= LAST_SHOT,
-  );
+  const wanted = new Set([from]);
+  if (travelling) wanted.add(from + 1);
+  if (neighbours && primary)
+    [from - 1, from + 1, from + 2].forEach((index) => wanted.add(index));
+  const mounted = [...wanted]
+    .filter((index) => index >= 0 && index <= LAST_SHOT)
+    .sort((a, b) => a - b);
 
   return (
     <div
@@ -224,23 +310,28 @@ export function Stills({ mode, mood }: { mode: StillsMode; mood: StillMood }) {
     >
       {mounted.map((index) => (
         <div
-          key={index}
+          key={`${shownMood}:${index}`}
           ref={(node) => {
             if (!node) return;
             layers.current.set(index, node);
             return () => {
-              layers.current.delete(index);
+              if (layers.current.get(index) === node)
+                layers.current.delete(index);
             };
           }}
           className="absolute inset-0"
-          // The first paint (before JavaScript): only the current still.
           style={{
             opacity: index === from ? 1 : 0,
             visibility: index === from ? "visible" : "hidden",
             willChange: "opacity, transform",
           }}
         >
-          <Still beat={index} priority={index === 0} mood={mood} />
+          <Still
+            beat={index}
+            priority={index === from}
+            mood={shownMood}
+            onLoad={index === from ? handleFirstLoad : undefined}
+          />
         </div>
       ))}
     </div>

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useReportWebVitals } from "next/web-vitals";
-import { sceneSignals } from "@/components/experience/loader-store";
+import { sceneSignals } from "@/components/experience/scene-signals";
 import { experience, subscribeProgress } from "@/components/experience/store";
 import {
   currentVisit,

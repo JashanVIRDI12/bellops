@@ -44,7 +44,29 @@ const initialState: EnvironmentState = {
   weather: null,
   settled: false,
 };
-let state = initialState;
+
+/** A `?scene=` preview mood in the address, if any. */
+function previewMode(): SceneMode | null {
+  const preview = new URL(window.location.href).searchParams.get("scene");
+  return sceneModes.includes(preview as SceneMode)
+    ? (preview as SceneMode)
+    : null;
+}
+
+// The server renders the default mood (it can't know the visitor's clock);
+// in the browser the store starts from the device clock straight away, so the
+// first image asked for after hydration is already the right one.
+let state: EnvironmentState =
+  typeof window === "undefined"
+    ? initialState
+    : (() => {
+        const mode = previewMode() ?? "auto";
+        return {
+          ...initialState,
+          mode,
+          atmosphere: resolveAtmosphere(new Date(), mode, null, null),
+        };
+      })();
 let initialized = false;
 let nextWeatherAt = 0;
 let pending = false;
@@ -184,9 +206,9 @@ function initialize() {
     return;
   }
   initialized = true;
-  const preview = new URL(window.location.href).searchParams.get("scene");
-  if (sceneModes.includes(preview as SceneMode)) {
-    update({ mode: preview as SceneMode, settled: true });
+  const preview = previewMode();
+  if (preview) {
+    update({ mode: preview, settled: true });
     return;
   }
   update();

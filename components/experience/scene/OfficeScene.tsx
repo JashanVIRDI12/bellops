@@ -31,7 +31,6 @@ import type { WorkProject } from "@/lib/work";
 import type { Atmosphere } from "@/lib/atmosphere";
 import { SceneSignals } from "@/components/three/scenes/shared";
 import { MAX_FRAME_DELTA, SCROLL_DAMPING } from "../camera-motion";
-import { loaderState } from "../loader-store";
 import { experience, subscribeProgress } from "../store";
 import { Daylight, SUN_DIRECTION } from "./Daylight";
 import { Exterior } from "./Exterior";
@@ -65,7 +64,7 @@ const TILT_PITCH = 0.035;
 const LOOK_FREQUENCY = 6; // higher = snappier
 const LOOK_DAMPING = 0.78; // 1 = no overshoot
 const INTRO_DOLLY = 0.9; // meters the camera eases forward during the load sequence
-const MAX_INTRO_HOLD = 20; // seconds the load sequence waits for the start-up loader, at most
+const MAX_INTRO_HOLD = 20; // seconds the load sequence waits to be shown, at most
 
 // Camera dynamics while travelling between shots. Both fade to nothing as it lands.
 const BANK = 0.032; // radians the view rolls into a turn, at most (~1.8°)
@@ -141,6 +140,7 @@ export default function OfficeScene({
       const pass = () => {
         if (passed.current) return;
         passed.current = true;
+        rig.revealed = true;
         onReady?.();
       };
       if (frameMs <= SLOW_FRAME_MS) return pass();
@@ -357,6 +357,7 @@ function Warmup({ onProgress }: { onProgress?: (fraction: number) => void }) {
   // Before the first frame: hold the camera on the first shot.
   useLayoutEffect(() => {
     rig.warmShot = 0;
+    rig.revealed = false;
     return () => {
       rig.warmShot = null;
     };
@@ -508,8 +509,8 @@ function CameraRig({ profile }: { profile: RenderProfile }) {
     rig.screen = sample.screen;
 
     // Load sequence: the sun sweeps in across the logo while the camera eases
-    // in. It waits for the start-up loader, so it plays as the loader lifts.
-    if (loaderState.lifted || introHold.current > MAX_INTRO_HOLD)
+    // in. It waits until the scene is shown, so it plays as the scene fades in.
+    if (rig.revealed || introHold.current > MAX_INTRO_HOLD)
       introClock.current += dt;
     else introHold.current += dt;
     rig.intro = introAt(introClock.current);

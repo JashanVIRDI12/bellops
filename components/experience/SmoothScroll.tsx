@@ -10,14 +10,6 @@ import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersRedu
 const SCROLL_LERP = 0.085;
 
 let lenis: Lenis | null = null;
-let locked = false;
-
-/** Holds the page still (the start-up loader is showing) or lets it scroll. */
-export function lockScroll(lock: boolean) {
-  locked = lock;
-  if (lock) lenis?.stop();
-  else lenis?.start();
-}
 
 /**
  * Scrolls to a section by id, smoothly when Lenis is running, instantly
@@ -44,7 +36,6 @@ export function SmoothScroll() {
 
     const instance = new Lenis({ lerp: SCROLL_LERP, wheelMultiplier: 0.9 });
     lenis = instance;
-    if (locked) instance.stop();
     instance.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => instance.raf(time * 1000);
     gsap.ticker.add(tick);

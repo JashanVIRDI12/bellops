@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { preload } from "react-dom";
+import type { StillMood } from "@/lib/atmosphere";
 import type { WorkProject } from "@/lib/work";
 import { SceneErrorBoundary } from "@/components/three/utils/SceneErrorBoundary";
 import { cx } from "@/components/three/utils/cx";
@@ -11,9 +12,9 @@ import {
   type SceneTier,
 } from "@/components/three/utils/use3DSupport";
 import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersReducedMotion";
-import { Stills, type StillsMode } from "./Stills";
+import { Stills, stillImage, type StillsMode } from "./Stills";
 import { useEnvironment } from "./environment-store";
-import { reportScene } from "./loader-store";
+import { reportScene } from "./scene-signals";
 import { modelsFor, type LiveTier } from "./scene/profile";
 
 // three.js, the models and postprocessing load in their own chunk, and only on
@@ -21,6 +22,25 @@ import { modelsFor, type LiveTier } from "./scene/profile";
 const OfficeScene = dynamic(() => import("./scene/OfficeScene"), {
   ssr: false,
 });
+
+/*
+ * Starts downloading the first still before any JavaScript runs: a tiny
+ * inline script works out the visitor's mood from their clock (the same hours
+ * as resolveAtmosphere in lib/atmosphere.ts, or a ?scene= preview) and adds a
+ * high-priority preload for that mood's still, in this screen's orientation.
+ * The server can't know either, so it can't preload the right one itself.
+ */
+const MOODS: StillMood[] = ["day", "dusk", "night", "overcast", "rain"];
+const firstStills = Object.fromEntries(
+  MOODS.map((mood) => [
+    mood,
+    [
+      stillImage(0, "landscape", mood, true).srcSet,
+      stillImage(0, "portrait", mood, true).srcSet,
+    ],
+  ]),
+);
+const preloadFirstStill = `(function(){try{var s=${JSON.stringify(firstStills)};var q=new URLSearchParams(location.search).get("scene");var d=new Date(),h=d.getHours()+d.getMinutes()/60;var m=s[q]?q:h<6||h>=19?"night":h<8||h>=17?"dusk":"day";var l=document.createElement("link");l.rel="preload";l.as="image";l.setAttribute("fetchpriority","high");l.setAttribute("imagesrcset",s[m][matchMedia("(orientation: portrait)").matches?1:0]);l.setAttribute("imagesizes","100vw");document.head.appendChild(l)}catch(e){}})()`;
 
 /* Remembers, for the browser session, that this device was too slow for 3D. */
 const TOO_SLOW_KEY = "bellops:stills";
@@ -75,6 +95,11 @@ function useLiveTier(): LiveTier | "fallback" | "pending" {
  * devices (tuned separately for desktops and phones), crossfading stills
  * everywhere else.
  *
+ * Nothing here holds up the page: the text paints straight away over a dark
+ * backdrop (in light colors), the still for the visitor's mood fades in
+ * behind it, and the live scene downloads, warms up out of sight and then
+ * crossfades in. A thin line along the top tracks the 3D on its way.
+ *
  * It's as tall as the screen with the browser's toolbars hidden (100lvh), so
  * on phones the 3D never resizes, and never stutters, as they slide away.
  */
@@ -87,11 +112,11 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   /** "fading": handing over to the stills; "off": the live scene is gone. */
   const [retired, setRetired] = useState<"no" | "fading" | "off">("no");
   const [loaded, setLoaded] = useState(0);
+  const [warmup, setWarmup] = useState(0);
+  /** A still (or the live scene) is on screen, so the text can take its mood's colors. */
+  const [stillShown, setStillShown] = useState(false);
   const markReady = useCallback(() => setReady(true), []);
-  const reportWarmup = useCallback(
-    (fraction: number) => reportScene({ warmup: fraction }),
-    [],
-  );
+  const markStillShown = useCallback(() => setStillShown(true), []);
   const markFailed = useCallback(() => setRetired("off"), []);
   const markTooSlow = useCallback(() => {
     try {
@@ -122,62 +147,74 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
     for (const model of modelsFor(liveTier))
       preload(model, { as: "fetch", crossOrigin: "anonymous" });
 
-  // Keep the start-up loader informed.
+  // Analytics records which renderer each visit got.
   useEffect(() => {
     reportScene({
       source: tier === "pending" ? null : live ? "live" : "stills",
-      progress: loaded,
-      ready: live && ready,
     });
-  }, [tier, live, loaded, ready]);
+  }, [tier, live]);
+
+  // Downloading is most of the wait, the warm-up the rest.
+  const progress = Math.min(1, 0.04 + (loaded / 100) * 0.66 + warmup * 0.3);
 
   return (
-    <div
-      aria-hidden
-      className="fixed inset-x-0 top-0 z-0 h-lvh bg-[#151c29]"
-      data-scene-mood={atmosphere.still}
-      data-scene-renderer={live && liveTier ? liveTier : "stills"}
-      data-scene-source={
-        mode !== "auto" ? "preview" : weather ? "weather" : "clock"
-      }
-    >
-      <Stills mode={stills} mood={atmosphere.still} />
-
-      {live && liveTier && (
-        <div
-          data-live-ready={ready}
-          className={cx(
-            "absolute inset-0 transition-opacity duration-1000 ease-out",
-            showing ? "opacity-100" : "opacity-0",
-          )}
-        >
-          <SceneErrorBoundary onError={markFailed}>
-            <OfficeScene
-              tier={liveTier}
-              projects={projects}
-              atmosphere={atmosphere}
-              active
-              onReady={markReady}
-              onProgress={setLoaded}
-              onWarmup={reportWarmup}
-              onContextLost={markFailed}
-              onTooSlow={markTooSlow}
-            />
-          </SceneErrorBoundary>
-          {/* Phones skip the post-processing pass; the same vignette, in CSS. */}
-          {liveTier === "mobile" && <div className="stage-vignette" />}
-        </div>
-      )}
-
-      {/* Loading line, only while the live scene downloads. */}
-      {live && !ready && (
-        <div className="absolute inset-x-0 top-0 h-px bg-white/5">
-          <div
-            className="bg-violet h-full transition-[width] duration-300 ease-out"
-            style={{ width: `${Math.max(4, loaded)}%` }}
+    <>
+      <script dangerouslySetInnerHTML={{ __html: preloadFirstStill }} />
+      <div
+        aria-hidden
+        className="fixed inset-x-0 top-0 z-0 h-lvh bg-[#151c29]"
+        data-backdrop={stillShown || showing ? "ready" : "pending"}
+        data-scene-mood={atmosphere.still}
+        data-scene-renderer={live && liveTier ? liveTier : "stills"}
+        data-scene-source={
+          mode !== "auto" ? "preview" : weather ? "weather" : "clock"
+        }
+      >
+        {tier !== "pending" && (
+          <Stills
+            mode={stills}
+            mood={atmosphere.still}
+            primary={!live}
+            onFirstLoad={markStillShown}
           />
-        </div>
+        )}
+
+        {live && liveTier && (
+          <div
+            data-live-ready={ready}
+            className={cx(
+              "absolute inset-0 transition-opacity duration-1000 ease-out",
+              showing ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <SceneErrorBoundary onError={markFailed}>
+              <OfficeScene
+                tier={liveTier}
+                projects={projects}
+                atmosphere={atmosphere}
+                active
+                onReady={markReady}
+                onProgress={setLoaded}
+                onWarmup={setWarmup}
+                onContextLost={markFailed}
+                onTooSlow={markTooSlow}
+              />
+            </SceneErrorBoundary>
+            {/* Phones skip the post-processing pass; the same vignette, in CSS. */}
+            {liveTier === "mobile" && <div className="stage-vignette" />}
+          </div>
+        )}
+      </div>
+
+      {/* The 3D on its way: downloading, then warming up. */}
+      {live && (
+        <div
+          aria-hidden
+          className="scene-progress"
+          data-done={showing || undefined}
+          style={{ "--progress": showing ? 1 : progress } as CSSProperties}
+        />
       )}
-    </div>
+    </>
   );
 }

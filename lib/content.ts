@@ -119,15 +119,6 @@ export const cookieNotice = {
   accept: "OK",
 };
 
-/** Status lines on the start-up loader, in the order they can appear. */
-export const loader = {
-  checking: "Checking your local time and weather",
-  matching: (place?: string) =>
-    place ? `Matching the sky in ${place}` : "Matching your local sky",
-  lighting: "Setting the light",
-  opening: "Opening the studio",
-};
-
 /** The enquiry form in the contact section. Enquiries arrive in /admin. */
 export const enquiryForm = {
   label: "Send us an enquiry",
