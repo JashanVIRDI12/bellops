@@ -11,8 +11,9 @@ const caseStudies = new Set(projects.map((project) => project.slug));
 export function proxy(request: NextRequest) {
   const slug = request.nextUrl.pathname.split("/")[2];
   if (slug && !caseStudies.has(decodeURIComponent(slug))) {
-    // No route matches /404, so Next.js renders the not-found page with a 404.
-    return NextResponse.rewrite(new URL("/404", request.url));
+    // No route matches /404, so it renders the not-found page. The status is
+    // set here too: Vercel serves that prerendered page with a 200 otherwise.
+    return NextResponse.rewrite(new URL("/404", request.url), { status: 404 });
   }
 }
 
