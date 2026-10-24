@@ -52,8 +52,12 @@ export function useBeatTracker(root: RefObject<HTMLElement | null>) {
       setProgress(progress);
     };
 
-    const measure = () => {
-      viewport = ruler.offsetHeight || window.innerHeight;
+    // Measured only when the page or the ruler changes size, from inside the
+    // observer, where the layout is already worked out: never forces one.
+    const measure = (entries: ResizeObserverEntry[]) => {
+      for (const entry of entries)
+        if (entry.target === ruler)
+          viewport = entry.contentRect.height || window.innerHeight;
       const beats = container.querySelectorAll<HTMLElement>("[data-beat]");
       starts = Array.from(
         beats,
@@ -62,16 +66,14 @@ export function useBeatTracker(root: RefObject<HTMLElement | null>) {
       update();
     };
 
-    measure();
     const resize = new ResizeObserver(measure);
     resize.observe(container);
+    resize.observe(ruler);
     window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", measure);
     return () => {
       ruler.remove();
       resize.disconnect();
       window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", measure);
     };
   }, [root]);
 }
