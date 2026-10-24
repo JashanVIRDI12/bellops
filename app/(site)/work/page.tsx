@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactCta } from "@/components/site/ContactCta";
-import { WorkCards } from "@/components/site/WorkCards";
+import { StudioHero } from "@/components/site/StudioHero";
+import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { workPage } from "@/lib/content";
-import { shareMetadata } from "@/lib/seo";
+import { homeUrl, shareMetadata, siteUrl } from "@/lib/seo";
+import { breadcrumbs, jsonLd } from "@/lib/services";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
@@ -16,17 +19,37 @@ export const metadata: Metadata = {
   }),
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  ...breadcrumbs([
+    { name: "Home", url: homeUrl },
+    { name: "Work", url: `${siteUrl}${workPage.path}` },
+  ]),
+};
+
 export default function Work() {
   return (
     <>
-      <section className="site-container pt-16 pb-12 md:pt-24 md:pb-16">
-        <p className="site-eyebrow">Work</p>
-        <h1 className="site-h1 mt-4">{workPage.heading}</h1>
-        <p className="site-lead mt-6">{workPage.lead}</p>
-      </section>
-      <section aria-label="Projects" className="site-container pb-8">
-        <WorkCards projects={projects} headingLevel="h2" />
-      </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
+      />
+      <StudioHero
+        hour={{ shot: 3, mood: "day" }}
+        crumbs={[{ label: "Home", href: "/" }, { label: "Work" }]}
+        heading={workPage.heading}
+        lead={workPage.lead}
+      >
+        <Link href="/#contact" className="button button--solid">
+          Start a project
+        </Link>
+      </StudioHero>
+      <WorkShowcase
+        projects={projects}
+        heading={null}
+        showAll={false}
+        titleLevel="h2"
+      />
       <ContactCta />
     </>
   );

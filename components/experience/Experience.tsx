@@ -6,7 +6,7 @@ import { projects } from "@/lib/work";
 import { Chapters } from "./Chapters";
 import { ContactDock } from "./ContactDock";
 import { CookieNotice } from "./CookieNotice";
-import { Header } from "./Header";
+import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SmoothScroll } from "./SmoothScroll";
 import { Stage } from "./Stage";
 import { useBeatTracker } from "./useBeatTracker";
@@ -28,7 +28,7 @@ export function Experience() {
     <>
       <SmoothScroll />
       <Stage projects={projects} />
-      <Header />
+      <SiteHeader variant="tour" />
       <main ref={content} className="relative">
         <Chapters />
       </main>

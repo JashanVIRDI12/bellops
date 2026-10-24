@@ -1,14 +1,17 @@
 import type { ReactNode } from "react";
+import { SmoothScroll } from "@/components/experience/SmoothScroll";
+import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
 
-/** The inner pages (services, work): a plain dark page around the content. */
+/** The inner pages (services, work): the studio's night palette around the content. */
 export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="site-page">
-      <SiteHeader />
+      <SmoothScroll />
+      <SiteHeader variant="page" />
       <main id="main">{children}</main>
       <SiteFooter />
+      <div aria-hidden className="grain" />
     </div>
   );
 }

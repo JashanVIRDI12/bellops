@@ -261,26 +261,29 @@ after changing the scene, and bump the folder version so no stale images are ser
 
 What to edit, and where:
 
-| Change                                        | File                                                                                          |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Copy, WhatsApp, social links, cookie notice   | `lib/content.ts`                                                                              |
-| Enquiry form and floating WhatsApp button     | `components/contact/`, `components/experience/ContactDock.tsx`                                |
-| Admin portal                                  | `app/admin/`, `lib/admin/session.ts`, `lib/leads/`                                            |
-| Analytics: tracking, sources, report          | `components/analytics/`, `lib/analytics/`, `app/admin/analytics/`                             |
-| Database tables                               | `supabase/schema.sql`                                                                         |
-| Projects shown on the laptop                  | `lib/work.ts` and `public/projects/`                                                          |
-| Camera shots (and phone framings), lighting   | `components/experience/scene/shots.ts`                                                        |
-| Sky and sea of clouds, per time and weather   | `components/experience/scene/Exterior.tsx`                                                    |
-| Sun and room lighting                         | `components/experience/scene/lighting.ts` and `scene/Daylight.tsx`                            |
-| Ceiling and wall lights                       | `components/experience/scene/Office.tsx`                                                      |
-| Local time, sun position and weather          | `lib/atmosphere.ts`, `components/experience/environment-store.ts`, `app/api/weather/route.ts` |
-| Logo sign size, glow, power-on                | `components/experience/scene/LogoSign.tsx` and `scene/rig.ts`                                 |
-| Bloom, scroll feel, banking, frame-rate check | `components/experience/scene/OfficeScene.tsx`                                                 |
-| Quality settings for phones and desktops      | `components/experience/scene/profile.ts`                                                      |
-| Cursor, finger drag and tilt                  | `components/experience/scene/look.ts`                                                         |
-| Which devices get 3D                          | `components/three/utils/use3DSupport.ts`                                                      |
-| First still preload, 3D progress line         | `components/experience/Stage.tsx`, `components/experience/Stills.tsx`                         |
-| Section heights (how long each shot holds)    | `components/experience/Chapters.tsx`                                                          |
+| Change                                           | File                                                                                          |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Copy, WhatsApp, social links, cookie notice      | `lib/content.ts`                                                                              |
+| Services: names, page copy, studio shot per page | `lib/content.ts` (`services`, `servicesPage`, `projectProcess`, `faqs`)                       |
+| Header: services panel, phone menu               | `components/nav/SiteHeader.tsx`                                                               |
+| Inner pages: hero, sections, footer              | `components/site/`, `app/(site)/`                                                             |
+| Enquiry form and floating WhatsApp button        | `components/contact/`, `components/experience/ContactDock.tsx`                                |
+| Admin portal                                     | `app/admin/`, `lib/admin/session.ts`, `lib/leads/`                                            |
+| Analytics: tracking, sources, report             | `components/analytics/`, `lib/analytics/`, `app/admin/analytics/`                             |
+| Database tables                                  | `supabase/schema.sql`                                                                         |
+| Projects shown on the laptop                     | `lib/work.ts` and `public/projects/`                                                          |
+| Camera shots (and phone framings), lighting      | `components/experience/scene/shots.ts`                                                        |
+| Sky and sea of clouds, per time and weather      | `components/experience/scene/Exterior.tsx`                                                    |
+| Sun and room lighting                            | `components/experience/scene/lighting.ts` and `scene/Daylight.tsx`                            |
+| Ceiling and wall lights                          | `components/experience/scene/Office.tsx`                                                      |
+| Local time, sun position and weather             | `lib/atmosphere.ts`, `components/experience/environment-store.ts`, `app/api/weather/route.ts` |
+| Logo sign size, glow, power-on                   | `components/experience/scene/LogoSign.tsx` and `scene/rig.ts`                                 |
+| Bloom, scroll feel, banking, frame-rate check    | `components/experience/scene/OfficeScene.tsx`                                                 |
+| Quality settings for phones and desktops         | `components/experience/scene/profile.ts`                                                      |
+| Cursor, finger drag and tilt                     | `components/experience/scene/look.ts`                                                         |
+| Which devices get 3D                             | `components/three/utils/use3DSupport.ts`                                                      |
+| First still preload, 3D progress line            | `components/experience/Stage.tsx`, `components/experience/Stills.tsx`                         |
+| Section heights (how long each shot holds)       | `components/experience/Chapters.tsx`                                                          |
 
 Every tweakable value has a comment next to it.
 
@@ -294,6 +297,22 @@ pnpm stills                # in another (needs Google Chrome)
 The capture includes all eight shots in landscape and portrait for five moods.
 Use `STILLS_MOODS=night`, `STILLS_SHOTS=0` or `STILLS_SIZES=portrait` to limit a refresh. If the server is
 on another port, set `STILLS_URL=http://localhost:3002`.
+
+**Service pages.** Every service has its own page (`/premium-website-design`,
+`/landing-pages`, `/google-meta-ads`, `/social-media-management`, `/seo`,
+`/website-care-plans`, `/branding`), and `/services` lists them all. Each
+opens on a window into the studio: one of the tour's stills, art-directed to
+an hour of the day (`hour` in `lib/content.ts`; phones can get a different
+shot, as Branding does with the lit sign). Then what's included, how a
+project runs, the work, related services, questions and a way in. The copy
+is drawn from the services' own descriptions: no prices, timelines or results
+until Bellops supplies them. Each page carries Service and BreadcrumbList
+structured data.
+
+The header is the same everywhere. On wide screens, Services opens a panel
+listing every service with a preview of its studio shot; on phones, a Menu
+button opens a full-screen menu. Both work from the keyboard and close with
+Escape.
 
 **Models.** The scene loads compressed copies in `public/models/`: the office
 (1.15 MB, from 2.34 MB) and the laptop (0.68 MB, from 0.85 MB), the same for

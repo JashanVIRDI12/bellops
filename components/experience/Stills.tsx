@@ -1,6 +1,5 @@
 "use client";
 
-import { getImageProps } from "next/image";
 import {
   useCallback,
   useEffect,
@@ -19,6 +18,7 @@ import {
   damp,
   easeShot,
 } from "./camera-motion";
+import { stillImage, type StillOrientation } from "./still-image";
 import { experience, subscribeProgress } from "./store";
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -32,45 +32,6 @@ const SETTLE_EPSILON = 0.0004;
 // all, which frees their full-screen layers (a lot of graphics memory on phones).
 const HIDE_AFTER_MS = 1200;
 const LAST_SHOT = SHOT_COUNT - 1;
-
-export type StillOrientation = "landscape" | "portrait";
-
-const STILL_SIZE: Record<StillOrientation, { width: number; height: number }> =
-  {
-    landscape: { width: 1920, height: 1080 },
-    portrait: { width: 860, height: 1864 },
-  };
-
-/**
- * Pre-rendered frames of every camera shot, captured from the live scene.
- * Shown on low-end devices and with reduced motion, and as the backdrop
- * everywhere while the 3D loads.
- */
-const stillSrc = (
-  beat: number,
-  orientation: StillOrientation,
-  mood: StillMood,
-) => `/experience/atmosphere-v5/${mood}/shot-${beat}-${orientation}.webp`;
-
-/**
- * The image props for one still. The start-of-page preload (Stage) asks for
- * exactly these URLs, so the first still is already downloading before any
- * JavaScript runs.
- */
-export function stillImage(
-  beat: number,
-  orientation: StillOrientation,
-  mood: StillMood,
-  priority: boolean,
-) {
-  return getImageProps({
-    alt: "",
-    src: stillSrc(beat, orientation, mood),
-    ...STILL_SIZE[orientation],
-    sizes: "100vw",
-    fetchPriority: priority ? "high" : "low",
-  }).props;
-}
 
 function Still({
   beat,

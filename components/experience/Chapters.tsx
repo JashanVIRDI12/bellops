@@ -6,8 +6,8 @@ import {
   approach,
   contact,
   intro,
-  servicePages,
   services,
+  servicesPage,
   site,
   studio,
   workPage,
@@ -164,20 +164,12 @@ export function Chapters() {
                         : "text-base/tight"
                     }`}
                   >
-                    {"href" in item && item.href ? (
-                      <Link
-                        href={item.href}
-                        className="decoration-violet-soft/60 hover:decoration-violet-soft underline decoration-1 underline-offset-4 transition-colors"
-                      >
-                        {item.title}
-                        <span aria-hidden className="text-violet-soft">
-                          {" "}
-                          →
-                        </span>
-                      </Link>
-                    ) : (
-                      item.title
-                    )}
+                    <Link
+                      href={item.href}
+                      className="decoration-violet-soft/60 hover:decoration-violet-soft underline decoration-1 underline-offset-4 transition-colors"
+                    >
+                      {item.title}
+                    </Link>
                   </h3>
                   <p className="mt-2 text-[0.8125rem]/relaxed font-medium text-white/85 md:text-sm/relaxed">
                     {item.body}
@@ -243,19 +235,8 @@ export function Chapters() {
               </p>
               <ul className="flex flex-wrap gap-x-6 gap-y-2">
                 <li>
-                  <Link
-                    href={servicePages.premium.path}
-                    className="hover:text-white"
-                  >
-                    {servicePages.premium.navLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href={servicePages.landing.path}
-                    className="hover:text-white"
-                  >
-                    {servicePages.landing.navLabel}
+                  <Link href={servicesPage.path} className="hover:text-white">
+                    Services
                   </Link>
                 </li>
                 <li>

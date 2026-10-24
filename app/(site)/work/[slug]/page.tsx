@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCta } from "@/components/site/ContactCta";
-import { WorkCards } from "@/components/site/WorkCards";
-import { shareMetadata } from "@/lib/seo";
+import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
+import { WorkShowcase } from "@/components/site/WorkShowcase";
+import { workPage } from "@/lib/content";
+import { homeUrl, shareMetadata, siteUrl } from "@/lib/seo";
+import { breadcrumbs, jsonLd } from "@/lib/services";
 import { caseStudyPath, projectHost, projects } from "@/lib/work";
 
 const projectFor = (slug: string) =>
@@ -38,74 +40,71 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   const project = projectFor((await params).slug);
   if (!project) notFound();
   const others = projects.filter((other) => other.slug !== project.slug);
+  const structuredData = {
+    "@context": "https://schema.org",
+    ...breadcrumbs([
+      { name: "Home", url: homeUrl },
+      { name: "Work", url: `${siteUrl}${workPage.path}` },
+      { name: project.client, url: `${siteUrl}${caseStudyPath(project)}` },
+    ]),
+  };
 
   return (
     <>
-      <section className="site-container pt-12 pb-12 md:pt-20 md:pb-16">
-        <nav aria-label="Breadcrumb" className="text-sm text-white/60">
-          <Link href="/work" className="site-link">
-            Work
-          </Link>
-          <span aria-hidden> / </span>
-          <span aria-current="page">{project.client}</span>
-        </nav>
-        <h1 className="site-h1 mt-6">{project.client}</h1>
-        <p className="site-lead mt-6">{project.title}.</p>
-        <p className="mt-8">
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="site-button-ghost"
-            data-track={`project-${project.slug}`}
-          >
-            Visit {projectHost(project)} <span aria-hidden>↗</span>
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
-        </p>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
+      />
+      <section className="wrap case-intro">
+        <Crumbs
+          trail={[
+            { label: "Work", href: workPage.path },
+            { label: project.client },
+          ]}
+        />
+        <RevealTitle text={project.client} className="case-title" />
+        <div className="hero-foot">
+          <p className="hero-lead">{project.title}.</p>
+          <div className="hero-actions">
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="button button--ghost"
+              data-track={`project-${project.slug}`}
+            >
+              Visit {projectHost(project)}
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
       </section>
 
-      <section
-        aria-label="Screens"
-        className="site-container grid items-end gap-6 md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]"
-      >
-        <figure className="site-card">
+      <section aria-label="Screens" className="wrap case-screens">
+        <figure className="case-desktop">
           <Image
             src={project.image}
             alt={`The ${project.client} website on a laptop screen`}
             width={1600}
             height={1000}
-            sizes="(min-width: 768px) 70vw, 100vw"
+            sizes="(min-width: 1024px) 66vw, 100vw"
             preload
-            className="aspect-[16/10] w-full object-cover"
           />
-          <figcaption className="p-4 text-sm text-white/60">Desktop</figcaption>
+          <figcaption>On a laptop</figcaption>
         </figure>
-        <figure className="site-card mx-auto w-full max-w-xs md:max-w-none">
+        <figure className="case-phone">
           <Image
             src={project.mobileImage}
             alt={`The ${project.client} website on a phone`}
             width={780}
             height={1690}
-            sizes="(min-width: 768px) 23vw, 80vw"
-            className="aspect-[780/1690] w-full object-cover"
+            sizes="(min-width: 1024px) 22vw, 70vw"
           />
-          <figcaption className="p-4 text-sm text-white/60">Mobile</figcaption>
+          <figcaption>On a phone</figcaption>
         </figure>
       </section>
 
-      <section
-        aria-labelledby="more-work"
-        className="site-container py-16 md:py-20"
-      >
-        <h2 id="more-work" className="site-h2">
-          More work
-        </h2>
-        <div className="mt-10">
-          <WorkCards projects={others} />
-        </div>
-      </section>
-
+      <WorkShowcase projects={others} heading="More work" />
       <ContactCta />
     </>
   );

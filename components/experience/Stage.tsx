@@ -13,7 +13,8 @@ import {
 } from "@/components/three/utils/use3DSupport";
 import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersReducedMotion";
 import { whenIdle } from "@/components/three/utils/whenIdle";
-import { Stills, stillImage, type StillsMode } from "./Stills";
+import { Stills, type StillsMode } from "./Stills";
+import { stillImage } from "./still-image";
 import { useEnvironment } from "./environment-store";
 import { reportScene } from "./scene-signals";
 import { modelsFor, type LiveTier } from "./scene/profile";

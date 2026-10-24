@@ -11,6 +11,13 @@ const SCROLL_LERP = 0.085;
 
 let lenis: Lenis | null = null;
 
+/** Holds the page still (a menu covers it) or lets it scroll again. */
+export function setScrollLocked(locked: boolean) {
+  if (locked) lenis?.stop();
+  else lenis?.start();
+  document.documentElement.classList.toggle("scroll-locked", locked);
+}
+
 /**
  * Scrolls to a section by id, smoothly when Lenis is running, instantly
  * otherwise (reduced motion).
