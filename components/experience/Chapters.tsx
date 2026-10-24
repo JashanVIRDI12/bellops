@@ -245,13 +245,17 @@ const ghost = { "aria-hidden": true, "data-intro-ghost": "" } as const;
  * One layer of the opening scene. Both layers lay out every part, so they line
  * up exactly at any screen size; each shows its own parts and keeps invisible
  * copies of the others (hidden from screen readers, with no links).
- * - "headline": the <h1> in white with mix-blend-mode: difference, so each
- *   letter shows the inverse of the sky, clouds or window frame behind it.
- * - "rest": the shade, eyebrow, description and buttons in their usual colors.
+ * - "headline": the large tagline in white with mix-blend-mode: difference, so
+ *   each letter shows the inverse of the sky, clouds or window frame behind it.
+ * - "rest": the shade, the <h1>, description and buttons in their usual colors.
+ *
+ * Screen readers hear the "rest" layer in order: the <h1>, then the tagline
+ * (a visually hidden copy, since the visible one is drawn by the other
+ * layer), then the description and buttons.
  */
 function IntroLayer({ part }: { part: "headline" | "rest" }) {
   const headline = part === "headline";
-  const lines = intro.headingLines.map((line) => (
+  const lines = intro.taglineLines.map((line) => (
     <span key={line}>{line} </span>
   ));
   return (
@@ -260,15 +264,24 @@ function IntroLayer({ part }: { part: "headline" | "rest" }) {
     >
       {!headline && <Scrim />}
       <div className="scene-copy intro-copy">
-        <p className="intro-eyebrow" {...(headline ? ghost : {})}>
-          {intro.eyebrow}
-        </p>
         {headline ? (
-          <h1 className="intro-title font-heading">{lines}</h1>
+          <p className="intro-eyebrow" {...ghost}>
+            {intro.heading}
+          </p>
         ) : (
-          <p className="intro-title font-heading" {...ghost}>
+          <h1 className="intro-eyebrow">{intro.heading}</h1>
+        )}
+        {headline ? (
+          <p aria-hidden className="intro-title font-heading">
             {lines}
           </p>
+        ) : (
+          <>
+            <p className="intro-title font-heading" {...ghost}>
+              {lines}
+            </p>
+            <p className="sr-only">{intro.taglineLines.join(" ")}</p>
+          </>
         )}
         <div className="intro-footer" {...(headline ? ghost : {})}>
           <p className="intro-description">{intro.body}</p>

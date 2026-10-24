@@ -5,9 +5,9 @@
 
 export const site = {
   name: "Bellops",
-  // The search-result snippet and share-card text. Keep it under ~155 characters.
+  // The search-result snippet and share-card text. Keep it under ~160 characters.
   description:
-    "Bellops is a web design and digital marketing studio in India: premium 3D websites, landing pages, Google and Meta ads, social media management and SEO.",
+    "Bellops builds premium 3D websites, high-converting landing pages, and runs Google & Meta ads and SEO for brands across India. See our work and get a quote.",
   // WhatsApp is the only direct contact for now (no call or email buttons).
   // With the country code; spaces are fine.
   whatsapp: "+91 85868 75703",
@@ -34,10 +34,12 @@ export const chapters = [
 export type ChapterId = (typeof chapters)[number]["id"];
 
 export const intro = {
-  eyebrow: "Web design & digital marketing studio",
-  // The page's <h1>, one entry per line (wide screens keep these breaks).
-  // Keep each line to about 11 characters so four lines fit the window.
-  headingLines: ["Web design,", "3D, ads", "and social.", "One studio."],
+  // The page's <h1>, in the words people search for. It sits small, above
+  // the large tagline.
+  heading: "Premium 3D Website Design Agency in India",
+  // The large display tagline under it, one entry per line (wide screens keep
+  // these breaks). Keep each line to about 11 characters so four lines fit the window.
+  taglineLines: ["Web design,", "3D, ads", "and social.", "One studio."],
   body: "We design and build fast, premium websites with immersive 3D, then grow them with Google and Meta ads, social media management and SEO.",
   cta: "Start a project",
   whatsapp: "WhatsApp us",

@@ -1036,7 +1036,7 @@ html:has(.site-loader[data-state="tracking"]) .experience-header * {
   }
 }
 
-/* A phone turned sideways: the headline and buttons only. */
+/* A phone turned sideways: the heading, tagline and buttons only. */
 @media (orientation: landscape) and (height < 35rem) {
   .intro-frame {
     padding-top: 4.5rem;
@@ -1044,10 +1044,14 @@ html:has(.site-loader[data-state="tracking"]) .experience-header * {
   }
 
   .intro-title {
-    font-size: min(10vw, calc((100svh - 11rem) / 3.6));
+    font-size: min(10vw, calc((100svh - 12.5rem) / 3.6));
   }
 
-  .intro-eyebrow,
+  /* The <h1> stays; it's one short line. */
+  .intro-eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
   .intro-description {
     display: none;
   }
