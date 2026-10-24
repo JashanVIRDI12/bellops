@@ -154,13 +154,19 @@ Each enquiry also records where its visit came from, its city and device.
 `https://www.bellops.in/?utm_source=meta&utm_medium=paid&utm_campaign=diwali`.
 Google Ads auto-tagging (gclid) is recognised without tags.
 
-**Privacy.** Analytics use no cookies and no third-party scripts (the only
+**Privacy.** The site's own analytics use no cookies (the only first-party
 cookie is the cookie notice's own). A visit ID lives in the
 browser tab's session storage and is gone when the tab closes. The server
 never stores IP addresses: visitors are counted with a one-way hash that
 changes every day, and the city comes from Vercel's coarse IP location.
 Browsers that send Do Not Track or Global Privacy Control, bots and visits
 from localhost (unless `ANALYTICS_IN_DEV=1`) aren't counted.
+
+**Google Analytics.** Google's tag (GA4 property `G-GC08E6VQ91`) also runs,
+loaded once the page is idle so it never holds up the first paint. It sets
+Google's own `_ga` cookies, which the cookie notice covers. It stays off for
+Do Not Track and Global Privacy Control, on `/admin` and on localhost. The
+measurement ID is in `components/analytics/GoogleAnalytics.tsx`.
 
 How it works: `components/analytics/Tracker.tsx` batches events and sends them
 to `/api/collect` when the page is hidden or a contact button is pressed;

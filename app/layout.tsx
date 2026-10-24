@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { site } from "@/lib/content";
 import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -60,7 +61,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`}>
-      <body className="text-ink font-sans antialiased">{children}</body>
+      <body className="text-ink font-sans antialiased">
+        {children}
+        <GoogleAnalytics />
+      </body>
     </html>
   );
 }

@@ -22,7 +22,8 @@ let timer = 0;
 /** Read when a batch is sent: which scene the visitor got ("3d" or "images"). */
 let sceneOf: () => string = () => "";
 
-function allowed() {
+/** False when the browser asks not to be tracked (Do Not Track or Global Privacy Control). */
+export function trackingAllowed() {
   if (typeof window === "undefined") return false;
   const nav = navigator as Navigator & { globalPrivacyControl?: boolean };
   return nav.globalPrivacyControl !== true && nav.doNotTrack !== "1";
@@ -77,7 +78,7 @@ export function setSceneReader(read: () => string) {
 }
 
 export function track(type: EventType, name?: string, value?: number) {
-  if (!allowed()) return;
+  if (!trackingAllowed()) return;
   if (type === "vitals" && name && value !== undefined) {
     vitals.set(name, value);
     return;
@@ -89,7 +90,7 @@ export function track(type: EventType, name?: string, value?: number) {
 
 /** Sends what's waiting. `final`: the page is going away, include vitals. */
 export function flush(final = false) {
-  if (!allowed()) return;
+  if (!trackingAllowed()) return;
   window.clearTimeout(timer);
   if (final)
     for (const [name, value] of vitals)
