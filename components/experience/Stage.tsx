@@ -12,6 +12,7 @@ import {
   type SceneTier,
 } from "@/components/three/utils/use3DSupport";
 import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersReducedMotion";
+import { whenIdle } from "@/components/three/utils/whenIdle";
 import { Stills, stillImage, type StillsMode } from "./Stills";
 import { useEnvironment } from "./environment-store";
 import { reportScene } from "./scene-signals";
@@ -46,6 +47,10 @@ const preloadFirstStill = `(function(){try{var s=${JSON.stringify(firstStills)};
 const TOO_SLOW_KEY = "bellops:stills";
 /* How long the live scene takes to fade out when handing over to the stills. */
 const HANDOVER_MS = 1000;
+/* The 3D starts loading once the first still is up and the browser is idle,
+   or after these limits (ms) at most. */
+const IDLE_WAIT = 2500;
+const STILL_WAIT = 4000;
 
 /**
  * `?render=` forces a renderer, for testing on a real device:
@@ -117,6 +122,9 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   const [stillShown, setStillShown] = useState(false);
   const markReady = useCallback(() => setReady(true), []);
   const markStillShown = useCallback(() => setStillShown(true), []);
+  /** The page has settled enough to start on the 3D. */
+  const [idle, setIdle] = useState(false);
+  const [stillWaitOver, setStillWaitOver] = useState(false);
   const markFailed = useCallback(() => setRetired("off"), []);
   const markTooSlow = useCallback(() => {
     try {
@@ -136,6 +144,19 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   const liveTier = tier === "desktop" || tier === "mobile" ? tier : null;
   // Reduced motion gets the stills: same story, no camera flight.
   const live = liveTier !== null && !reducedMotion && retired !== "off";
+
+  // The page comes first: the 3D (code and models) waits for the first still
+  // and a quiet moment, so it never competes with the opening paint.
+  useEffect(() => {
+    if (!live || stillShown) return;
+    const timer = window.setTimeout(() => setStillWaitOver(true), STILL_WAIT);
+    return () => window.clearTimeout(timer);
+  }, [live, stillShown]);
+  useEffect(() => {
+    if (!live || idle || !(stillShown || stillWaitOver)) return;
+    return whenIdle(() => setIdle(true), IDLE_WAIT);
+  }, [live, idle, stillShown, stillWaitOver]);
+  const started = live && idle;
   const showing = live && ready && retired === "no";
   // The still for the current shot paints first everywhere; the live scene
   // fades in over it once it's ready.
@@ -143,7 +164,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
 
   // Once this device has passed the 3D check, download its models alongside
   // the 3D code instead of after it. Devices that get images never fetch them.
-  if (live && liveTier)
+  if (started && liveTier)
     for (const model of modelsFor(liveTier))
       preload(model, { as: "fetch", crossOrigin: "anonymous" });
 
@@ -179,7 +200,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
           />
         )}
 
-        {live && liveTier && (
+        {started && liveTier && (
           <div
             data-live-ready={ready}
             className={cx(
@@ -207,7 +228,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       </div>
 
       {/* The 3D on its way: downloading, then warming up. */}
-      {live && (
+      {started && (
         <div
           aria-hidden
           className="scene-progress"

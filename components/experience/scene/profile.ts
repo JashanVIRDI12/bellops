@@ -1,7 +1,7 @@
 // Render settings for each kind of device. Kept free of three.js so the page
 // can read them (to preload the right model) without loading any 3D code.
 
-import { MACBOOK_URL, OFFICE_MOBILE_URL, OFFICE_URL } from "./models";
+import { MACBOOK_URL, OFFICE_URL } from "./models";
 
 export type LiveTier = "desktop" | "mobile";
 
@@ -35,7 +35,7 @@ export type RenderProfile = {
 export const PROFILES: Record<LiveTier, RenderProfile> = {
   desktop: {
     tier: "desktop",
-    maxDpr: 1.75,
+    maxDpr: 1.5,
     maxPixels: Infinity,
     composer: true,
     shadowMapSize: 2048,
@@ -56,7 +56,7 @@ export const PROFILES: Record<LiveTier, RenderProfile> = {
     reflectionSize: 128,
     skyOctaves: 4,
     rainDrops: 700,
-    officeUrl: OFFICE_MOBILE_URL,
+    officeUrl: OFFICE_URL,
     fingerLook: 0.11,
   },
 };

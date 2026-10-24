@@ -171,7 +171,7 @@ query.
 
 The page scrolls normally. A fixed stage behind it plays the camera shot that matches each section.
 
-- **Desktop:** the live 3D scene. It loads in its own chunk after the page and renders only while something moves.
+- **Desktop:** the live 3D scene. It loads in its own chunk once the page has painted and the browser is idle, and renders only while something moves.
 - **Phones and tablets:** the same live scene, tuned for phone graphics chips
   (see "On phones" below).
 - **Slow devices and reduced motion:** pre-rendered stills of the same shots, crossfading as you scroll.
@@ -289,13 +289,14 @@ The capture includes all eight shots in landscape and portrait for five moods.
 Use `STILLS_MOODS=night`, `STILLS_SHOTS=0` or `STILLS_SIZES=portrait` to limit a refresh. If the server is
 on another port, set `STILLS_URL=http://localhost:3002`.
 
-**Models.** The scene loads compressed copies in `public/models/`. To re-compress after replacing a source model:
-
-```bash
-npx @gltf-transform/cli optimize public/minimalistic_modern_office.glb public/models/office.glb --compress meshopt --texture-compress webp --texture-size 2048
-npx @gltf-transform/cli optimize public/minimalistic_modern_office.glb public/models/office-mobile.glb --compress meshopt --texture-compress webp --texture-size 1024
-npx @gltf-transform/cli optimize public/macbook_pro_m3_16_inch_2024.glb public/models/macbook.glb --compress meshopt --texture-compress webp --texture-size 1024
-```
+**Models.** The scene loads compressed copies in `public/models/`: the office
+(1.15 MB, from 2.34 MB) and the laptop (0.68 MB, from 0.85 MB), the same for
+phones and desktops. `scripts/optimize-models.mjs` builds them from the source
+models; its header says how to run it. It keeps 1024 px textures, drops what
+the scene never reads (the hidden backdrop, unused textures, the plants'
+unused UV set) and simplifies only as far as nothing visibly changes. Going
+further was tried: it thins out the plants' leaves and wipes the laptop's key
+legends.
 
 Earlier 3D pieces (the orb and the work showcase) are still on [/playground](http://localhost:3000/playground).
 
