@@ -79,10 +79,13 @@ export const services = {
     {
       title: "Premium & 3D website design",
       body: "Custom website design and development with immersive 3D, smooth motion and a premium finish.",
+      // The service's own page, where there is one.
+      href: "/premium-website-design",
     },
     {
       title: "Landing pages",
       body: "High-converting landing pages for ad campaigns, product launches and lead generation.",
+      href: "/landing-pages",
     },
     {
       title: "Google & Meta ad campaigns",
@@ -111,6 +114,41 @@ export const contact = {
   heading: "Have a project in mind?",
   body: "Tell us about your website, ad campaign or social media goals and when you want to launch. We usually reply within a working day.",
   whatsapp: "Chat on WhatsApp",
+};
+
+/**
+ * The service pages. A first pass built from the copy above; Bellops will
+ * extend it (no prices, timelines or results until they're supplied).
+ */
+export const servicePages = {
+  premium: {
+    path: "/premium-website-design",
+    title: "Premium & Luxury Website Design Company in India | Bellops",
+    description:
+      "Custom premium and luxury website design in India by Bellops: planned around your customers, designed and built in-house, with immersive 3D and smooth motion.",
+    heading: "Premium Website Design for Brands That Want to Stand Out",
+    lead: "Custom website design and development with immersive 3D, smooth motion and a premium finish, for brands that care how they feel, not only how they look.",
+    navLabel: "Premium websites",
+  },
+  landing: {
+    path: "/landing-pages",
+    title: "Landing Page Design Agency in India for Ads | Bellops",
+    description:
+      "High-converting landing pages for Google and Meta ad campaigns, product launches and lead generation, designed and built in-house by Bellops in India.",
+    heading: "High-Converting Landing Pages for Google & Meta Ads",
+    lead: "High-converting landing pages for ad campaigns, product launches and lead generation, built to load fast and turn clicks into enquiries.",
+    navLabel: "Landing pages",
+  },
+};
+
+/** The work index and case studies. */
+export const workPage = {
+  path: "/work",
+  title: "Selected Work: Websites Designed & Built by Bellops",
+  description:
+    "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
+  heading: "Selected work",
+  lead: "Websites we've designed and built, from first sketch to launch.",
 };
 
 /** The cookie notice shown once per browser, until the visitor presses OK. */

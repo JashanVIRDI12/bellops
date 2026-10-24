@@ -1,16 +1,19 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { EnquiryForm } from "@/components/contact/EnquiryForm";
 import { WhatsAppIcon } from "@/components/contact/icons";
 import {
   approach,
   contact,
   intro,
+  servicePages,
   services,
   site,
   studio,
+  workPage,
 } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
-import { projects } from "@/lib/work";
+import { caseStudyPath, projectHost, projects } from "@/lib/work";
 import { GlideLink } from "./GlideLink";
 
 /*
@@ -116,12 +119,19 @@ export function Chapters() {
               <p className="mt-3 max-w-[42ch] font-medium text-white/90">
                 {project.title}
               </p>
-              <p className="mt-5">
+              <p className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                <Link
+                  href={caseStudyPath(project)}
+                  className="text-violet-soft font-bold underline decoration-2 underline-offset-4 transition-colors hover:text-white"
+                  data-track={`case-study-${project.slug}`}
+                >
+                  Read the case study
+                </Link>
                 <ExternalLink
                   href={project.url}
                   track={`project-${project.slug}`}
                 >
-                  Visit {new URL(project.url).hostname.replace(/^www\./, "")}
+                  Visit {projectHost(project)}
                 </ExternalLink>
               </p>
             </div>
@@ -154,7 +164,20 @@ export function Chapters() {
                         : "text-base/tight"
                     }`}
                   >
-                    {item.title}
+                    {"href" in item && item.href ? (
+                      <Link
+                        href={item.href}
+                        className="decoration-violet-soft/60 hover:decoration-violet-soft underline decoration-1 underline-offset-4 transition-colors"
+                      >
+                        {item.title}
+                        <span aria-hidden className="text-violet-soft">
+                          {" "}
+                          →
+                        </span>
+                      </Link>
+                    ) : (
+                      item.title
+                    )}
                   </h3>
                   <p className="mt-2 text-[0.8125rem]/relaxed font-medium text-white/85 md:text-sm/relaxed">
                     {item.body}
@@ -218,7 +241,28 @@ export function Chapters() {
                   .
                 </span>
               </p>
-              <ul className="flex gap-6">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2">
+                <li>
+                  <Link
+                    href={servicePages.premium.path}
+                    className="hover:text-white"
+                  >
+                    {servicePages.premium.navLabel}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={servicePages.landing.path}
+                    className="hover:text-white"
+                  >
+                    {servicePages.landing.navLabel}
+                  </Link>
+                </li>
+                <li>
+                  <Link href={workPage.path} className="hover:text-white">
+                    Work
+                  </Link>
+                </li>
                 {site.socials.map((social) => (
                   <li key={social.label}>
                     <ExternalLink

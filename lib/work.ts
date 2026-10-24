@@ -9,7 +9,7 @@
  * The titles paraphrase each site's own description; edit them freely.
  */
 export type WorkProject = {
-  /** Unique, URL-safe id. */
+  /** Unique, URL-safe id; also the case study's address, /work/<slug>. */
   slug: string;
   title: string;
   client: string;
@@ -39,7 +39,7 @@ export const projects: readonly WorkProject[] = [
     url: "https://www.pushwebb.com",
   },
   {
-    slug: "chase-healthcare",
+    slug: "chase-healthcare-wellness",
     title: "An export site for a WHO-GMP healthcare manufacturer",
     client: "Chase Healthcare & Wellness",
     image: "/projects/chw-desktop.cd0dbb19.webp",
@@ -47,3 +47,11 @@ export const projects: readonly WorkProject[] = [
     url: "https://www.chw.co.in",
   },
 ];
+
+/** A project's case-study page. */
+export const caseStudyPath = (project: Pick<WorkProject, "slug">) =>
+  `/work/${project.slug}`;
+
+/** The project's own site, without "https://www.", for link text. */
+export const projectHost = (project: Pick<WorkProject, "url">) =>
+  new URL(project.url).hostname.replace(/^www\./, "");
