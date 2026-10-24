@@ -1,11 +1,14 @@
 // Refresh the PUSHWebb device screenshots after its interactive robot loads.
 // Run: node scripts/capture-pushwebb.mjs
 
+import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright-core";
 
-const out = path.resolve("public/work");
+// Screenshots are named with a hash of their contents (they're cached for a
+// year); update lib/work.ts with the names this prints.
+const out = path.resolve("public/projects");
 const browser = await chromium.launch({
   executablePath:
     process.env.CHROME_PATH ??
@@ -55,8 +58,10 @@ try {
       canvas.getContext("2d").drawImage(image, 0, 0);
       return canvas.toDataURL("image/webp", 0.88).split(",")[1];
     }, png.toString("base64"));
-    const file = path.join(out, `pushwebb-${size.name}-bot.webp`);
-    await writeFile(file, Buffer.from(webp, "base64"));
+    const bytes = Buffer.from(webp, "base64");
+    const hash = createHash("sha256").update(bytes).digest("hex").slice(0, 8);
+    const file = path.join(out, `pushwebb-${size.name}-bot.${hash}.webp`);
+    await writeFile(file, bytes);
     console.log(`Saved ${file} with the robot loaded`);
     await page.close();
   }

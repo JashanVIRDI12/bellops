@@ -268,7 +268,7 @@ What to edit, and where:
 | Admin portal                                  | `app/admin/`, `lib/admin/session.ts`, `lib/leads/`                                            |
 | Analytics: tracking, sources, report          | `components/analytics/`, `lib/analytics/`, `app/admin/analytics/`                             |
 | Database tables                               | `supabase/schema.sql`                                                                         |
-| Projects shown on the laptop                  | `lib/work.ts` and `public/work/`                                                              |
+| Projects shown on the laptop                  | `lib/work.ts` and `public/projects/`                                                          |
 | Camera shots (and phone framings), lighting   | `components/experience/scene/shots.ts`                                                        |
 | Sky and sea of clouds, per time and weather   | `components/experience/scene/Exterior.tsx`                                                    |
 | Sun and room lighting                         | `components/experience/scene/lighting.ts` and `scene/Daylight.tsx`                            |
@@ -298,7 +298,10 @@ on another port, set `STILLS_URL=http://localhost:3002`.
 **Models.** The scene loads compressed copies in `public/models/`: the office
 (1.15 MB, from 2.34 MB) and the laptop (0.68 MB, from 0.85 MB), the same for
 phones and desktops. `scripts/optimize-models.mjs` builds them from the source
-models; its header says how to run it. It keeps 1024 px textures, drops what
+models; its header says how to run it. Models and project screenshots are
+named with a short hash of their contents and cached for a year
+(`immutable`), so a replaced file must get a new name (and the code its new
+path). It keeps 1024 px textures, drops what
 the scene never reads (the hidden backdrop, unused textures, the plants'
 unused UV set) and simplifies only as far as nothing visibly changes. Going
 further was tried: it thins out the plants' leaves and wipes the laptop's key
