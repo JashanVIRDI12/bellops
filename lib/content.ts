@@ -16,6 +16,9 @@ export const site = {
   socials: [
     { label: "Instagram", href: "https://www.instagram.com/bellops.ai/" },
   ],
+  // Where the studio is, for search engines (structured data). Add the street
+  // and PIN code here if they should be public.
+  address: { locality: "Moti Nagar", region: "Delhi", country: "IN" },
 };
 
 /**

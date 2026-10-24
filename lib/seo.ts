@@ -60,9 +60,8 @@ export const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      // A ProfessionalService is a kind of LocalBusiness. Its address and city
-      // are still to come from Bellops ([NEEDS JASHAN]); add `address` here
-      // once supplied. Nothing is guessed in the meantime.
+      // A ProfessionalService is a kind of LocalBusiness, so it carries the
+      // studio's address (lib/content.ts).
       "@type": ["Organization", "ProfessionalService"],
       "@id": organizationId,
       name: site.name,
@@ -70,6 +69,12 @@ export const structuredData = {
       description: site.description,
       // E.164, from the WhatsApp number in lib/content.ts.
       telephone: site.whatsapp.replace(/[^\d+]/g, ""),
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.address.locality,
+        addressRegion: site.address.region,
+        addressCountry: site.address.country,
+      },
       sameAs: site.socials.map((social) => social.href),
       areaServed: { "@type": "Country", name: "India" },
       knowsAbout: [
