@@ -999,6 +999,9 @@ html:has(.site-page) {
   min-height: 100svh;
   background-color: var(--midnight);
   color: var(--moonlight);
+  /* Tilted phone mock-ups and zooming photos never widen the page. clip,
+     not hidden: it doesn't make a scroll box, so sticky headings still work. */
+  overflow-x: clip;
 }
 
 .site-page :focus-visible {
