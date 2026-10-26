@@ -59,12 +59,10 @@ export function shot(id: ChapterId, beat = 0) {
 }
 
 export const intro = {
-  // The page's <h1>, in the words people search for. It sits small, above
-  // the large tagline.
-  heading: "3D Website Design Agency in India, Built to Perform",
-  // The large display tagline under it, one entry per line (wide screens keep
-  // these breaks). Keep each line to about 11 characters so four lines fit the window.
-  taglineLines: ["Web design,", "3D, ads", "and social.", "One studio."],
+  // The page's one headline: the <h1>, in the words people search for, set
+  // large over the view out of the window. One entry per line (wide screens
+  // keep these breaks; phones may wrap them).
+  headingLines: ["3D website design", "agency in India,", "built to perform"],
   body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small, remote studio.",
   cta: "Get a quote for your website",
   whatsapp: "Chat on WhatsApp",

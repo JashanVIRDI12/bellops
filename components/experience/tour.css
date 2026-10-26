@@ -82,6 +82,12 @@
   visibility: hidden;
 }
 
+/* A ghost's words live in an attribute (Chapters.tsx: Ghost), so the HTML
+   holds them once; drawn here, they still size the box like real text. */
+[data-ghost-text]::before {
+  content: attr(data-ghost-text);
+}
+
 /* Forced colors replace the white type, so blending would only garble it. */
 @media (forced-colors: active) {
   .intro-frame--headline {
@@ -154,10 +160,10 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
   line-height: 1.4;
 }
 
-/* Portrait: big enough that lines may wrap. Landscape: four lines, sized to
-   the window pane's width and the screen's height. */
+/* Portrait: big enough that lines may wrap. Landscape: three lines of up to
+   17 characters, sized to the window pane's width and the screen's height. */
 .intro-title {
-  font-size: min(17vw, calc((100svh - 25rem) / 4.6));
+  font-size: min(12vw, calc((100svh - 25rem) / 4.6));
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 0.9;
@@ -170,7 +176,7 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 
 @media (orientation: landscape) {
   .intro-title {
-    font-size: min(12.5vw, calc((100svh - 25rem) / 3.6));
+    font-size: min(7.4vw, calc((100svh - 22rem) / 2.7));
   }
 }
 
@@ -201,7 +207,7 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 
   /* The description runs the width of the pane, the buttons under it. */
   .intro-title {
-    font-size: min(12.5vw, calc((100svh - 23rem) / 3.6));
+    font-size: min(7.4vw, calc((100svh - 20rem) / 2.7));
   }
 
   .intro-description {
@@ -281,7 +287,7 @@ body:has([data-backdrop="pending"]) .intro-frame {
   background-color: rgb(7 10 19 / 0.4);
 }
 
-/* A phone turned sideways: the heading, tagline and buttons only. */
+/* A phone turned sideways: the headline and buttons only. */
 @media (orientation: landscape) and (height < 35rem) {
   .intro-frame {
     padding-top: 4.5rem;
@@ -289,12 +295,7 @@ body:has([data-backdrop="pending"]) .intro-frame {
   }
 
   .intro-title {
-    font-size: min(10vw, calc((100svh - 12.5rem) / 3.6));
-  }
-
-  /* The <h1> stays; it's one short line. */
-  .intro-eyebrow {
-    margin-bottom: 0.5rem;
+    font-size: min(6.4vw, calc((100svh - 11rem) / 2.7));
   }
 
   .intro-description {

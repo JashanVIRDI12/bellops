@@ -549,26 +549,50 @@ export function Chapters() {
   );
 }
 
-/** Marks the invisible copies that hold another layer's space. */
-const ghost = { "aria-hidden": true, "data-intro-ghost": "" } as const;
+/**
+ * An invisible stand-in for text the other layer draws: the same element and
+ * classes, so it takes up exactly the same space, but its words come from a
+ * data attribute through CSS (tour.css). The page's HTML then holds every
+ * line of the opening scene once, not once per layer.
+ */
+function Ghost({
+  as: Tag = "span",
+  className,
+  text,
+  children,
+}: {
+  as?: "p" | "span";
+  className?: string;
+  text: string;
+  children?: ReactNode;
+}) {
+  return (
+    <Tag
+      aria-hidden
+      data-intro-ghost=""
+      data-ghost-text={text}
+      className={className}
+    >
+      {children}
+    </Tag>
+  );
+}
 
 /**
  * One layer of the opening scene. Both layers lay out every part, so they line
- * up exactly at any screen size; each shows its own parts and keeps invisible
- * copies of the others (hidden from screen readers, with no links).
- * - "headline": the large tagline in white with mix-blend-mode: difference, so
- *   each letter shows the inverse of the sky, clouds or window frame behind it.
- * - "rest": the shade, the <h1>, description and buttons in their usual colors.
+ * up exactly at any screen size; each shows its own parts and holds invisible
+ * stand-ins (Ghost) for the other's.
+ * - "headline": the page's <h1>, large, in white with mix-blend-mode:
+ *   difference, so each letter shows the inverse of the sky, clouds or window
+ *   frame behind it. The blend has to sit on the layer itself (a sticky
+ *   frame is its own stacking context), hence two layers.
+ * - "rest": the shade, description and buttons in their usual colors.
  *
- * Screen readers hear the "rest" layer in order: the <h1>, then the tagline
- * (a visually hidden copy, since the visible one is drawn by the other
- * layer), then the description and buttons.
+ * Screen readers hear the <h1> first (the headline layer comes first), then
+ * the description and buttons.
  */
 function IntroLayer({ part }: { part: "headline" | "rest" }) {
   const headline = part === "headline";
-  const lines = intro.taglineLines.map((line) => (
-    <span key={line}>{line} </span>
-  ));
   return (
     <div
       className={`${frame} intro-frame ${headline ? "intro-frame--headline" : ""}`}
@@ -576,38 +600,40 @@ function IntroLayer({ part }: { part: "headline" | "rest" }) {
       {!headline && <Scrim />}
       <div className="scene-copy intro-copy">
         {headline ? (
-          <p className="intro-eyebrow" {...ghost}>
-            {intro.heading}
-          </p>
+          <h1 className="intro-title font-heading">
+            {intro.headingLines.map((line) => (
+              <span key={line}>{line} </span>
+            ))}
+          </h1>
         ) : (
-          <h1 className="intro-eyebrow">{intro.heading}</h1>
-        )}
-        {headline ? (
           <p aria-hidden className="intro-title font-heading">
-            {lines}
+            {intro.headingLines.map((line) => (
+              <Ghost key={line} text={line} />
+            ))}
           </p>
-        ) : (
-          <>
-            <p className="intro-title font-heading" {...ghost}>
-              {lines}
-            </p>
-            <p className="sr-only">{intro.taglineLines.join(" ")}</p>
-          </>
         )}
-        <div className="intro-footer" {...(headline ? ghost : {})}>
-          <p className="intro-description">{intro.body}</p>
+        <div
+          className="intro-footer"
+          {...(headline ? { "aria-hidden": true } : {})}
+        >
+          {headline ? (
+            <Ghost as="p" className="intro-description" text={intro.body} />
+          ) : (
+            <p className="intro-description">{intro.body}</p>
+          )}
           <div className="intro-actions">
             {headline ? (
               <>
-                <span className="intro-cta">{intro.cta}</span>
-                <span className="contact-button contact-button--outline">
+                <Ghost className="intro-cta" text={intro.cta} />
+                <Ghost
+                  className="contact-button contact-button--outline"
+                  text={intro.whatsapp}
+                >
                   <WhatsAppIcon />
-                  {intro.whatsapp}
-                </span>
-                <span className="intro-scroll">
-                  <span>{intro.hint}</span>
+                </Ghost>
+                <Ghost className="intro-scroll" text={intro.hint}>
                   <ArrowDownIcon />
-                </span>
+                </Ghost>
               </>
             ) : (
               <>
