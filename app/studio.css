@@ -905,6 +905,63 @@
   color: #fff;
   border-color: #6740cc;
 }
+/* About and the questions, before the contact section. */
+.tour-about {
+  background: #1d1927;
+  color: #f6f2ec;
+  padding-block: 3rem 5rem;
+}
+.tour-about .section-topline {
+  border-color: #f6f2ec33;
+  color: #beb5cc;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 2rem 6%;
+  align-items: start;
+  padding-block: 3rem;
+}
+.about-grid > * {
+  min-width: 0;
+}
+.about-copy p {
+  max-width: 52ch;
+  color: #d6d0dd;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+.about-copy .studio-text-link {
+  margin-top: 1.5rem;
+}
+.home-faq {
+  border-top: 1px solid #f6f2ec22;
+}
+.home-faq > h2 {
+  color: #beb5cc;
+}
+.work-intro {
+  max-width: 60ch;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.capabilities-kicker {
+  max-width: 48ch;
+  margin-bottom: 1.25rem;
+  color: #6a646b;
+}
+.approach-link {
+  margin-top: 2.5rem;
+}
+.tour-hero-description p {
+  max-width: 50ch;
+}
+@media (max-width: 899px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
 .tour-contact {
   background: #15121d;
   color: #f6f2ec;

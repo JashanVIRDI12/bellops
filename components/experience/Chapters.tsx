@@ -6,8 +6,17 @@ import { Arrow } from "@/components/site/Arrow";
 import { Capabilities } from "@/components/site/Capabilities";
 import { ProofStrip } from "@/components/site/ProofStrip";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { INSTAGRAM_URL, approach, contact, intro, studio } from "@/lib/content";
+import {
+  INSTAGRAM_URL,
+  approach,
+  contact,
+  intro,
+  services,
+  studio,
+} from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
+import { aboutBellops, homeFaqs, workIntro } from "@/lib/home";
+import { threeDPage } from "@/lib/three-d";
 import { caseStudyPath, projects } from "@/lib/work";
 import { GlideLink } from "./GlideLink";
 
@@ -55,11 +64,7 @@ export function Chapters() {
               </span>
             </p>
             <div className="tour-hero-description hero-intro">
-              <p>
-                We build websites people feel.
-                <br />
-                And the strategy that moves them forward.
-              </p>
+              <p>{intro.body}</p>
               <div className="tour-hero-actions">
                 <GlideLink
                   to="contact"
@@ -68,7 +73,7 @@ export function Chapters() {
                   data-track="start-project"
                   data-cta="get_quote"
                 >
-                  Get a quote in 24h <Arrow diagonal />
+                  {intro.cta} <Arrow diagonal />
                 </GlideLink>
                 <a
                   href={whatsappHref()}
@@ -78,7 +83,7 @@ export function Chapters() {
                   data-magnetic
                   data-track="whatsapp-intro"
                 >
-                  <WhatsAppIcon /> WhatsApp us
+                  <WhatsAppIcon /> {intro.whatsapp}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </div>
@@ -143,18 +148,19 @@ export function Chapters() {
           </div>
         </div>
         <div className="tour-hero-bottom">
-          <a
-            href="#studio"
+          <GlideLink
+            to="work"
             className="scroll-invitation"
-            data-cta="explore_studio"
+            data-cta="see_work"
           >
             <span className="scroll-circle">
               <Arrow />
             </span>
             <span>
-              Take a closer look<span>Scroll to explore</span>
+              {intro.hint}
+              <span>Three recent projects</span>
             </span>
-          </a>
+          </GlideLink>
           <p>
             Premium website design & digital marketing
             <br />
@@ -212,14 +218,14 @@ export function Chapters() {
             </span>
           </div>
           <div className="story-copy">
-            <p className="studio-label" data-enter>
-              Small team. Whole picture.
-            </p>
-            <h2 className="editorial-title" data-enter>
+            <h2 className="studio-label" data-enter>
+              {studio.heading}
+            </h2>
+            <p className="editorial-title" data-enter>
               A bigger
               <br />
               point of <em>view.</em>
-            </h2>
+            </p>
             <p
               className="story-manifesto"
               aria-label="We connect how your brand looks, how your website works, and how your business grows."
@@ -282,6 +288,13 @@ export function Chapters() {
                   </li>
                 ))}
               </ol>
+              <Link
+                href={threeDPage.path}
+                className="studio-text-link approach-link"
+                data-enter
+              >
+                See how we build 3D websites <Arrow diagonal />
+              </Link>
             </div>
           </div>
         </div>
@@ -305,6 +318,11 @@ export function Chapters() {
                 0{index + 1} / 0{projects.length}
               </span>
             </div>
+            {index === 0 && (
+              <p className="work-intro" data-enter>
+                {workIntro}
+              </p>
+            )}
             <div className="project-heading" data-enter>
               <h2 id={"project-title-" + index}>{project.client}</h2>
               <span>{projectTypes[index]}</span>
@@ -351,7 +369,7 @@ export function Chapters() {
             <div className="project-bottom">
               <p>{project.title}</p>
               <Link href={caseStudyPath(project)} className="studio-text-link">
-                Explore the project <Arrow diagonal />
+                Read the {project.client} case study <Arrow diagonal />
               </Link>
             </div>
           </div>
@@ -368,21 +386,61 @@ export function Chapters() {
               04 / What we bring to the table
             </span>
             <Link href="/services" className="studio-text-link">
-              All services <Arrow diagonal />
+              Compare all services <Arrow diagonal />
             </Link>
           </div>
           <div className="capabilities-heading" data-enter>
-            <h2 className="editorial-title">
-              All the right
-              <br />
-              <em>connections.</em>
-            </h2>
+            <div>
+              <h2 className="studio-label capabilities-kicker">
+                {services.heading}
+              </h2>
+              <p className="editorial-title">
+                All the right
+                <br />
+                <em>connections.</em>
+              </p>
+            </div>
             <p>
               A considered identity. A website with a point of view. A plan for
               what comes next.
             </p>
           </div>
           <Capabilities />
+        </div>
+      </section>
+      <section id="about" aria-labelledby="about-title" className="tour-about">
+        <div className="studio-wrap">
+          <div className="section-topline" data-enter>
+            <span className="studio-label">05 / {aboutBellops.heading}</span>
+            <span>Moti Nagar, Delhi</span>
+          </div>
+          <div className="about-grid">
+            <h2 id="about-title" className="editorial-title" data-enter>
+              About <em>Bellops</em>
+            </h2>
+            <div className="about-copy" data-enter>
+              <p>{aboutBellops.body}</p>
+              <Link href="/about" className="studio-text-link">
+                More about the studio <Arrow diagonal />
+              </Link>
+            </div>
+          </div>
+          <div className="about-grid home-faq">
+            <h2 className="studio-label" data-enter>
+              Frequently asked questions
+            </h2>
+            <div className="faq">
+              {homeFaqs.map((faq) => (
+                <details key={faq.question} className="faq-item">
+                  <summary>
+                    <span>{faq.question}</span>
+                    <span className="faq-icon" aria-hidden="true" />
+                  </summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <section
@@ -394,7 +452,7 @@ export function Chapters() {
         <div className="studio-wrap">
           <div className="section-topline" data-enter>
             <span className="studio-label">
-              05 / Your next chapter starts here
+              06 / Your next chapter starts here
             </span>
             <span className="contact-location">
               <span className="status-dot" /> Based in Delhi. Open to ideas.

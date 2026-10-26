@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Experience } from "@/components/experience/Experience";
 import { site } from "@/lib/content";
+import { homeFaqs } from "@/lib/home";
+import { faqPage, jsonLd } from "@/lib/schema";
 import { shareMetadata, siteTitle, structuredData } from "@/lib/seo";
 
 // Set here rather than in the layout, so other pages never inherit the home
@@ -21,6 +23,16 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      {/* The home page's questions, word for word as shown (lib/home.ts). */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({
+            "@context": "https://schema.org",
+            ...faqPage(homeFaqs),
+          }),
         }}
       />
       <Experience />

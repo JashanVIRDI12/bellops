@@ -9,7 +9,7 @@ export const site = {
   name: "Bellops",
   // The search-result snippet and share-card text. Keep it under ~160 characters.
   description:
-    "Bellops builds premium 3D websites, high-converting landing pages, and runs Google & Meta ads and SEO for brands across India. See our work and get a quote.",
+    "Bellops is a Delhi studio building premium, fast 3D websites with Three.js and WebGL, plus landing pages, ads and SEO for brands across India.",
   // WhatsApp is the only direct contact for now (no call or email buttons).
   // With the country code; spaces are fine.
   whatsapp: "+91 85868 75703",
@@ -17,6 +17,9 @@ export const site = {
   whatsappQuote: "Hi Bellops, I'd like a quote for my project.", // the phones' floating WhatsApp button
   copyrightYear: 2026, // static on purpose: the page is prerendered, so no new Date()
   socials: [{ label: "Instagram", href: INSTAGRAM_URL }],
+  // Who runs the studio: named on the home and about pages, and in the
+  // structured data.
+  founders: ["Jashan Singh", "Shivam Ahuja"],
   // Where the studio is, for search engines (structured data). Add the street
   // and PIN code here if they should be public.
   address: { locality: "Moti Nagar", region: "Delhi", country: "IN" },
@@ -39,36 +42,33 @@ export type ChapterId = (typeof chapters)[number]["id"];
 
 export const intro = {
   // The page's <h1>, in the words people search for. It sits small, above
-  // the large tagline.
-  heading: "Premium 3D Website Design Agency in India",
-  // The large display tagline under it, one entry per line (wide screens keep
-  // these breaks). Keep each line to about 11 characters so four lines fit the window.
-  taglineLines: ["Web design,", "3D, ads", "and social.", "One studio."],
-  body: "We design and build fast, premium websites with immersive 3D, then grow them with Google and Meta ads, social media management and SEO.",
-  cta: "Start a project",
-  whatsapp: "WhatsApp us",
-  hint: "Explore the studio",
+  // the large display line.
+  heading: "3D Website Design Agency in India, Built to Perform",
+  body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small studio in Moti Nagar, Delhi.",
+  cta: "Get a quote for your website",
+  whatsapp: "Chat on WhatsApp",
+  hint: "See our work",
 };
 
 export const studio = {
-  heading: "Web design and marketing under one roof.",
-  body: "Bellops is an independent studio for brands that care how they feel, not only how they look. Strategy, design, development, ads and social media, from one small team.",
+  heading: "Premium website design and marketing, under one roof",
+  body: "Bellops is an independent studio for brands that care how they feel, not only how they look. One small team handles strategy, design, development, ads and social media, so your website and your marketing pull in the same direction.",
 };
 
 export const approach = {
   heading: "Built to rank, load fast and convert.",
   points: [
     {
+      title: "Fast on every device",
+      body: "Technical SEO and Core Web Vitals are built in, and every 3D scene ships with a lighter version for slower phones.",
+    },
+    {
       title: "Strategy first",
-      body: "We plan every page around your customers and what they search for, before anything is designed.",
+      body: "Every page is planned around your customers and what they search for, before anything is designed.",
     },
     {
       title: "Designed and built in-house",
-      body: "The people who design your website code it too, so nothing gets lost in handoff.",
-    },
-    {
-      title: "Fast on every device",
-      body: "Technical SEO and Core Web Vitals are built in, and every 3D scene has a lighter version for slower phones.",
+      body: "The people who design your site write the code too. Nothing gets lost in a handoff.",
     },
   ],
 };
@@ -123,11 +123,11 @@ export type Service = {
 export const services = {
   // Each service card's WhatsApp button types this in; {service} is its title.
   whatsappMessage: "Hi Bellops, I'm interested in {service}.",
-  heading: "Websites, ads, social and SEO.",
+  heading: "Interactive websites, and everything that brings people to them",
   items: [
     {
       title: "Premium & 3D website design",
-      body: "Custom website design and development with immersive 3D, smooth motion and a premium finish.",
+      body: "Custom design and development with immersive Three.js and WebGL 3D, smooth motion and a premium finish, without slowing the site down.",
       href: "/premium-website-design",
       nav: "Premium websites",
       navImage: "/navigation/services-v1/premium-websites.webp",
@@ -179,7 +179,7 @@ export const services = {
     },
     {
       title: "Google & Meta ad campaigns",
-      body: "Google, Instagram and Facebook ads with the creative and targeting to turn clicks into customers.",
+      body: "Google, Instagram and Facebook ads, with the creative and targeting to turn clicks into customers, sent to pages we built to convert.",
       href: "/google-meta-ads",
       nav: "Google & Meta ads",
       navImage: "/navigation/services-v1/google-meta-ads.webp",
@@ -231,7 +231,7 @@ export const services = {
     },
     {
       title: "SEO & speed optimization",
-      body: "Technical, on-page and local SEO, plus faster load times, so customers find you on Google.",
+      body: "Technical, on-page and local SEO, plus faster load times, so customers find you on Google and stay.",
       href: "/seo-services",
       nav: "SEO & speed",
       navImage: "/navigation/services-v1/seo-speed.webp",
@@ -259,7 +259,7 @@ export const services = {
     },
     {
       title: "Website care plans",
-      body: "Website maintenance: hosting, security updates, backups and small edits, every month.",
+      body: "Hosting, security updates, backups and small edits, handled every month.",
       href: "/website-care-plans",
       nav: "Website care",
       navImage: "/navigation/services-v1/website-care.webp",
@@ -282,7 +282,7 @@ export const services = {
     },
     {
       title: "Branding starter packs",
-      body: "Logo design, color palette and a social media kit for a consistent brand identity.",
+      body: "Logo design, colour palette and a social media kit for a consistent brand identity.",
       href: "/branding",
       nav: "Branding",
       navImage: "/navigation/services-v1/branding.webp",
@@ -372,8 +372,8 @@ export const faqs = [
 ];
 
 export const contact = {
-  heading: "Have a project in mind?",
-  body: "Tell us about your website, ad campaign or social media goals and when you want to launch. We usually reply within a working day.",
+  heading: "Tell us what you're building",
+  body: "Share your goals, budget range and launch date. We usually reply within a working day.",
   whatsapp: "Chat on WhatsApp",
 };
 
@@ -442,7 +442,7 @@ export const enquiryForm = {
   ],
   messagePlaceholder: "What you're building, your timeline, any links.",
   privacy: "We use these details to reply to your enquiry.",
-  submit: "Send enquiry",
+  submit: "Send my enquiry",
   pending: "Sending…",
   // Both end with a WhatsApp link.
   failed: "Your enquiry didn't send. Try again, or message us on",

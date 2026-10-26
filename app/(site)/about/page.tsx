@@ -5,6 +5,7 @@ import { Process } from "@/components/site/Process";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { aboutPage, approach, studio } from "@/lib/content";
+import { aboutBellops } from "@/lib/home";
 import { breadcrumbList, jsonLd, webPage, type Crumb } from "@/lib/schema";
 import { shareMetadata } from "@/lib/seo";
 import { projects } from "@/lib/work";
@@ -31,8 +32,8 @@ const structuredData = {
 };
 
 /**
- * The studio: who Bellops is and how it works, in the words the home page
- * already uses. The founder's story joins once Jashan's bio is written.
+ * The studio: who Bellops is, who runs it and how it works, in the words
+ * the home page uses.
  */
 export default function About() {
   return (
@@ -58,6 +59,14 @@ export default function About() {
           Our services
         </Link>
       </StudioHero>
+      <section aria-labelledby="who" className="wrap split block">
+        <h2 id="who" className="block-title">
+          {aboutBellops.heading}
+        </h2>
+        <div className="page-copy">
+          <p>{aboutBellops.body}</p>
+        </div>
+      </section>
       <section aria-labelledby="approach" className="wrap split block">
         <h2 id="approach" className="block-title">
           {approach.heading}

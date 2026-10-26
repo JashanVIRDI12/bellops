@@ -44,7 +44,7 @@ type Variant = "tour" | "page";
  *
  * - Wide screens: Services opens a panel listing every service, previewing
  *   each one's service image as it's pointed at; Work and Contact go straight
- *   there; "Start a project" is always one click away.
+ *   there; "Get a quote" is always one click away.
  * - Phones: a Menu button opens a full-screen menu.
  *
  * Both close with Escape, a click elsewhere or a link, and give focus back.
@@ -149,9 +149,9 @@ export function SiteHeader({ variant }: { variant: Variant }) {
           className="nav-cta"
           onClick={goToContact}
           data-track="nav-start-project"
-          data-cta="start_project"
+          data-cta="get_quote"
         >
-          Start a project
+          Get a quote
         </Link>
 
         <MobileMenu
@@ -414,9 +414,9 @@ function MobileMenu({
             href="/#contact"
             className="nav-cta"
             onClick={onContact}
-            data-cta="start_project"
+            data-cta="get_quote"
           >
-            Start a project
+            Get a quote
           </Link>
           <a
             href={whatsappHref()}
