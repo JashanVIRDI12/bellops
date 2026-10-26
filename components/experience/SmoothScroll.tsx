@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import "./lenis.css";
 import { usePrefersReducedMotion } from "@/components/three/utils/usePrefersReducedMotion";
 
 /* Tweakable: how heavy the smooth scroll feels. Lower = smoother and slower to settle. */

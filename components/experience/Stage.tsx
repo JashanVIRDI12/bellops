@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { preload } from "react-dom";
+import "./stage.css";
 import type { StillMood } from "@/lib/atmosphere";
 import type { WorkProject } from "@/lib/work";
 import { SceneErrorBoundary } from "@/components/three/utils/SceneErrorBoundary";

@@ -1,0 +1,46 @@
+/* The home page's 3D stage (Stage.tsx). Loaded with it, not on every page. */
+
+/* ── The 3D on its way ───────────────────────────────────────────────────── */
+/* A thin line across the top of the screen while the live studio downloads
+   and warms up behind the page (the stills show meanwhile). Above the header
+   (z 36) and the grain (z 40). Stage sets --progress from 0 to 1. */
+
+.scene-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgb(206 194 255 / 0),
+    var(--color-violet-soft) 40%,
+    #fff
+  );
+  box-shadow: 0 0 10px rgb(206 194 255 / 0.65);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  transition:
+    transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1),
+    opacity 700ms ease 250ms;
+}
+
+.scene-progress[data-done] {
+  opacity: 0;
+}
+
+/* Phones render the studio without the post-processing pass; this is the
+   desktop vignette (OfficeScene, offset 0.3, darkness 0.32) drawn in CSS, so
+   the stills and the live scene still match. */
+.stage-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse farthest-corner at center,
+    transparent 55%,
+    rgb(0 0 0 / 0.02) 71%,
+    rgb(0 0 0 / 0.067) 85%,
+    rgb(0 0 0 / 0.143)
+  );
+}

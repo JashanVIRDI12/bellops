@@ -48,234 +48,6 @@
   text-shadow: 0 1px 16px rgb(255 248 238 / 0.5);
 }
 
-/* Transparent gradients keep copy readable as the camera and sunlight move. */
-.scene-frame {
-  isolation: isolate;
-}
-
-.scene-scrim {
-  position: absolute;
-  inset: 0;
-  /* Frames are one small screen tall (100svh), but when a phone's toolbar
-     shrinks the screen grows to 100lvh: reach down to its real bottom edge,
-     so no band of unshaded scene shows under the copy. */
-  bottom: calc(100svh - 100lvh);
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgb(7 10 19 / 0.88),
-    rgb(7 10 19 / 0.62) 24%,
-    rgb(7 10 19 / 0.16) 48%,
-    transparent 70%
-  );
-}
-
-.scene-copy {
-  position: relative;
-  color: #fff;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.35);
-}
-
-.scene-copy :focus-visible {
-  outline-color: var(--color-violet-soft);
-}
-
-/*
- * Scene 1: a full-screen headline over the view out of the window. It fills
- * the large left pane and stops short of the dark window frame.
- *
- * Two layers share one grid cell and the same layout (see IntroLayer):
- * - The headline layer is white with mix-blend-mode: difference, so every
- *   letter is the inverse of what's behind it: dark over bright sky and
- *   clouds, light over the night sky and the window frame. It can only blend
- *   with the 3D scene because nothing between them starts a stacking context
- *   (main has no z-index). It sits above the other layer (z-index 1) and
- *   lets clicks through to the buttons.
- * - The other layer holds the eyebrow, description and buttons. They are
- *   near-black against the bright day, dusk and overcast skies and turn white
- *   at night and in the rain (the backdrop reports its mood as data-scene-mood),
- *   where a shade also keeps the inverted headline from going mid-grey.
- */
-.intro-section {
-  display: grid;
-}
-
-.intro-section > .intro-frame {
-  grid-area: 1 / 1;
-  align-self: start;
-}
-
-.intro-frame--headline {
-  z-index: 1;
-  pointer-events: none;
-  mix-blend-mode: difference;
-}
-
-.intro-frame--headline .intro-copy {
-  color: #fff;
-  text-shadow: none;
-}
-
-.intro-frame--headline .intro-title {
-  pointer-events: auto;
-}
-
-[data-intro-ghost] {
-  visibility: hidden;
-}
-
-/* Forced colors replace the white type, so blending would only garble it. */
-@media (forced-colors: active) {
-  .intro-frame--headline {
-    mix-blend-mode: normal;
-  }
-}
-
-.intro-frame {
-  --intro-fg: var(--color-ink);
-  --intro-muted: rgb(14 14 20 / 0.8);
-  --intro-rule: rgb(14 14 20 / 0.24);
-  --intro-glow: 0 1px 24px rgb(255 255 255 / 0.3);
-  --intro-fill: rgb(255 255 255 / 0.3);
-  --intro-focus: var(--color-violet);
-  align-items: flex-end;
-  padding-top: 6rem;
-  padding-bottom: clamp(1.25rem, 4svh, 2.5rem);
-}
-
-body:has([data-scene-mood="night"], [data-scene-mood="rain"]) .intro-frame {
-  --intro-fg: #fff;
-  --intro-muted: rgb(255 255 255 / 0.84);
-  --intro-rule: rgb(255 255 255 / 0.3);
-  --intro-glow: 0 2px 22px rgb(0 0 0 / 0.4);
-  --intro-fill: rgb(7 10 19 / 0.25);
-  --intro-focus: var(--color-violet-soft);
-}
-
-/* Light skies need no shade; at night, a soft one under the footer. */
-.intro-frame .scene-scrim {
-  background: none;
-}
-
-body:has([data-scene-mood="night"]) .intro-frame .scene-scrim {
-  background: linear-gradient(
-    to top,
-    rgb(7 10 19 / 0.6),
-    rgb(7 10 19 / 0.2) 30%,
-    transparent 55%
-  );
-}
-
-/* The rainy sky is mid-grey, which inverts to mid-grey: darken it enough
-   for the headline to turn light and stay readable. */
-body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
-  background: linear-gradient(
-    to top,
-    rgb(7 10 19 / 0.66),
-    rgb(7 10 19 / 0.5) 50%,
-    rgb(7 10 19 / 0.42)
-  );
-}
-
-.intro-copy {
-  width: 100%;
-  color: var(--intro-fg);
-  text-shadow: var(--intro-glow);
-  transition: color 600ms ease;
-}
-
-.intro-copy :focus-visible {
-  outline-color: var(--intro-focus);
-}
-
-.intro-eyebrow {
-  margin-bottom: clamp(0.75rem, 2svh, 1.25rem);
-  color: var(--intro-muted);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-/* Portrait: big enough that lines may wrap. Landscape: four lines, sized to
-   the window pane's width and the screen's height. */
-.intro-title {
-  font-size: min(17vw, calc((100svh - 22rem) / 4.6));
-  font-weight: 500;
-  letter-spacing: -0.055em;
-  line-height: 0.9;
-}
-
-.intro-title span {
-  display: block;
-  text-wrap: balance;
-}
-
-@media (orientation: landscape) {
-  .intro-title {
-    font-size: min(12.5vw, calc((100svh - 23rem) / 3.6));
-  }
-}
-
-/* Wide screens: keep everything inside the left pane, clear of the frame. */
-@media (orientation: landscape) and (width >= 48rem) {
-  .intro-copy {
-    max-width: calc(68vw - 4rem);
-  }
-}
-
-.intro-footer {
-  display: grid;
-  gap: 1.25rem;
-  margin-top: clamp(1.25rem, 3.5svh, 2.25rem);
-  border-top: 1px solid var(--intro-rule);
-  padding-top: clamp(1rem, 2.5svh, 1.5rem);
-}
-
-@media (orientation: landscape) and (width >= 80rem) {
-  /* Wide 16:9 screens also show the left window frame; start clear of it. */
-  .intro-frame {
-    padding-left: max(4rem, 5.6vw);
-  }
-
-  .intro-title {
-    font-size: min(12.5vw, calc((100svh - 20rem) / 3.6));
-  }
-
-  .intro-footer {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    column-gap: 3rem;
-  }
-}
-
-.intro-description {
-  max-width: 48ch;
-  color: var(--intro-muted);
-  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
-  font-weight: 500;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.intro-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1.5rem;
-}
-
-.intro-frame .contact-button--outline {
-  border-color: var(--intro-fg);
-  background-color: var(--intro-fill);
-  color: var(--intro-fg);
-  text-shadow: none;
-}
-
-.intro-frame .intro-cta:focus-visible {
-  outline-color: var(--intro-focus);
-}
-
 .intro-cta {
   display: inline-flex;
   align-items: center;
@@ -311,26 +83,6 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 .intro-cta:focus-visible {
   outline-color: #fff;
   outline-offset: 4px;
-}
-
-.intro-scroll {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: var(--intro-muted);
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-  text-decoration: none;
-  transition: color 180ms ease;
-}
-
-.intro-scroll:hover {
-  color: var(--intro-fg);
-}
-
-.intro-scroll:focus-visible {
-  outline-offset: 0.5rem;
 }
 
 /* ── Contact: WhatsApp buttons, the dock, the enquiry form ───────────────── */
@@ -369,19 +121,6 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 
 .contact-button--light svg {
   color: var(--color-whatsapp);
-}
-
-/* A faint fill keeps the outline button legible over bright sky. */
-.contact-button--outline {
-  border: 2px solid rgb(255 255 255 / 0.75);
-  background-color: rgb(7 10 19 / 0.22);
-  color: #fff;
-  padding-inline: 1.2rem;
-}
-
-.contact-button--outline:hover {
-  border-color: #fff;
-  background-color: rgb(7 10 19 / 0.4);
 }
 
 /* WhatsApp, floating in the bottom-right corner on phones (every public page). */
@@ -520,37 +259,11 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
   gap: 3rem;
 }
 
-.contact-frame .scene-scrim {
-  background: linear-gradient(
-    to bottom,
-    rgb(7 10 19 / 0.25),
-    rgb(7 10 19 / 0.78) 12rem,
-    rgb(7 10 19 / 0.9)
-  );
-}
-
 @media (width >= 64rem) {
   .contact-layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 31rem);
     align-items: end;
     gap: 4rem;
-  }
-
-  .contact-frame .scene-scrim {
-    background:
-      linear-gradient(
-        to left,
-        rgb(7 10 19 / 0.9),
-        rgb(7 10 19 / 0.8) 38%,
-        rgb(7 10 19 / 0.25) 56%,
-        transparent 70%
-      ),
-      linear-gradient(
-        to top,
-        rgb(7 10 19 / 0.88),
-        rgb(7 10 19 / 0.5) 28%,
-        transparent 55%
-      );
   }
 }
 
@@ -816,47 +529,6 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 
 .enquiry-link:hover {
   color: #fff;
-}
-
-/* ── The 3D on its way ───────────────────────────────────────────────────── */
-/* A thin line across the top of the screen while the live studio downloads
-   and warms up behind the page (the stills show meanwhile). Above the header
-   (z 36) and the grain (z 40). Stage sets --progress from 0 to 1. */
-
-.scene-progress {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 50;
-  height: 2px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgb(206 194 255 / 0),
-    var(--color-violet-soft) 40%,
-    #fff
-  );
-  box-shadow: 0 0 10px rgb(206 194 255 / 0.65);
-  transform: scaleX(var(--progress, 0));
-  transform-origin: left;
-  transition:
-    transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1),
-    opacity 700ms ease 250ms;
-}
-
-.scene-progress[data-done] {
-  opacity: 0;
-}
-
-/* Until a still is on screen the backdrop is dark, so the opening copy starts
-   in its light colors whatever the mood; it eases into the mood's colors as
-   the still fades in. */
-body:has([data-backdrop="pending"]) .intro-frame {
-  --intro-fg: #fff;
-  --intro-muted: rgb(255 255 255 / 0.84);
-  --intro-rule: rgb(255 255 255 / 0.3);
-  --intro-glow: 0 2px 22px rgb(0 0 0 / 0.4);
-  --intro-fill: rgb(7 10 19 / 0.25);
-  --intro-focus: var(--color-violet-soft);
 }
 
 /* ── The header: on the tour and on every other page ────────────────────── */
@@ -1309,76 +981,6 @@ html.scroll-locked body {
 
   .nav-sheet li {
     animation: none;
-  }
-}
-
-/* The service list can grow naturally on short screens. */
-.services-frame .scene-scrim {
-  background: linear-gradient(
-    to top,
-    rgb(7 10 19 / 0.94),
-    rgb(7 10 19 / 0.82) 42%,
-    rgb(7 10 19 / 0.2) 78%,
-    transparent
-  );
-}
-
-@media (min-width: 48rem) {
-  .scene-frame-side .scene-scrim {
-    background: linear-gradient(
-      var(--scene-shade-direction, to left),
-      rgb(7 10 19 / 0.9),
-      rgb(7 10 19 / 0.72) 28%,
-      rgb(7 10 19 / 0.18) 52%,
-      transparent 72%
-    );
-  }
-
-  .scene-frame-left {
-    --scene-shade-direction: to right;
-  }
-
-  .services-frame .scene-scrim {
-    background: linear-gradient(
-      to left,
-      rgb(7 10 19 / 0.94),
-      rgb(7 10 19 / 0.84) 40%,
-      rgb(7 10 19 / 0.3) 72%,
-      transparent
-    );
-  }
-}
-
-@media (width < 48rem) and (height < 44rem) {
-  .services-frame {
-    position: relative;
-    padding-top: 8rem;
-  }
-}
-
-/* A phone turned sideways: the heading, tagline and buttons only. */
-@media (orientation: landscape) and (height < 35rem) {
-  .intro-frame {
-    padding-top: 4.5rem;
-    padding-bottom: 0.75rem;
-  }
-
-  .intro-title {
-    font-size: min(10vw, calc((100svh - 12.5rem) / 3.6));
-  }
-
-  /* The <h1> stays; it's one short line. */
-  .intro-eyebrow {
-    margin-bottom: 0.5rem;
-  }
-
-  .intro-description {
-    display: none;
-  }
-
-  .intro-footer {
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
   }
 }
 
@@ -2442,22 +2044,6 @@ body {
   border-radius: 4px;
 }
 
-/* Phones render the studio without the post-processing pass; this is the
-   desktop vignette (OfficeScene, offset 0.3, darkness 0.32) drawn in CSS, so
-   the stills and the live scene still match. */
-.stage-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse farthest-corner at center,
-    transparent 55%,
-    rgb(0 0 0 / 0.02) 71%,
-    rgb(0 0 0 / 0.067) 85%,
-    rgb(0 0 0 / 0.143)
-  );
-}
-
 /* Film grain over everything, so the 3D, the stills and the text share one surface. */
 .grain {
   position: fixed;
@@ -2466,23 +2052,4 @@ body {
   pointer-events: none;
   opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ── Lenis smooth scroll ─────────────────────────────────────────────────── */
-
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
 }
