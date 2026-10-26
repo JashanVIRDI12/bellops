@@ -137,6 +137,11 @@ export type Service = {
     hour: Hour;
     /** Other services worth a look from here (their hrefs). */
     related: readonly string[];
+    /**
+     * The page's answer to "What does it cost?". {price} is filled from
+     * `price` (₹50,000, ₹15,000/month), so it always matches the hero.
+     */
+    priceAnswer: string;
   };
 };
 
@@ -168,6 +173,8 @@ export const services = {
         ],
         hour: { shot: shot("work", 2), mood: "dusk" },
         related: ["/landing-pages", "/seo-services", "/website-care-plans"],
+        priceAnswer:
+          "Premium websites start from {price}. The final price depends on scope, and you'll get a fixed quote once we understand the project.",
       },
     },
     {
@@ -196,6 +203,8 @@ export const services = {
           "/premium-website-design",
           "/seo-services",
         ],
+        priceAnswer:
+          "Landing pages start from {price}. The final price depends on scope, and you'll get a fixed quote once we understand the project.",
       },
     },
     {
@@ -224,6 +233,8 @@ export const services = {
           "/social-media-management",
           "/seo-services",
         ],
+        priceAnswer:
+          "Ad management starts from {price}, plus your ad spend. Tell us your goals and we'll send a fixed quote.",
       },
     },
     {
@@ -248,6 +259,8 @@ export const services = {
         ],
         hour: { shot: shot("approach"), mood: "day" },
         related: ["/branding", "/google-meta-ads", "/premium-website-design"],
+        priceAnswer:
+          "Social media management starts from {price}. Tell us your goals and we'll send a fixed quote.",
       },
     },
     {
@@ -276,6 +289,8 @@ export const services = {
           "/landing-pages",
           "/website-care-plans",
         ],
+        priceAnswer:
+          "SEO and speed optimization starts from {price}. Tell us your goals and we'll send a fixed quote.",
       },
     },
     {
@@ -299,6 +314,8 @@ export const services = {
         ],
         hour: { shot: shot("approach"), mood: "night" },
         related: ["/seo-services", "/premium-website-design", "/landing-pages"],
+        priceAnswer:
+          "Website care plans start from {price}. Tell us about your site and we'll send a fixed quote.",
       },
     },
     {
@@ -331,6 +348,8 @@ export const services = {
           "/premium-website-design",
           "/google-meta-ads",
         ],
+        priceAnswer:
+          "Branding starter packs start from {price}. Tell us what you need and we'll send a fixed quote.",
       },
     },
   ] satisfies readonly Service[],
@@ -345,6 +364,9 @@ export const servicesPage = {
   heading: "Everything your brand needs online, from one studio",
   lead: "Strategy, design, development, ads and social media, from one small team: Delhi-based, working remotely across India.",
   hour: { shot: shot("studio"), mood: "dusk" } as Hour,
+  // "What does it cost?" here: {care} and {premium} are those services' prices.
+  priceAnswer:
+    "Prices start from {care} for website care and {premium} for a premium website. Each service above shows its starting price, and every quote is fixed once we understand the project.",
 };
 
 /**
@@ -374,6 +396,9 @@ export const projectProcess = {
 };
 
 /** Questions on the service pages. Every answer comes from what Bellops has said. */
+/** Asked last on every service page, answered with its prices (lib/services.ts). */
+export const COST_QUESTION = "What does it cost?";
+
 export const faqs = [
   {
     question: "Where are you based?",
@@ -388,11 +413,6 @@ export const faqs = [
     question: "Can one team handle the website, ads and social media?",
     answer:
       "Yes. Strategy, design, development, ads and social media all come from one small team, so nothing gets lost between agencies.",
-  },
-  {
-    question: "What does it cost?",
-    answer:
-      "It depends on what you need. Tell us about the project and we'll send you a quote.",
   },
 ];
 

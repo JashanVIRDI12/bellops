@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/pricing";
 import { jsonLd } from "@/lib/schema";
 import {
   serviceByHref,
+  serviceFaqs,
   serviceStructuredData,
   serviceTrail,
 } from "@/lib/services";
@@ -103,7 +104,7 @@ export function ServicePage({ service }: { service: Service }) {
         </div>
         <ServiceRows items={related} />
       </section>
-      <Faq />
+      <Faq items={serviceFaqs(service)} />
       <ContactCta whatsapp={whatsapp} />
     </>
   );

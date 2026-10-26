@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { services, servicesPage, type Service } from "./content";
+import {
+  COST_QUESTION,
+  faqs,
+  services,
+  servicesPage,
+  type Service,
+} from "./content";
+import { formatRate } from "./pricing";
 import { breadcrumbList, service as serviceNode, type Crumb } from "./schema";
 import { shareMetadata } from "./seo";
 
@@ -43,3 +50,26 @@ export function serviceMetadata(service: Service): Metadata {
     ...shareMetadata({ title, description, path: service.href }),
   };
 }
+
+/** The common questions, then "What does it cost?" answered by `answer`. */
+const faqsWithCost = (answer: string) => [
+  ...faqs,
+  { question: COST_QUESTION, answer },
+];
+
+/** A service page's questions: the cost answer names its starting price. */
+export const serviceFaqs = (service: Service) =>
+  faqsWithCost(
+    service.page.priceAnswer.replace("{price}", formatRate(service.price)),
+  );
+
+/** /services' questions: the cost answer gives the lowest and the website price. */
+export const servicesFaqs = () =>
+  faqsWithCost(
+    servicesPage.priceAnswer
+      .replace("{care}", formatRate(serviceByHref("/website-care-plans").price))
+      .replace(
+        "{premium}",
+        formatRate(serviceByHref("/premium-website-design").price),
+      ),
+  );

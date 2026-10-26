@@ -9,7 +9,7 @@ import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { servicesPage } from "@/lib/content";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
 import { shareMetadata, siteUrl } from "@/lib/seo";
-import { allServices } from "@/lib/services";
+import { allServices, servicesFaqs } from "@/lib/services";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
@@ -70,7 +70,7 @@ export default function Services() {
       </section>
       <Process />
       <WorkShowcase projects={projects} />
-      <Faq />
+      <Faq items={servicesFaqs()} />
       <ContactCta />
     </>
   );

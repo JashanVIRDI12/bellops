@@ -17,3 +17,8 @@ export function formatPrice(price: Price) {
   const extra = price.extra ? ` + ${price.extra}` : "";
   return `From ${formatInr(price.from)}${per}${extra}`;
 }
+
+/** A starting price without the "From": "₹50,000", "₹15,000/month". */
+export function formatRate(price: Price) {
+  return `${formatInr(price.from)}${price.per ? `/${price.per}` : ""}`;
+}
