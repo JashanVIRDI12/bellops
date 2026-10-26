@@ -1,16 +1,34 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { draftPages, hiddenDraftPaths } from "@/lib/drafts";
 import { projects } from "@/lib/work";
 
 const caseStudies = new Set(projects.map((project) => project.slug));
+const industries = new Set(
+  draftPages
+    .map((page) => page.path)
+    .filter((path) => path.startsWith("/industries/")),
+);
+
+/** Vercel's production deployment (www.bellops.in), not a preview or local build. */
+const live = process.env.VERCEL_ENV === "production";
 
 /**
- * Unknown case studies get a real 404 status. The case-study pages share a
- * prerendered shell, so by the time the page itself could call notFound()
- * the response has already started as 200; this check runs first.
+ * Real 404 statuses, set before the page renders. Pages with dynamic segments
+ * share a prerendered shell, so by the time the page itself could call
+ * notFound() the response has already started as 200; this check runs first.
+ *
+ * - Unknown case studies and unknown industries.
+ * - Scaffolds still waiting for their copy (lib/drafts.ts), on the live site
+ *   only: local and preview builds show them for review.
  */
 export function proxy(request: NextRequest) {
-  const slug = request.nextUrl.pathname.split("/")[2];
-  if (slug && !caseStudies.has(decodeURIComponent(slug))) {
+  const path = decodeURIComponent(request.nextUrl.pathname).replace(/\/$/, "");
+  const [, section, slug] = path.split("/");
+  const missing =
+    (section === "work" && slug && !caseStudies.has(slug)) ||
+    (section === "industries" && !industries.has(path)) ||
+    (live && hiddenDraftPaths.has(path));
+  if (missing) {
     // No route matches /404, so it renders the not-found page. The status is
     // set here too: Vercel serves that prerendered page with a 200 otherwise.
     return NextResponse.rewrite(new URL("/404", request.url), { status: 404 });
@@ -18,5 +36,10 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/work/:slug",
+  matcher: [
+    "/work/:slug",
+    "/industries/:path*",
+    "/three-js-development",
+    "/3d-product-configurator",
+  ],
 };

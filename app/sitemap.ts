@@ -1,5 +1,12 @@
 import type { MetadataRoute } from "next";
-import { services, servicesPage, workPage } from "@/lib/content";
+import {
+  aboutPage,
+  contactPage,
+  services,
+  servicesPage,
+  workPage,
+} from "@/lib/content";
+import { draftPages } from "@/lib/drafts";
 import { homeUrl, siteUrl } from "@/lib/seo";
 import { caseStudyPath, projects } from "@/lib/work";
 
@@ -15,6 +22,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...services.items.map((service) => service.href),
     workPage.path,
     ...projects.map(caseStudyPath),
+    aboutPage.path,
+    contactPage.path,
+    // Scaffolds join once their copy is in (lib/drafts.ts).
+    ...draftPages.filter((page) => page.ready).map((page) => page.path),
   ];
   return [
     { url: homeUrl, lastModified },

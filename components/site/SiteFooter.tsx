@@ -1,6 +1,8 @@
 import Link from "next/link";
 import {
   INSTAGRAM_URL,
+  aboutPage,
+  contactPage,
   services,
   servicesPage,
   site,
@@ -44,10 +46,13 @@ export function SiteFooter() {
               <Link href="/">The studio</Link>
             </li>
             <li>
+              <Link href={aboutPage.path}>About</Link>
+            </li>
+            <li>
               <Link href={workPage.path}>Work</Link>
             </li>
             <li>
-              <Link href="/#contact">Contact</Link>
+              <Link href={contactPage.path}>Contact</Link>
             </li>
           </ul>
         </nav>

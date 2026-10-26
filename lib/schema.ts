@@ -7,6 +7,23 @@
 import { siteUrl } from "./seo";
 
 export const organizationId = `${siteUrl}/#organization`;
+export const websiteId = `${siteUrl}/#website`;
+
+/** A page node (AboutPage, ContactPage, …) inside the site. */
+export function webPage(
+  type: string,
+  page: { path: string; title: string; description: string },
+) {
+  return {
+    "@type": type,
+    "@id": `${siteUrl}${page.path}#webpage`,
+    url: `${siteUrl}${page.path}`,
+    name: page.title,
+    description: page.description,
+    isPartOf: { "@id": websiteId },
+    about: { "@id": organizationId },
+  };
+}
 
 /** One step of a breadcrumb trail. The current page, last, has no href. */
 export type Crumb = { label: string; href?: string };

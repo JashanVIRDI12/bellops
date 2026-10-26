@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
   // contents, so a file never changes under its name: cache it for a year.
   // (Screenshots live in /projects, not /work, which holds the case-study
   // pages: those must not be cached like files.)
+  // The SEO service moved from /seo to /seo-services.
+  async redirects() {
+    return [{ source: "/seo", destination: "/seo-services", permanent: true }];
+  },
   async headers() {
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },

@@ -136,7 +136,7 @@ export const services = {
           "A lighter version of every 3D scene for slower phones",
         ],
         hour: { shot: 5, mood: "dusk" },
-        related: ["/landing-pages", "/seo", "/website-care-plans"],
+        related: ["/landing-pages", "/seo-services", "/website-care-plans"],
       },
     },
     {
@@ -159,7 +159,11 @@ export const services = {
           "Technical SEO built in",
         ],
         hour: { shot: 4, mood: "day" },
-        related: ["/google-meta-ads", "/premium-website-design", "/seo"],
+        related: [
+          "/google-meta-ads",
+          "/premium-website-design",
+          "/seo-services",
+        ],
       },
     },
     {
@@ -182,7 +186,11 @@ export const services = {
           "Landing pages to match each campaign",
         ],
         hour: { shot: 1, mood: "day" },
-        related: ["/landing-pages", "/social-media-management", "/seo"],
+        related: [
+          "/landing-pages",
+          "/social-media-management",
+          "/seo-services",
+        ],
       },
     },
     {
@@ -211,7 +219,7 @@ export const services = {
     {
       title: "SEO & speed optimization",
       body: "Technical, on-page and local SEO, plus faster load times, so customers find you on Google.",
-      href: "/seo",
+      href: "/seo-services",
       nav: "SEO & speed",
       navImage: "/navigation/services-v1/seo-speed.webp",
       page: {
@@ -254,7 +262,7 @@ export const services = {
           "Small edits, every month",
         ],
         hour: { shot: 2, mood: "night" },
-        related: ["/seo", "/premium-website-design", "/landing-pages"],
+        related: ["/seo-services", "/premium-website-design", "/landing-pages"],
       },
     },
     {
@@ -361,6 +369,27 @@ export const workPage = {
     "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
   heading: "Selected work",
   lead: "Websites we've designed and built, from first sketch to launch.",
+};
+
+/**
+ * The about and contact pages, built from the studio's existing words (the
+ * studio, approach and contact copy above). The founder's story waits for
+ * Jashan's bio.
+ */
+export const aboutPage = {
+  path: "/about",
+  title: "About Bellops: Web Design & Digital Marketing Studio in Delhi",
+  description:
+    "Bellops is an independent web design and digital marketing studio in Moti Nagar, Delhi: strategy, design, development, ads and social media from one small team.",
+  hour: { shot: 1, mood: "day" } as Hour,
+};
+
+export const contactPage = {
+  path: "/contact",
+  title: "Contact Bellops: Web Design Studio in Moti Nagar, Delhi",
+  description:
+    "Tell Bellops about your website, ad campaign or social media goals. Send an enquiry or chat on WhatsApp; we usually reply within a working day.",
+  hour: { shot: 7, mood: "night" } as Hour,
 };
 
 /** The cookie notice shown once per browser, until the visitor presses OK. */
