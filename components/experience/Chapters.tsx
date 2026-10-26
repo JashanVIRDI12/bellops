@@ -507,16 +507,8 @@ export function Chapters() {
             over the last shot. */}
         <div className="tour-foot">
           <SiteFooter>
-            The studio follows your local time and weather. Weather data from{" "}
-            <a
-              href="https://www.met.no/en"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              MET Norway
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
-            .
+            The studio follows your local time and weather. Weather data from
+            MET Norway.
           </SiteFooter>
         </div>
       </section>

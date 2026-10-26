@@ -9,7 +9,7 @@ import {
   site,
   workPage,
 } from "@/lib/content";
-import { blogPage, publishedPosts } from "@/lib/blog";
+import { blogPage } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 import { threeDPage } from "@/lib/three-d";
 
@@ -61,11 +61,9 @@ export function SiteFooter({ children }: { children?: ReactNode }) {
             <li>
               <Link href={workPage.path}>Work</Link>
             </li>
-            {publishedPosts.length > 0 && (
-              <li>
-                <Link href={blogPage.path}>Blog</Link>
-              </li>
-            )}
+            <li>
+              <Link href={blogPage.path}>Blog</Link>
+            </li>
             <li>
               <Link href={contactPage.path}>Contact</Link>
             </li>

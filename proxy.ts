@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { postBySlug, publishedPosts } from "@/lib/blog";
+import { postBySlug } from "@/lib/blog";
 import { draftPages, hiddenDraftPaths, liveSite as live } from "@/lib/drafts";
 import { projects } from "@/lib/work";
 
@@ -17,8 +17,8 @@ const industries = new Set(
  *
  * - Unknown case studies, industries and blog posts.
  * - On the live site only (local and preview builds show them for review):
- *   scaffolds still waiting for their copy (lib/drafts.ts), draft posts, and
- *   /blog until a post is published (lib/blog.ts).
+ *   scaffolds still waiting for their copy (lib/drafts.ts) and draft posts.
+ *   The /blog index itself is always live (it says when nothing's published).
  */
 export function proxy(request: NextRequest) {
   const path = decodeURIComponent(request.nextUrl.pathname).replace(/\/$/, "");
@@ -27,7 +27,6 @@ export function proxy(request: NextRequest) {
     (section === "work" && slug && !caseStudies.has(slug)) ||
     (section === "industries" && !industries.has(path)) ||
     (section === "blog" && slug && !postBySlug(slug)) ||
-    (live && section === "blog" && !slug && publishedPosts.length === 0) ||
     (live && section === "blog" && slug && postBySlug(slug)?.draft) ||
     (live && hiddenDraftPaths.has(path));
   if (missing) {

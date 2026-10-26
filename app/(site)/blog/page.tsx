@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { blogPage, postPath, visiblePosts } from "@/lib/blog";
+import { servicesPage, workPage } from "@/lib/content";
 import {
   breadcrumbList,
   jsonLd,
@@ -49,7 +50,7 @@ const dateFormat = new Intl.DateTimeFormat("en-IN", {
   timeZone: "UTC",
 });
 
-/** Every post, newest first. Live once the first post is published (proxy.ts). */
+/** Every published post, newest first (drafts too on local and preview builds). */
 export default function Blog() {
   return (
     <>
@@ -62,6 +63,20 @@ export default function Blog() {
         <RevealTitle text={blogPage.heading} className="case-title" />
       </section>
       <section aria-label="Posts" className="wrap block">
+        {visiblePosts.length === 0 && (
+          <p className="page-copy">
+            Nothing is published yet: the first articles are in review. In the
+            meantime, see{" "}
+            <Link href={workPage.path} className="text-link">
+              our work
+            </Link>{" "}
+            or{" "}
+            <Link href={servicesPage.path} className="text-link">
+              what we do
+            </Link>
+            .
+          </p>
+        )}
         <ul className="post-list">
           {visiblePosts.map((post) => (
             <li key={post.slug}>
