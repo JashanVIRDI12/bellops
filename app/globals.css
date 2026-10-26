@@ -198,7 +198,7 @@
   border: 1px solid rgb(255 255 255 / 0.16);
   border-radius: 1rem;
   padding: 0.6rem 0.6rem 0.6rem 1rem;
-  background-color: rgb(14 14 20 / 0.9);
+  background-color: rgb(13 17 30 / 0.92);
   box-shadow: 0 16px 40px -14px rgb(0 0 0 / 0.6);
   color: rgb(255 255 255 / 0.9);
   font-size: 0.8125rem;
@@ -356,7 +356,7 @@
 }
 
 .enquiry select option {
-  background-color: #15151d;
+  background-color: var(--midnight-raised);
   color: #fff;
 }
 
@@ -533,6 +533,9 @@
 
 /* ── The header: on the tour and on every other page ────────────────────── */
 
+/* The site palette, shared by the home page's tour and every inner page
+   (with --color-violet and --color-violet-soft above). Use these, not new
+   hex values. */
 :root {
   --midnight: #0d111e; /* the studio's night sky: the inner pages' ground */
   --midnight-raised: #151c29; /* the 3D stage's backdrop */
@@ -2118,8 +2121,10 @@ html:has(.site-page) {
 /* ── Base ────────────────────────────────────────────────────────────────── */
 
 html {
-  background-color: #e4dccf;
-  color-scheme: light;
+  /* The night ground under every page, so overscrolling past the top or
+     bottom never shows another colour. */
+  background-color: var(--midnight);
+  color-scheme: dark;
   /* Keeps the layout steady when scrolling is locked (no scrollbar jump). */
   scrollbar-gutter: stable;
 }

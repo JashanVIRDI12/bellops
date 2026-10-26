@@ -1,6 +1,9 @@
 /* BellOps inner pages: the editorial layer over globals.css (service lists,
    heroes, showcase, footer). The home page's 3D tour has its own styles in
-   components/experience/tour.css. */
+   components/experience/tour.css.
+   Colours come only from the site palette in globals.css (--midnight,
+   --midnight-raised, --moonlight, --mist, --line, --color-violet,
+   --color-violet-soft), the same as the home page. */
 .site-page section[id] {
   scroll-margin-top: 6rem;
 }
@@ -28,7 +31,7 @@
 .capabilities-photo {
   position: relative;
   aspect-ratio: 4/4.2;
-  background: #d5cfc5;
+  background: var(--midnight-raised);
   overflow: hidden;
 }
 .capabilities-photo > img {
@@ -51,7 +54,8 @@
   position: absolute;
   bottom: 1.3rem;
   left: 1.3rem;
-  background: #eeeae2;
+  background: var(--moonlight);
+  color: var(--midnight);
   padding: 0.65rem 0.8rem;
   font-size: 0.65rem;
 }
@@ -62,16 +66,16 @@
   gap: 0.5rem;
   margin-top: 1rem;
   font-size: 0.56rem;
-  color: #6a646b;
+  color: var(--mist);
 }
 .capabilities-list {
-  border-top: 1px solid #28222f55;
+  border-top: 1px solid rgb(242 238 248 / 0.33);
 }
 .capabilities-list li {
   display: flex;
   align-items: start;
   gap: 0.5rem;
-  border-bottom: 1px solid #28222f33;
+  border-bottom: 1px solid var(--line);
 }
 .capabilities-list li > a:first-child {
   flex: 1;
@@ -86,9 +90,9 @@
   height: 2rem;
   margin-top: 1.35rem;
   padding: 0;
-  border: 1px solid #28222f33;
+  border: 1px solid rgb(242 238 248 / 0.27);
   border-radius: 50%;
-  color: var(--color-whatsapp);
+  color: #5fe39a; /* WhatsApp green, lifted to read on the night ground */
   transition:
     background 250ms,
     color 250ms;
@@ -106,7 +110,7 @@
 }
 .capability-number {
   font-size: 0.58rem;
-  color: #79707b;
+  color: var(--mist);
   padding-top: 0.4rem;
 }
 .capability-copy {
@@ -121,26 +125,23 @@
   display: block;
   max-width: 43ch;
   font-size: 0.72rem;
-  color: #6a646b;
+  color: var(--mist);
   line-height: 1.6;
   margin-top: 0.6rem;
 }
 .capability-copy > .capability-price {
   display: block;
   margin-top: 0.7rem;
-  color: #5b36e8;
+  color: var(--color-violet-soft);
   font-size: 0.78rem;
   font-weight: 700;
-}
-.services-editorial .capability-copy > .capability-price {
-  color: #cfbafa;
 }
 .capability-arrow {
   display: grid;
   place-items: center;
   width: 2rem;
   height: 2rem;
-  border: 1px solid #28222f33;
+  border: 1px solid rgb(242 238 248 / 0.27);
   border-radius: 50%;
   transition:
     background 250ms,
@@ -151,12 +152,12 @@
   height: 0.8rem;
 }
 .capabilities-list li[data-active] h3 {
-  color: #6740cc;
+  color: var(--color-violet-soft);
 }
 .capabilities-list li[data-active] .capability-arrow {
-  background: #6740cc;
+  background: var(--color-violet);
   color: #fff;
-  border-color: #6740cc;
+  border-color: var(--color-violet);
 }
 .reading-progress {
   position: fixed;
@@ -165,7 +166,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #bfa4ff;
+  background: var(--color-violet-soft);
   transform: scaleX(0);
   transform-origin: left;
   pointer-events: none;
@@ -184,7 +185,12 @@
   letter-spacing: -0.06em;
 }
 .site-page .hero-shot::after {
-  background: linear-gradient(90deg, #14111bf0, #14111b99 65%, #14111b33);
+  background: linear-gradient(
+    90deg,
+    rgb(13 17 30 / 0.94),
+    rgb(13 17 30 / 0.6) 65%,
+    rgb(13 17 30 / 0.2)
+  );
 }
 .site-page .block {
   padding-block: clamp(4rem, 8vw, 8rem);
@@ -224,35 +230,11 @@
   margin-bottom: 2rem;
 }
 .services-editorial .capabilities {
-  color: #f6f2ec;
-}
-.services-editorial .capabilities-list {
-  border-color: #ffffff55;
-}
-.services-editorial .capabilities-list li {
-  border-color: #ffffff22;
-}
-.services-editorial .capability-copy > span,
-.services-editorial .capabilities-caption,
-.services-editorial .capability-number {
-  color: #a99eb6;
-}
-.services-editorial .capability-arrow,
-.services-editorial .capability-whatsapp {
-  border-color: #ffffff44;
-}
-.services-editorial .capabilities-list .capability-whatsapp {
-  color: #5fe39a;
-}
-.services-editorial .capabilities-list li[data-active] h3 {
-  color: #cfbafa;
-}
-.services-editorial .photo-corner {
-  color: #27222c;
+  color: var(--moonlight);
 }
 .site-page .closing {
-  background: #6b43d4;
-  color: #f6f2ec;
+  background: var(--color-violet);
+  color: var(--moonlight);
 }
 .site-page .closing-title {
   font-size: clamp(3.2rem, 7.5vw, 8rem);
@@ -260,32 +242,32 @@
   letter-spacing: -0.065em;
 }
 .site-page .closing-lead {
-  color: #e5dbf3;
+  color: rgb(242 238 248 / 0.86);
 }
 .site-page .closing .button--solid {
-  background: #f6f2ec;
-  color: #26212f;
+  background: var(--moonlight);
+  color: var(--midnight);
   box-shadow: none;
 }
 .site-page .closing .button--light {
   background: transparent;
-  color: #f6f2ec;
-  border: 1px solid #ffffff55;
+  color: var(--moonlight);
+  border: 1px solid rgb(242 238 248 / 0.45);
 }
 .site-page .showcase-frame {
   position: relative;
   border-radius: 0.25rem;
   padding: 5% 12% 6% 7%;
-  background: #302a3b;
+  background: var(--midnight-raised);
 }
 .site-page .showcase > li:nth-child(2) .showcase-frame {
-  background: #b6a7c3;
+  background: var(--color-violet-soft);
 }
 .site-page .showcase > li:nth-child(3) .showcase-frame {
-  background: #9daea4;
+  background: var(--color-violet);
 }
 .site-page .showcase-frame > img {
-  border: 5px solid #25212e;
+  border: 5px solid var(--midnight);
   border-radius: 0.5rem;
   aspect-ratio: 16 / 10;
   transform: rotate(-3deg);
@@ -295,7 +277,7 @@
   bottom: 4%;
   right: 5%;
   width: 21%;
-  border: 4px solid #211e28;
+  border: 4px solid var(--midnight);
   border-radius: 1rem;
   overflow: hidden;
   transform: rotate(6deg);
@@ -322,9 +304,6 @@
   font-size: 4rem;
   opacity: 0.75;
 }
-.foot {
-  background: #15121d;
-}
 .foot-masthead {
   width: min(100%, 1500px);
   padding-inline: clamp(1.5rem, 4.5vw, 5rem);
@@ -334,12 +313,12 @@
 .foot-masthead > span {
   display: block;
   font: 500 clamp(5rem, 20vw, 22rem)/0.8 var(--font-space-grotesk);
-  color: #f6f2ec;
+  color: var(--moonlight);
   letter-spacing: -0.08em;
   padding-bottom: 0.1em;
 }
 .foot-masthead > span > span {
-  color: #8f6bc6;
+  color: var(--color-violet);
 }
 .foot-legal {
   display: flex;
@@ -348,15 +327,12 @@
   gap: 1rem;
 }
 .foot-legal a {
-  color: #d2bdf6;
+  color: var(--color-violet-soft);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 .nav {
-  background: #15121df5;
-}
-.nav[data-solid] {
-  background: #15121df5;
+  background: rgb(13 17 30 / 0.96);
 }
 .nav-cta {
   box-shadow: none;

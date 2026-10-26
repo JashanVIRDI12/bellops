@@ -1,13 +1,13 @@
 /* The admin portal: the studio's night palette, built for reading. */
 
 :root:has(.admin) {
-  background-color: #0c0c12;
+  background-color: #0d111e;
   color-scheme: dark;
 }
 
 .admin {
   min-height: 100svh;
-  background-color: #0c0c12;
+  background-color: #0d111e;
   color: #fff;
   font-size: 1rem;
 }
@@ -602,7 +602,7 @@
   margin-right: 0.4rem;
   border-radius: 999px;
   background-color: rgb(255 255 255 / 0.15);
-  color: #0c0c12;
+  color: #0d111e;
   font-size: 0.7rem;
   font-weight: 800;
 }

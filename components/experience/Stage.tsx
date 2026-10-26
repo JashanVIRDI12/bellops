@@ -185,7 +185,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       <script dangerouslySetInnerHTML={{ __html: preloadFirstStill }} />
       <div
         aria-hidden
-        className="fixed inset-x-0 top-0 z-0 h-lvh bg-[#151c29]"
+        className="fixed inset-x-0 top-0 z-0 h-lvh bg-(--midnight-raised)"
         data-backdrop={stillShown || showing ? "ready" : "pending"}
         data-scene-mood={atmosphere.still}
         data-scene-renderer={live && liveTier ? liveTier : "stills"}
