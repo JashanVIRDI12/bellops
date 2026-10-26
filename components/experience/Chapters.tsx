@@ -5,7 +5,7 @@ import { WhatsAppIcon } from "@/components/contact/icons";
 import { Arrow } from "@/components/site/Arrow";
 import { Capabilities } from "@/components/site/Capabilities";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { INSTAGRAM_URL, approach, contact, studio } from "@/lib/content";
+import { INSTAGRAM_URL, approach, contact, intro, studio } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
 import { caseStudyPath, projects } from "@/lib/work";
 import { GlideLink } from "./GlideLink";
@@ -37,17 +37,17 @@ export function Chapters() {
         </div>
         <div className="tour-hero-body">
           <div className="tour-hero-copy">
-            <p className="studio-label hero-intro">
-              Independent web design & digital growth studio.
-            </p>
-            <h1 className="tour-title" aria-label="Built to be remembered.">
+            {/* The page's <h1>, in the words people search for, set small
+                above the display line. */}
+            <h1 className="studio-label hero-intro">{intro.heading}</h1>
+            <p className="tour-title">
               <span className="hero-line">
                 <span>Built to be</span>
               </span>
               <span className="hero-line">
                 <span className="tour-title-accent">remembered.</span>
               </span>
-            </h1>
+            </p>
             <div className="tour-hero-description hero-intro">
               <p>
                 We build websites people feel.
