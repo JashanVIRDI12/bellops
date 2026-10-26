@@ -71,6 +71,14 @@
   background: #f6f2ec;
   color: #191522;
 }
+.studio-button--outline {
+  border: 1px solid #f6f2ec66;
+  background: #0e111966;
+  color: #f6f2ec;
+}
+.studio-button--outline:hover {
+  border-color: #f6f2ec;
+}
 .studio-button:hover {
   box-shadow: 0 8px 30px #0002;
 }
@@ -174,14 +182,19 @@
 .tour-hero-description {
   padding-top: 2.2rem;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.7rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 .tour-hero-description p {
   color: #c9c6cf;
   font-size: 0.86rem;
   line-height: 1.7;
+}
+.tour-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 .hero-composition {
   position: relative;
@@ -1354,7 +1367,7 @@
   .tour-hero-description {
     display: block;
   }
-  .tour-hero-description .studio-button {
+  .tour-hero-actions {
     margin-top: 1.3rem;
   }
   .studio-button {

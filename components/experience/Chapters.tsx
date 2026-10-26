@@ -59,15 +59,28 @@ export function Chapters() {
                 <br />
                 And the strategy that moves them forward.
               </p>
-              <GlideLink
-                to="contact"
-                className="studio-button studio-button--violet"
-                data-magnetic
-                data-track="start-project"
-                data-cta="get_quote"
-              >
-                Let&apos;s make it happen <Arrow diagonal />
-              </GlideLink>
+              <div className="tour-hero-actions">
+                <GlideLink
+                  to="contact"
+                  className="studio-button studio-button--violet"
+                  data-magnetic
+                  data-track="start-project"
+                  data-cta="get_quote"
+                >
+                  Get a quote in 24h <Arrow diagonal />
+                </GlideLink>
+                <a
+                  href={whatsappHref()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="studio-button studio-button--outline"
+                  data-magnetic
+                  data-track="whatsapp-intro"
+                >
+                  <WhatsAppIcon /> WhatsApp us
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </div>
             </div>
           </div>
           <div
