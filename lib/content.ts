@@ -386,6 +386,13 @@ export const enquiryForm = {
     "Not sure yet",
   ],
   message: "About the project",
+  // Optional. Each chip types its text into the message in one tap.
+  quickLabel: "Start the message with",
+  quickMessages: [
+    { label: "New website", text: "I'd like a new website." },
+    { label: "Redesign", text: "I'd like to redesign my current website." },
+    { label: "Ads", text: "I'd like help with Google or Meta ads." },
+  ],
   messagePlaceholder: "What you're building, your timeline, any links.",
   privacy: "We use these details to reply to your enquiry.",
   submit: "Send enquiry",

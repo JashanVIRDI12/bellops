@@ -73,8 +73,6 @@ function validate(values: EnquiryValues) {
       digits.length > 15)
   )
     errors.phone = "Check the number. Include the country code outside India.";
-  if (values.message.length < 10)
-    errors.message = "Add a few words about the project.";
   return errors;
 }
 

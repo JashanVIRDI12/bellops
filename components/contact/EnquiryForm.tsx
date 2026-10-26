@@ -49,6 +49,7 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
     initialState,
   );
   const formRef = useRef<HTMLFormElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const sentRef = useRef<HTMLHeadingElement>(null);
   const started = useRef(false);
   const reported = useRef(false);
@@ -121,6 +122,15 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
     "aria-describedby": errors[field] ? `enquiry-${field}-error` : undefined,
   });
   const contactError = errors.contact ? "enquiry-contact-error" : undefined;
+
+  /** One tap types a starting line into the message, without the keyboard. */
+  const fillMessage = (text: string) => {
+    const field = messageRef.current;
+    if (!field) return;
+    const current = field.value.trim();
+    if (!current.includes(text))
+      field.value = current ? `${current}\n${text}` : text;
+  };
 
   return (
     <form
@@ -253,12 +263,30 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
       </fieldset>
 
       <div className="enquiry-field">
-        <label htmlFor="enquiry-message">{enquiryForm.message}</label>
+        <label htmlFor="enquiry-message">
+          {enquiryForm.message}{" "}
+          <span className="enquiry-optional">optional</span>
+        </label>
+        <div
+          role="group"
+          aria-label={enquiryForm.quickLabel}
+          className="enquiry-quick"
+        >
+          {enquiryForm.quickMessages.map((quick) => (
+            <button
+              key={quick.label}
+              type="button"
+              onClick={() => fillMessage(quick.text)}
+            >
+              {quick.label}
+            </button>
+          ))}
+        </div>
         <textarea
+          ref={messageRef}
           id="enquiry-message"
           name="message"
           rows={3}
-          required
           maxLength={4000}
           placeholder={enquiryForm.messagePlaceholder}
           defaultValue={values?.message}

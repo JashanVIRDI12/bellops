@@ -737,6 +737,36 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
     color 150ms ease;
 }
 
+/* Above the message: one tap types a starting line into it. */
+.enquiry-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 0.5rem 0.75rem;
+}
+
+.enquiry-quick button {
+  min-height: 2.25rem;
+  border: 1.5px dashed rgb(255 255 255 / 0.5);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.enquiry-quick button:hover {
+  border-color: #fff;
+}
+
+.enquiry-quick button:focus-visible {
+  outline: 2px solid var(--color-violet-soft);
+  outline-offset: 2px;
+}
+
 .enquiry-chip input:hover + span {
   border-color: #fff;
 }
