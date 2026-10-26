@@ -17,6 +17,8 @@ export function useStudioMotion(scope: RefObject<HTMLElement | null>) {
       media.add("(prefers-reduced-motion: no-preference)", () => {
         const q = gsap.utils.selector(scope);
         if (q(".hero-line").length) {
+          // Transforms only: the hero copy and screens are in the server HTML
+          // and stay visible from the first paint (they are the page's LCP).
           gsap
             .timeline({ defaults: { ease: "power3.out" } })
             .from(q(".hero-line > span"), {
@@ -27,12 +29,12 @@ export function useStudioMotion(scope: RefObject<HTMLElement | null>) {
             })
             .from(
               q(".hero-intro"),
-              { y: 20, opacity: 0, duration: 0.8, stagger: 0.1 },
+              { y: 20, duration: 0.8, stagger: 0.1 },
               0.35,
             )
             .from(
               q(".hero-art"),
-              { y: 70, opacity: 0, rotate: 0, duration: 1.1, stagger: 0.12 },
+              { y: 70, rotate: 0, duration: 1.1, stagger: 0.12 },
               0.25,
             );
           gsap.to(q(".hero-composition"), {
