@@ -2,8 +2,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { services, type Service } from "@/lib/content";
+import { WhatsAppIcon } from "@/components/contact/icons";
+import { services, site, type Service } from "@/lib/content";
+import { whatsappHref } from "@/lib/contact-links";
 import { Arrow } from "./Arrow";
+
+/** "Landing pages" -> "landing pages"; names like Google or SEO stay as they are. */
+const midSentence = (title: string) =>
+  /^[A-Z][a-z]/.test(title) && !title.startsWith("Google")
+    ? title[0]!.toLowerCase() + title.slice(1)
+    : title;
 
 export function Capabilities({
   items = services.items,
@@ -51,6 +59,25 @@ export function Capabilities({
                 <Arrow diagonal />
               </span>
             </Link>
+            <a
+              href={whatsappHref(
+                site.whatsapp,
+                services.whatsappMessage.replace(
+                  "{service}",
+                  midSentence(item.title),
+                ),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="capability-whatsapp"
+              data-track={`whatsapp-service${item.href.replace("/", "-")}`}
+              data-ga-location="service_card"
+            >
+              <WhatsAppIcon size={15} />
+              <span className="sr-only">
+                Ask about {item.title} on WhatsApp (opens in a new tab)
+              </span>
+            </a>
           </li>
         ))}
       </ul>

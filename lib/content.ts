@@ -112,6 +112,8 @@ export type Service = {
 };
 
 export const services = {
+  // Each service card's WhatsApp button types this in; {service} is its title.
+  whatsappMessage: "Hi Bellops, I'm interested in {service}.",
   heading: "Websites, ads, social and SEO.",
   items: [
     {

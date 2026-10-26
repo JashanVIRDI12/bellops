@@ -751,7 +751,35 @@
   border-top: 1px solid #28222f55;
 }
 .capabilities-list li {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
   border-bottom: 1px solid #28222f33;
+}
+.capabilities-list li > a:first-child {
+  flex: 1;
+  min-width: 0;
+}
+/* Beside the arrow: WhatsApp, with this service typed in. */
+.capabilities-list .capability-whatsapp {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 1.35rem;
+  padding: 0;
+  border: 1px solid #28222f33;
+  border-radius: 50%;
+  color: var(--color-whatsapp);
+  transition:
+    background 250ms,
+    color 250ms;
+}
+.capabilities-list .capability-whatsapp:hover {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
 }
 .capabilities-list a {
   display: flex;
@@ -988,8 +1016,12 @@
 .services-editorial .capability-number {
   color: #a99eb6;
 }
-.services-editorial .capability-arrow {
+.services-editorial .capability-arrow,
+.services-editorial .capability-whatsapp {
   border-color: #ffffff44;
+}
+.services-editorial .capabilities-list .capability-whatsapp {
+  color: #5fe39a;
 }
 .services-editorial .capabilities-list li[data-active] h3 {
   color: #cfbafa;
@@ -1508,7 +1540,8 @@
   .capability-copy > span {
     font-size: 0.72rem;
   }
-  .capability-arrow {
+  .capability-arrow,
+  .capabilities-list .capability-whatsapp {
     width: 1.7rem;
     height: 1.7rem;
     flex-shrink: 0;
