@@ -17,19 +17,37 @@ import {
   scrollToSection,
   setScrollLocked,
 } from "@/components/experience/SmoothScroll";
+import { stillSrc } from "@/components/experience/still-image";
 import { useBeat } from "@/components/experience/store";
 import {
   chapters,
   services,
   servicesPage,
+  shot,
   site,
   workPage,
 } from "@/lib/content";
 import { blogPage, publishedPosts } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
+import { threeDPage } from "@/lib/three-d";
 
 /** The blog joins the menus with its first published post. */
 const hasBlog = publishedPosts.length > 0;
+
+/**
+ * The Services menus (the panel and the phone menu): every service, with 3D
+ * websites after premium websites. Its preview is the studio's own 3D shot.
+ */
+const menuServices = [
+  ...services.items.slice(0, 1),
+  {
+    href: threeDPage.path,
+    nav: threeDPage.menu.label,
+    body: threeDPage.menu.body,
+    navImage: stillSrc(shot("three-d"), "landscape", "dusk"),
+  },
+  ...services.items.slice(1),
+].map(({ href, nav, body, navImage }) => ({ href, nav, body, navImage }));
 
 const LAST_BEAT = chapters.reduce((sum, chapter) => sum + chapter.beats, 0) - 1;
 /* Tweakable (ms): hover intent for the services panel. */
@@ -87,7 +105,7 @@ export function SiteHeader({ variant }: { variant: Variant }) {
     [onHome],
   );
 
-  const onService = services.items.some((item) => item.href === pathname);
+  const onService = menuServices.some((item) => item.href === pathname);
 
   return (
     <header
@@ -180,7 +198,7 @@ function ServicesMenu({
   const wrapper = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const timer = useRef(0);
-  const [preview, setPreview] = useState(services.items[0]!.href);
+  const [preview, setPreview] = useState(menuServices[0]!.href);
 
   const later = (next: boolean, delay: number) => {
     window.clearTimeout(timer.current);
@@ -207,7 +225,7 @@ function ServicesMenu({
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
-  const shown = services.items.find((item) => item.href === preview)!;
+  const shown = menuServices.find((item) => item.href === preview)!;
 
   return (
     <div
@@ -245,7 +263,7 @@ function ServicesMenu({
       <div id={panelId} className="nav-panel" data-open={open || undefined}>
         <div className="nav-panel-inner">
           <ul className="nav-panel-list">
-            {services.items.map((item) => (
+            {menuServices.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -264,7 +282,7 @@ function ServicesMenu({
           <div className="nav-panel-aside">
             <div className="nav-panel-preview" aria-hidden="true">
               {open &&
-                services.items.map((item) => (
+                menuServices.map((item) => (
                   <Image
                     key={item.href}
                     src={item.navImage}
@@ -393,7 +411,7 @@ function MobileMenu({
             </li>
           </ul>
           <ul className="nav-sheet-services">
-            {services.items.map((item, index) => (
+            {menuServices.map((item, index) => (
               <li
                 key={item.href}
                 style={{ "--i": index + (hasBlog ? 4 : 3) } as CSSProperties}

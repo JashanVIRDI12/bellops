@@ -358,6 +358,15 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.foot-note {
+  margin-top: 1rem;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+.foot-note a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .nav {
   background: rgb(13 17 30 / 0.96);
 }

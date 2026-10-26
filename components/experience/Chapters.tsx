@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import "./tour.css";
 import { EnquiryForm } from "@/components/contact/EnquiryForm";
+import { SiteFooter } from "@/components/site/SiteFooter";
 import { WhatsAppIcon } from "@/components/contact/icons";
-import { blogPage, publishedPosts } from "@/lib/blog";
 import { clients, moreClients } from "@/lib/clients";
 import { testimonials } from "@/lib/testimonials";
 import {
@@ -12,11 +12,9 @@ import {
   aboutPage,
   approach,
   contact,
-  contactPage,
   intro,
   services,
   servicesPage,
-  site,
   studio,
   workPage,
 } from "@/lib/content";
@@ -503,81 +501,23 @@ export function Chapters() {
               </div>
               <EnquiryForm />
             </div>
-            <footer
-              data-ga-location="footer"
-              className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/25 pt-5 text-sm font-medium text-white/85 md:mt-14"
-            >
-              {/* Not Tailwind's `block`: the inner pages' .block (a section
-                  with a rule and deep padding) shares the name. */}
-              <div>
-                <p>
-                  © {site.copyrightYear} {site.name}
-                </p>
-                <p className="mt-1 text-xs font-normal text-white/60">
-                  The studio follows your local time and weather. Weather data
-                  from{" "}
-                  <a
-                    href="https://www.met.no/en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-white"
-                  >
-                    MET Norway
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                  .
-                </p>
-              </div>
-              <ul className="flex flex-wrap gap-x-6 gap-y-2">
-                <li>
-                  <Link href={servicesPage.path} className="hover:text-white">
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link href={threeDPage.path} className="hover:text-white">
-                    3D websites
-                  </Link>
-                </li>
-                <li>
-                  <Link href={workPage.path} className="hover:text-white">
-                    Work
-                  </Link>
-                </li>
-                <li>
-                  <Link href={aboutPage.path} className="hover:text-white">
-                    About
-                  </Link>
-                </li>
-                {publishedPosts.length > 0 && (
-                  <li>
-                    <Link href={blogPage.path} className="hover:text-white">
-                      Blog
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <Link href={contactPage.path} className="hover:text-white">
-                    Contact
-                  </Link>
-                </li>
-                {site.socials.map((social) => (
-                  <li key={social.label}>
-                    <a
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white"
-                      data-track={`social-${social.label.toLowerCase()}`}
-                    >
-                      {social.label}
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </footer>
           </div>
+        </div>
+        {/* The site's footer, as on every page, on a deep shade so it reads
+            over the last shot. */}
+        <div className="tour-foot">
+          <SiteFooter>
+            The studio follows your local time and weather. Weather data from{" "}
+            <a
+              href="https://www.met.no/en"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              MET Norway
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            .
+          </SiteFooter>
         </div>
       </section>
     </>

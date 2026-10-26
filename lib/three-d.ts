@@ -51,6 +51,11 @@ export const threeDPage = {
   shareDescription:
     "Immersive 3D websites that still load fast and rank. Designed and coded in-house by one small team. Tell us about your project.",
   nav: "3D website design",
+  // Its entry in the header's Services menu.
+  menu: {
+    label: "3D websites",
+    body: "Immersive Three.js and WebGL websites, configurators and 3D landing pages that still load fast.",
+  },
   heading: "Premium 3D Website Design Agency in India",
   lead: "Immersive 3D websites that load fast, rank on Google and turn visitors into enquiries.",
   hour: { shot: shot("three-d"), mood: "night" } as Hour,

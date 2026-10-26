@@ -655,6 +655,13 @@ body:has([data-backdrop="pending"]) .intro-frame {
   }
 }
 
+/* The site footer at the end of the tour: the night ground at a deep shade,
+   so the last shot still shows faintly behind it. */
+.tour-foot {
+  position: relative;
+  background: rgb(13 17 30 / 0.94);
+}
+
 /* ── The header over the tour ───────────────────────────────────────────── */
 /* Clear over the opening shots, so the studio fills the screen; the header's
    own shade keeps its links legible. It turns solid once the page scrolls

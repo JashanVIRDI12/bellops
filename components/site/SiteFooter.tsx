@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   INSTAGRAM_URL,
@@ -12,8 +13,12 @@ import { blogPage, publishedPosts } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 import { threeDPage } from "@/lib/three-d";
 
-/** The inner pages' footer: every service, the work, and how to reach us. */
-export function SiteFooter() {
+/**
+ * The footer on every page: every service, the work, and how to reach us.
+ * `children` adds a small note under the legal line (the home page credits
+ * its weather data there).
+ */
+export function SiteFooter({ children }: { children?: ReactNode }) {
   return (
     <footer className="foot" data-ga-location="footer">
       <div className="foot-masthead" aria-hidden="true">
@@ -111,6 +116,7 @@ export function SiteFooter() {
           </a>
         </span>
       </p>
+      {children && <p className="wrap foot-note">{children}</p>}
     </footer>
   );
 }
