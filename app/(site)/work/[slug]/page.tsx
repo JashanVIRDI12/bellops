@@ -2,14 +2,21 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { WhatsAppIcon } from "@/components/contact/icons";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
-import { workPage } from "@/lib/content";
+import { contact, workPage } from "@/lib/content";
+import { caseStudyWhatsappHref } from "@/lib/contact-links";
 import { breadcrumbList, creativeWork, jsonLd, type Crumb } from "@/lib/schema";
 import { serviceByHref } from "@/lib/services";
 import { shareMetadata } from "@/lib/seo";
-import { caseStudyPath, projectHost, projects } from "@/lib/work";
+import {
+  caseStudyPath,
+  projectHost,
+  projects,
+  type CaseStudyDetails,
+} from "@/lib/work";
 
 // Every project so far is a website, so each case study leads back to that
 // service's page (the hub). Give projects their own services once they vary.
@@ -38,14 +45,82 @@ export async function generateMetadata({
   };
 }
 
+/** The case study's sections, in order; each shows only when filled in. */
+const sections: {
+  key: Exclude<keyof CaseStudyDetails, "quote">;
+  label: string;
+}[] = [
+  { key: "brief", label: "Brief" },
+  { key: "built", label: "What we built" },
+  { key: "stack", label: "Stack" },
+  { key: "timeline", label: "Timeline" },
+  { key: "result", label: "Result" },
+];
+
+/** Brief, what we built, stack, timeline, result and quote: whatever is filled in. */
+function Details({ details }: { details?: CaseStudyDetails }) {
+  if (!details) return null;
+  const filled = sections.filter(({ key }) => {
+    const value = details[key];
+    return Array.isArray(value) ? value.length > 0 : Boolean(value);
+  });
+  if (filled.length === 0 && !details.quote) return null;
+  return (
+    <section aria-labelledby="project" className="wrap split block">
+      <h2 id="project" className="block-title">
+        The project
+      </h2>
+      <div>
+        {filled.length > 0 && (
+          <ul className="points">
+            {filled.map(({ key, label }) => {
+              const value = details[key]!;
+              return (
+                <li key={key}>
+                  <h3>{label}</h3>
+                  {Array.isArray(value) ? (
+                    <ul className="case-list">
+                      {value.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{value}</p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {details.quote && (
+          <figure className="case-quote">
+            <blockquote>
+              <p>{details.quote.text}</p>
+            </blockquote>
+            <figcaption>
+              {details.quote.name}
+              {details.quote.role && <span>, {details.quote.role}</span>}
+            </figcaption>
+          </figure>
+        )}
+      </div>
+    </section>
+  );
+}
+
 /**
- * One project: what it is, how it looks on a laptop and a phone, and a link
- * to the live site. Real numbers only: results get added once there are some.
+ * One project: what it is, how it looks on a laptop and a phone, a link to
+ * the live site, and its details as they're confirmed. Real facts only:
+ * results and quotes get added once the client approves them.
  */
 export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   const project = projectFor((await params).slug);
   if (!project) notFound();
   const others = projects.filter((other) => other.slug !== project.slug);
+  const whatsapp = {
+    href: caseStudyWhatsappHref(project.client),
+    track: `whatsapp-case-${project.slug}`,
+  };
   const trail: Crumb[] = [
     { label: "Home", href: "/" },
     { label: "Work", href: workPage.path },
@@ -87,6 +162,17 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           </div>
           <div className="hero-actions">
             <a
+              href={whatsapp.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="button button--light"
+              data-track={whatsapp.track}
+            >
+              <WhatsAppIcon />
+              {contact.whatsapp}
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <a
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
@@ -124,8 +210,9 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         </figure>
       </section>
 
+      <Details details={project.details} />
       <WorkShowcase projects={others} heading="More work" />
-      <ContactCta />
+      <ContactCta whatsapp={whatsapp} />
     </>
   );
 }

@@ -19,6 +19,27 @@ export type WorkProject = {
   mobileImage: string;
   /** Where a click goes. Absolute URLs open in a new tab, paths like "/work/x" stay in the site. */
   url: string;
+  /**
+   * The case study's sections. Each shows only when it's filled in, so leave
+   * out anything not yet confirmed: real facts only, and results and quotes
+   * only once the client has approved them.
+   */
+  details?: CaseStudyDetails;
+};
+
+export type CaseStudyDetails = {
+  /** What the client needed, in a sentence or two. */
+  brief?: string;
+  /** What Bellops designed and built: one item per line. */
+  built?: readonly string[];
+  /** The tools and services the site runs on. */
+  stack?: readonly string[];
+  /** How long it took, e.g. "About 3 weeks, from brief to launch". */
+  timeline?: string;
+  /** A measured result the client has approved. */
+  result?: string;
+  /** The client's words, approved by them. */
+  quote?: { text: string; name: string; role?: string };
 };
 
 export const projects: readonly WorkProject[] = [

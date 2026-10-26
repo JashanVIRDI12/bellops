@@ -1,4 +1,4 @@
-import { services, site } from "./content";
+import { services, site, workPage } from "./content";
 
 /**
  * Country code added to numbers typed without one (for example a 10-digit
@@ -57,3 +57,10 @@ export function serviceWhatsappHref(name: string, price: string) {
 /** The tracking name for a service's WhatsApp links: whatsapp-service-landing-pages. */
 export const serviceWhatsappTrack = (path: string) =>
   `whatsapp-service-${path.replace(/^\//, "")}`;
+
+/** WhatsApp from a case study: "I saw the {client} case study and want something similar." */
+export const caseStudyWhatsappHref = (client: string) =>
+  whatsappHref(
+    site.whatsapp,
+    workPage.whatsappMessage.replace("{name}", client),
+  );

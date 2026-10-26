@@ -410,6 +410,9 @@ export const workPage = {
     "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
   heading: "Selected work",
   lead: "Websites we've designed and built, from first sketch to launch.",
+  // A case study's WhatsApp links type this in; {name} is the client.
+  whatsappMessage:
+    "Hi Bellops, I saw the {name} case study and want something similar.",
 };
 
 /**

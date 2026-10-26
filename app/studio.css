@@ -300,6 +300,33 @@
 .site-page .showcase[data-count="3"] > li:first-child .showcase-phone img {
   aspect-ratio: 390 / 845;
 }
+/* Case studies: a list inside a point, and the client's words. */
+.case-list {
+  margin-top: 0.5rem;
+  color: var(--mist);
+}
+.points .case-list li {
+  border: 0;
+  padding-block: 0;
+}
+.points .case-list li + li {
+  margin-top: 0.35rem;
+}
+.case-quote {
+  margin-top: 2.5rem;
+  border-left: 2px solid var(--color-violet-soft);
+  padding-left: 1.5rem;
+}
+.case-quote blockquote {
+  color: var(--moonlight);
+  font: 500 clamp(1.3rem, 2.4vw, 1.9rem)/1.3 var(--font-space-grotesk);
+  letter-spacing: -0.02em;
+}
+.case-quote figcaption {
+  margin-top: 1rem;
+  color: var(--mist);
+  font-size: 0.9rem;
+}
 .site-page .process-number {
   font-size: 4rem;
   opacity: 0.75;
