@@ -14,6 +14,7 @@ export const site = {
   // With the country code; spaces are fine.
   whatsapp: "+91 85868 75703",
   whatsappGreeting: "Hi Bellops, I'd like to talk about a project.", // typed for the visitor, editable before sending
+  whatsappQuote: "Hi Bellops, I'd like a quote for my project.", // the phones' floating WhatsApp button
   copyrightYear: 2026, // static on purpose: the page is prerendered, so no new Date()
   socials: [{ label: "Instagram", href: INSTAGRAM_URL }],
   // Where the studio is, for search engines (structured data). Add the street

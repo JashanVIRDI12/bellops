@@ -384,7 +384,7 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
   background-color: rgb(7 10 19 / 0.4);
 }
 
-/* WhatsApp, floating in the bottom-right corner during the tour. */
+/* WhatsApp, floating in the bottom-right corner on phones (every public page). */
 .contact-dock {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right));
@@ -413,8 +413,11 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: 999px;
+  background-color: #fff;
+  color: var(--color-whatsapp);
   box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.6);
   transition:
     background-color 180ms ease,
@@ -423,32 +426,11 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
 
 .contact-dock-whatsapp:hover {
   transform: translateY(-1px);
-}
-
-.contact-dock-whatsapp {
-  gap: 0.5rem;
-  padding: 0 1.15rem 0 0.95rem;
-  background-color: #fff;
-  color: var(--color-ink);
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-
-.contact-dock-whatsapp:hover {
   background-color: #efebff;
 }
 
-.contact-dock-whatsapp svg {
-  color: var(--color-whatsapp);
-}
-
-@media (width < 48rem) {
-  .contact-dock-whatsapp {
-    width: 3rem;
-    padding: 0;
-  }
-
-  .contact-dock-label {
+@media (width >= 48rem) {
+  .contact-dock {
     display: none;
   }
 }
