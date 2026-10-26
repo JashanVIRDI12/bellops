@@ -87,7 +87,12 @@ const nextConfig: NextConfig = {
   },
   // The SEO service moved from /seo to /seo-services.
   async redirects() {
-    return [{ source: "/seo", destination: "/seo-services", permanent: true }];
+    return [
+      { source: "/seo", destination: "/seo-services", permanent: true },
+      // /index served a second copy of the home page; send it home for good
+      // (301, as search engines expect for a moved page).
+      { source: "/index", destination: "/", statusCode: 301 },
+    ];
   },
   async headers() {
     // 3D models and project screenshots are named with a hash of their
