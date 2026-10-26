@@ -3,16 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { WhatsAppIcon } from "@/components/contact/icons";
-import { services, site, type Service } from "@/lib/content";
-import { whatsappHref } from "@/lib/contact-links";
+import { services, type Service } from "@/lib/content";
+import { serviceWhatsappHref, serviceWhatsappTrack } from "@/lib/contact-links";
 import { formatPrice } from "@/lib/pricing";
 import { Arrow } from "./Arrow";
-
-/** "Landing pages" -> "landing pages"; names like Google or SEO stay as they are. */
-const midSentence = (title: string) =>
-  /^[A-Z][a-z]/.test(title) && !title.startsWith("Google")
-    ? title[0]!.toLowerCase() + title.slice(1)
-    : title;
 
 export function Capabilities({
   items = services.items,
@@ -64,17 +58,11 @@ export function Capabilities({
               </span>
             </Link>
             <a
-              href={whatsappHref(
-                site.whatsapp,
-                services.whatsappMessage.replace(
-                  "{service}",
-                  midSentence(item.title),
-                ),
-              )}
+              href={serviceWhatsappHref(item.title, formatPrice(item.price))}
               target="_blank"
               rel="noopener noreferrer"
               className="capability-whatsapp"
-              data-track={`whatsapp-service${item.href.replace("/", "-")}`}
+              data-track={serviceWhatsappTrack(item.href)}
               data-ga-location="service_card"
             >
               <WhatsAppIcon size={15} />

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Service } from "@/lib/content";
+import { WhatsAppIcon } from "@/components/contact/icons";
+import { contact, type Service } from "@/lib/content";
+import { serviceWhatsappHref, serviceWhatsappTrack } from "@/lib/contact-links";
 import { formatPrice } from "@/lib/pricing";
 import { jsonLd } from "@/lib/schema";
 import {
@@ -23,6 +25,11 @@ import { WorkShowcase } from "./WorkShowcase";
  */
 export function ServicePage({ service }: { service: Service }) {
   const related = service.page.related.map(serviceByHref);
+  // Every WhatsApp link here asks for a quote for this service, at its price.
+  const whatsapp = {
+    href: serviceWhatsappHref(service.title, formatPrice(service.price)),
+    track: serviceWhatsappTrack(service.href),
+  };
   return (
     <>
       <script
@@ -46,6 +53,17 @@ export function ServicePage({ service }: { service: Service }) {
         >
           Start a project
         </Link>
+        <a
+          href={whatsapp.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="button button--light"
+          data-track={whatsapp.track}
+        >
+          <WhatsAppIcon />
+          {contact.whatsapp}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
         <Link href="/work" className="button button--ghost" data-cta="see_work">
           See the work
         </Link>
@@ -86,7 +104,7 @@ export function ServicePage({ service }: { service: Service }) {
         <ServiceRows items={related} />
       </section>
       <Faq />
-      <ContactCta />
+      <ContactCta whatsapp={whatsapp} />
     </>
   );
 }

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { WhatsAppIcon } from "@/components/contact/icons";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Faq } from "@/components/site/Faq";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
-import { servicesPage } from "@/lib/content";
+import { contact, servicesPage } from "@/lib/content";
+import { serviceWhatsappHref, serviceWhatsappTrack } from "@/lib/contact-links";
 import {
   breadcrumbList,
   faqPage,
@@ -60,6 +62,12 @@ const structuredData = {
   ],
 };
 
+/** WhatsApp here asks for a quote for a 3D website, from the lowest 3D rate. */
+const whatsapp = {
+  href: serviceWhatsappHref("3D website design", threeDRates[0]!.price),
+  track: serviceWhatsappTrack(page.path),
+};
+
 /** The 3D website design page: what we build, how, how long, for how much. */
 export default function ThreeDWebsiteDesign() {
   return (
@@ -81,6 +89,17 @@ export default function ThreeDWebsiteDesign() {
         >
           Start your 3D project
         </Link>
+        <a
+          href={whatsapp.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="button button--light"
+          data-track={whatsapp.track}
+        >
+          <WhatsAppIcon />
+          {contact.whatsapp}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
         <a href="#selected-work" className="button button--ghost">
           See our work
         </a>
@@ -237,7 +256,7 @@ export default function ThreeDWebsiteDesign() {
       </section>
 
       <Faq items={page.faqs} />
-      <ContactCta />
+      <ContactCta whatsapp={whatsapp} />
     </>
   );
 }

@@ -13,8 +13,9 @@ export const site = {
   // WhatsApp is the only direct contact for now (no call or email buttons).
   // With the country code; spaces are fine.
   whatsapp: "+91 85868 75703",
-  whatsappGreeting: "Hi Bellops, I'd like to talk about a project.", // typed for the visitor, editable before sending
-  whatsappQuote: "Hi Bellops, I'd like a quote for my project.", // the phones' floating WhatsApp button
+  // Typed into every WhatsApp link (the visitor can edit it before sending),
+  // except on service pages, which use services.whatsappMessage.
+  whatsappQuote: "Hi Bellops, I'd like a quote for my project.",
   copyrightYear: 2026, // static on purpose: the page is prerendered, so no new Date()
   socials: [{ label: "Instagram", href: INSTAGRAM_URL }],
   // Who runs the studio: named on the home and about pages, and in the
@@ -140,8 +141,9 @@ export type Service = {
 };
 
 export const services = {
-  // Each service card's WhatsApp button types this in; {service} is its title.
-  whatsappMessage: "Hi Bellops, I'm interested in {service}.",
+  // Typed into the WhatsApp links on a service's page and its card on
+  // /services: {service} is its title, {price} its starting price.
+  whatsappMessage: "Hi Bellops, I'd like a quote for {service} ({price}).",
   heading: "Interactive websites, and everything that brings people to them",
   items: [
     {
