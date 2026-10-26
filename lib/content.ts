@@ -328,7 +328,7 @@ export const services = {
       navImage: "/navigation/services-v1/branding.webp",
       price: { from: 15_000 },
       page: {
-        title: "Branding Starter Packs: Logo & Brand Identity Design | Bellops",
+        title: "Branding & Logo Design Packs in India | Bellops",
         description:
           "Branding starter packs by Bellops in India: logo design, a colour palette and a social media kit, for a brand that looks the same everywhere it appears.",
         heading: "Branding Starter Packs for a Consistent Brand",
@@ -427,7 +427,7 @@ export const contact = {
 /** The work index and case studies. */
 export const workPage = {
   path: "/work",
-  title: "Selected Work: Websites Designed & Built by Bellops",
+  title: "Our Work: Website Case Studies",
   description:
     "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
   heading: "Selected work",
