@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { workPage } from "@/lib/content";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { serviceByHref } from "@/lib/services";
 import { shareMetadata } from "@/lib/seo";
 import { caseStudyPath, projectHost, projects } from "@/lib/work";
+
+// Every project so far is a website, so each case study leads back to that
+// service's page (the hub). Give projects their own services once they vary.
+const websiteDesign = serviceByHref("/premium-website-design");
 
 const projectFor = (slug: string) =>
   projects.find((project) => project.slug === slug);
@@ -60,7 +66,15 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         <Crumbs trail={trail} />
         <RevealTitle text={project.client} className="case-title" />
         <div className="hero-foot">
-          <p className="hero-lead">{project.title}.</p>
+          <div>
+            <p className="hero-lead">{project.title}.</p>
+            <p className="case-service">
+              Service:{" "}
+              <Link href={websiteDesign.href} className="text-link">
+                Website design
+              </Link>
+            </p>
+          </div>
           <div className="hero-actions">
             <a
               href={project.url}

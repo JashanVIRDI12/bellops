@@ -74,7 +74,7 @@ export function ServicePage({ service }: { service: Service }) {
       </section>
       <Included items={service.page.included} />
       <Process />
-      <WorkShowcase projects={projects} />
+      <WorkShowcase projects={projects} heading="Related work" />
       <section aria-labelledby="related" className="wrap block">
         <div className="block-head">
           <h2 id="related" className="block-title">

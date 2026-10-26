@@ -1643,6 +1643,13 @@ html:has(.site-page) {
   color: #fff;
 }
 
+/* Case studies: the service behind the project, under the lead. */
+.case-service {
+  margin-top: 1rem;
+  color: rgb(242 238 248 / 0.7);
+  font-size: 0.95rem;
+}
+
 /* Sections. */
 .block {
   border-top: 1px solid var(--line);
