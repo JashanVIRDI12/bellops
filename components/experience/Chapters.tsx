@@ -6,6 +6,7 @@ import { EnquiryForm } from "@/components/contact/EnquiryForm";
 import { WhatsAppIcon } from "@/components/contact/icons";
 import { blogPage, publishedPosts } from "@/lib/blog";
 import { clients, moreClients } from "@/lib/clients";
+import { testimonials } from "@/lib/testimonials";
 import {
   INSTAGRAM_URL,
   aboutPage,
@@ -45,6 +46,42 @@ const frame = "scene-frame sticky top-0 flex h-svh px-6 md:px-12 lg:px-16";
 const featuredRates = threeDRates.filter((row) =>
   ["3D landing page (one page)", "Full 3D website"].includes(row.name),
 );
+
+/**
+ * The proof slot under the opening scene: one or two real, approved client
+ * quotes (lib/testimonials.ts). Nothing renders until there are some.
+ */
+function ProofQuotes() {
+  const quotes = testimonials.slice(0, 2);
+  if (quotes.length === 0) return null;
+  return (
+    <ul aria-label="What clients say" className="tour-quotes mt-8">
+      {quotes.map((item) => (
+        <li key={item.quote}>
+          <figure>
+            <blockquote>
+              <p>“{item.quote}”</p>
+            </blockquote>
+            <figcaption>
+              {item.name}
+              {item.role ? `, ${item.role}` : ""},{" "}
+              {item.caseStudy ? (
+                <Link
+                  href={caseStudyPath({ slug: item.caseStudy })}
+                  className="tour-link"
+                >
+                  {item.company}
+                </Link>
+              ) : (
+                item.company
+              )}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 function Scrim() {
   return <div aria-hidden data-scrim className="scene-scrim" />;
@@ -86,6 +123,7 @@ export function Chapters() {
             <p className="mt-5 max-w-[46ch] font-medium text-white/90">
               {studio.body}
             </p>
+            <ProofQuotes />
           </div>
         </div>
       </section>
