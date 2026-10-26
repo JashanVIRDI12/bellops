@@ -244,17 +244,14 @@ export function Chapters() {
                 );
                 return (
                   <li key={client.name}>
-                    {client.url ? (
-                      <a
-                        href={client.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {client.caseStudy ? (
+                      <Link
+                        href={caseStudyPath({ slug: client.caseStudy })}
                         className="tour-logo-link"
-                        data-track={`client-${client.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                        data-track={`client-logo-${client.caseStudy}`}
                       >
                         {mark}
-                        <span className="sr-only"> (opens in a new tab)</span>
-                      </a>
+                      </Link>
                     ) : (
                       mark
                     )}

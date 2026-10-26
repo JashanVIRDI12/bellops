@@ -2,18 +2,18 @@
  * Brands Bellops has worked with, for the home page's Clients section (shown
  * in white over the 3D studio). Logos are one-colour silhouettes of each
  * brand's own logo, taken from its website (mngspirits.com, ospsmed.com and
- * so on), in public/clients. Each logo links to that website. Show only
- * clients who are happy to be named.
+ * so on), in public/clients. Show only clients who are happy to be named.
  *
- * GrowGuides is set as text, with no link: growguides.me expired on
- * 14 September 2026 (in its redemption period, October 2026), so there is no
- * logo to take and a link could end up somewhere else. Add `url` and a logo
- * once the domain is renewed.
+ * A logo links to the client's case study when there is one (`caseStudy`,
+ * a slug in lib/work.ts); the strip never sends visitors off the site.
+ *
+ * GrowGuides is set as text: growguides.me expired on 14 September 2026 (in
+ * its redemption period, October 2026), so there is no logo to take.
  */
 export type Client = {
   name: string;
-  /** The client's website. */
-  url?: string;
+  /** Slug of the client's case study in lib/work.ts, if it has one. */
+  caseStudy?: string;
   /** Display height in px; the width follows the file's ratio. */
   logo?: { src: string; width: number; height: number; display: number };
 };
@@ -24,7 +24,7 @@ export const moreClients = 20;
 export const clients: readonly Client[] = [
   {
     name: "Baba Luxury Cars",
-    url: "https://www.babaluxurycar.com",
+    caseStudy: "baba-luxury-cars",
     logo: {
       src: "/clients/baba-luxury-cars.webp",
       width: 384,
@@ -34,7 +34,7 @@ export const clients: readonly Client[] = [
   },
   {
     name: "Chase Healthcare & Wellness",
-    url: "https://www.chw.co.in",
+    caseStudy: "chase-healthcare-wellness",
     logo: {
       src: "/clients/chase-healthcare-wellness.webp",
       width: 117,
@@ -44,7 +44,6 @@ export const clients: readonly Client[] = [
   },
   {
     name: "MNG Spirits",
-    url: "https://www.mngspirits.com",
     logo: {
       src: "/clients/mng-spirits.webp",
       width: 338,
@@ -54,7 +53,6 @@ export const clients: readonly Client[] = [
   },
   {
     name: "Om Sai Pharma & Surgicals",
-    url: "https://www.ospsmed.com",
     logo: {
       src: "/clients/om-sai-pharma-surgicals.webp",
       width: 134,
@@ -64,7 +62,7 @@ export const clients: readonly Client[] = [
   },
   {
     name: "PUSHWebb",
-    url: "https://www.pushwebb.com",
+    caseStudy: "pushwebb",
     logo: {
       src: "/clients/pushwebb.webp",
       width: 564,
