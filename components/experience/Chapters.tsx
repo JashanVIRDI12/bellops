@@ -27,7 +27,12 @@ const projectTypes = [
 export function Chapters() {
   return (
     <>
-      <section id="intro" data-beat className="tour-hero">
+      <section
+        id="intro"
+        data-beat
+        className="tour-hero"
+        data-ga-location="hero"
+      >
         <div className="hero-grid" aria-hidden="true" />
         <div className="tour-hero-top">
           <p>
@@ -59,6 +64,7 @@ export function Chapters() {
                 className="studio-button studio-button--violet"
                 data-magnetic
                 data-track="start-project"
+                data-cta="get_quote"
               >
                 Let&apos;s make it happen <Arrow diagonal />
               </GlideLink>
@@ -121,7 +127,11 @@ export function Chapters() {
           </div>
         </div>
         <div className="tour-hero-bottom">
-          <a href="#studio" className="scroll-invitation">
+          <a
+            href="#studio"
+            className="scroll-invitation"
+            data-cta="explore_studio"
+          >
             <span className="scroll-circle">
               <Arrow />
             </span>
@@ -358,7 +368,12 @@ export function Chapters() {
           <Capabilities />
         </div>
       </section>
-      <section id="contact" data-beat className="tour-contact">
+      <section
+        id="contact"
+        data-beat
+        className="tour-contact"
+        data-ga-location="contact"
+      >
         <div className="studio-wrap">
           <div className="section-topline" data-enter>
             <span className="studio-label">

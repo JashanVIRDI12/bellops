@@ -17,3 +17,28 @@ export const track = (name: string, params: Record<string, string> = {}) => {
   const gtag = (window as Window & { gtag?: Gtag }).gtag;
   gtag?.("event", name, { page_path: window.location.pathname, ...params });
 };
+
+/** Where a link sits: the nearest data-ga-location (header, hero, footer…). */
+function locationOf(element: Element) {
+  return (
+    element.closest("[data-ga-location]")?.getAttribute("data-ga-location") ??
+    "page"
+  );
+}
+
+/**
+ * The events a click can send, from what was clicked:
+ * - a WhatsApp link: whatsapp_click {location}
+ * - a tel: or mailto: link: contact_click {method: phone | email}
+ * - anything with data-cta: cta_click {cta, location}
+ */
+export function trackClick(element: Element) {
+  const href = element.getAttribute("href") ?? "";
+  if (href.startsWith("https://wa.me/"))
+    track("whatsapp_click", { location: locationOf(element) });
+  else if (href.startsWith("tel:")) track("contact_click", { method: "phone" });
+  else if (href.startsWith("mailto:"))
+    track("contact_click", { method: "email" });
+  const cta = element.getAttribute("data-cta");
+  if (cta) track("cta_click", { cta, location: locationOf(element) });
+}

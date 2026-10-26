@@ -16,6 +16,7 @@ export function ContactDock() {
   return (
     <div
       className="contact-dock"
+      data-ga-location="floating"
       data-state={beat === 0 || beat >= LAST_BEAT ? "hidden" : undefined}
     >
       <a

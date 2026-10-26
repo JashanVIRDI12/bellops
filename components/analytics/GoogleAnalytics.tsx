@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { trackingAllowed } from "@/lib/analytics/client";
+import { trackClick } from "@/lib/track";
 import { whenIdle } from "@/components/three/utils/whenIdle";
 
 /** The Google Analytics 4 property. */
@@ -50,6 +51,19 @@ export function GoogleAnalytics() {
       script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
       document.head.appendChild(script);
     }, IDLE_WAIT);
+  }, [admin]);
+
+  // One listener for the whole site: WhatsApp, phone and email links and the
+  // calls to action (lib/track.ts). Nothing is sent where GA is off.
+  useEffect(() => {
+    if (admin) return;
+    const onClick = (event: MouseEvent) => {
+      const target = (event.target as Element | null)?.closest?.("a, button");
+      if (target) trackClick(target);
+    };
+    document.addEventListener("click", onClick, { capture: true });
+    return () =>
+      document.removeEventListener("click", onClick, { capture: true });
   }, [admin]);
 
   return null;

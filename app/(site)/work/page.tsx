@@ -40,7 +40,11 @@ export default function Work() {
         heading={workPage.heading}
         lead={workPage.lead}
       >
-        <Link href="/#contact" className="button button--solid">
+        <Link
+          href="/#contact"
+          className="button button--solid"
+          data-cta="start_project"
+        >
           Start a project
         </Link>
       </StudioHero>

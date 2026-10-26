@@ -38,10 +38,11 @@ export function ServicePage({ service }: { service: Service }) {
           href="/#contact"
           className="button button--solid"
           data-track={`service-start-${service.href.slice(1)}`}
+          data-cta="start_project"
         >
           Start a project
         </Link>
-        <Link href="/work" className="button button--ghost">
+        <Link href="/work" className="button button--ghost" data-cta="see_work">
           See the work
         </Link>
       </StudioHero>

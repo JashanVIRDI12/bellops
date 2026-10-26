@@ -56,7 +56,11 @@ export default function Services() {
         heading={servicesPage.heading}
         lead={servicesPage.lead}
       >
-        <Link href="/#contact" className="button button--solid">
+        <Link
+          href="/#contact"
+          className="button button--solid"
+          data-cta="start_project"
+        >
           Start a project
         </Link>
       </StudioHero>

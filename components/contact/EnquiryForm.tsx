@@ -9,6 +9,7 @@ import {
 } from "react";
 import { currentVisit, track } from "@/lib/analytics/client";
 import { trackMeta } from "@/lib/analytics/meta";
+import { track as trackGA } from "@/lib/track";
 import { enquiryForm, services } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
 import {
@@ -60,6 +61,7 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
       if (!reported.current) {
         reported.current = true;
         track("action", "enquiry-sent");
+        trackGA("generate_lead", { form: "contact" });
         trackMeta("Lead", {
           content_name: "Start a project enquiry",
           content_category: "enquiry-form",
@@ -74,7 +76,7 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
 
   if (state.status === "sent") {
     return (
-      <div className="enquiry-sent">
+      <div className="enquiry-sent" data-ga-location="form">
         <h3
           ref={sentRef}
           tabIndex={-1}
@@ -127,6 +129,7 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
       noValidate
       aria-label={enquiryForm.label}
       className="enquiry"
+      data-ga-location="form"
       onFocus={() => {
         if (started.current) return;
         started.current = true;

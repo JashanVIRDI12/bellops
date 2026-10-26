@@ -88,6 +88,7 @@ export function SiteHeader({ variant }: { variant: Variant }) {
   return (
     <header
       className="nav"
+      data-ga-location="header"
       data-variant={variant}
       data-solid={tourSolid || scrolled || panelOpen || undefined}
     >
@@ -134,6 +135,7 @@ export function SiteHeader({ variant }: { variant: Variant }) {
           className="nav-cta"
           onClick={goToContact}
           data-track="nav-start-project"
+          data-cta="start_project"
         >
           Start a project
         </Link>
@@ -384,7 +386,12 @@ function MobileMenu({
           </ul>
         </nav>
         <div className="nav-sheet-foot">
-          <Link href="/#contact" className="nav-cta" onClick={onContact}>
+          <Link
+            href="/#contact"
+            className="nav-cta"
+            onClick={onContact}
+            data-cta="start_project"
+          >
             Start a project
           </Link>
           <a

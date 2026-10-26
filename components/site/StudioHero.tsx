@@ -48,7 +48,7 @@ export function StudioHero({
   });
 
   return (
-    <section className="hero" data-mood={hour.mood}>
+    <section className="hero" data-mood={hour.mood} data-ga-location="hero">
       <div className="hero-shot" aria-hidden="true">
         <picture>
           <source

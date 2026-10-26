@@ -6,7 +6,11 @@ import { whatsappHref } from "@/lib/contact-links";
 /** The close of every inner page: the question, set as large as the page allows. */
 export function ContactCta() {
   return (
-    <section aria-labelledby="closing" className="closing">
+    <section
+      aria-labelledby="closing"
+      className="closing"
+      data-ga-location="contact"
+    >
       <div className="wrap">
         <h2 id="closing" className="closing-title">
           {contact.heading}
@@ -18,6 +22,7 @@ export function ContactCta() {
               href="/#contact"
               className="button button--solid"
               data-track="closing-enquiry"
+              data-cta="send_enquiry"
             >
               Send an enquiry
             </Link>

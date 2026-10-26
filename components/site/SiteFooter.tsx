@@ -11,7 +11,7 @@ import { whatsappHref } from "@/lib/contact-links";
 /** The inner pages' footer: every service, the work, and how to reach us. */
 export function SiteFooter() {
   return (
-    <footer className="foot">
+    <footer className="foot" data-ga-location="footer">
       <div className="foot-masthead" aria-hidden="true">
         <span>
           Bell<span>Ops</span>.
