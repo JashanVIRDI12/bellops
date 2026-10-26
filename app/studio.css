@@ -300,6 +300,19 @@
 .site-page .showcase[data-count="3"] > li:first-child .showcase-phone img {
   aspect-ratio: 390 / 845;
 }
+/* The second line of a long <h1> (RevealTitle's subline). */
+.reveal-subline {
+  display: block;
+  max-width: 28ch;
+  margin-top: 0.45em;
+  color: rgb(242 238 248 / 0.82);
+  font-size: max(0.32em, 1.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.reveal-subline::first-letter {
+  text-transform: uppercase;
+}
 /* Case studies: a list inside a point, and the client's words. */
 .case-list {
   margin-top: 0.5rem;

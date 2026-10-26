@@ -429,6 +429,8 @@ export const workPage = {
   description:
     "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
   heading: "Selected work",
+  // The rest of the <h1>: "Selected work: websites designed and built by Bellops".
+  headingSubline: "websites designed and built by Bellops",
   lead: "Websites we've designed and built, from first sketch to launch.",
   // A case study's WhatsApp links type this in; {name} is the client.
   whatsappMessage:

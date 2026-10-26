@@ -149,7 +149,11 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       />
       <section className="wrap case-intro">
         <Crumbs trail={trail} />
-        <RevealTitle text={project.client} className="case-title" />
+        <RevealTitle
+          text={project.client}
+          subline={project.headline}
+          className="case-title"
+        />
         <div className="hero-foot">
           <div>
             <p className="hero-lead">{project.title}.</p>

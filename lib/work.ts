@@ -13,6 +13,8 @@ export type WorkProject = {
   slug: string;
   title: string;
   client: string;
+  /** The rest of the case study's <h1>, after "{client}: ". */
+  headline: string;
   /** Desktop screenshot shown on the laptop (16:10). */
   image: string;
   /** Mobile screenshot shown on the phone (9:19.5). */
@@ -47,6 +49,7 @@ export const projects: readonly WorkProject[] = [
     slug: "baba-luxury-cars",
     title: "A showroom site for hand-picked, inspected luxury cars in Delhi",
     client: "Baba Luxury Cars",
+    headline: "a showroom website for luxury cars in Delhi",
     image: "/projects/babaluxurycar-desktop.b141fdec.webp",
     mobileImage: "/projects/babaluxurycar-mobile.a47e5d5a.webp",
     url: "https://www.babaluxurycar.com",
@@ -55,6 +58,7 @@ export const projects: readonly WorkProject[] = [
     slug: "pushwebb",
     title: "A home for a content, creative and performance agency",
     client: "PUSHWebb",
+    headline: "a website for a content, creative and performance agency",
     image: "/projects/pushwebb-desktop-bot.1240bf1f.webp",
     mobileImage: "/projects/pushwebb-mobile-bot.927a202e.webp",
     url: "https://www.pushwebb.com",
@@ -63,6 +67,7 @@ export const projects: readonly WorkProject[] = [
     slug: "chase-healthcare-wellness",
     title: "An export site for a WHO-GMP healthcare manufacturer",
     client: "Chase Healthcare & Wellness",
+    headline: "an export website for a WHO-GMP manufacturer",
     image: "/projects/chw-desktop.cd0dbb19.webp",
     mobileImage: "/projects/chw-mobile.c1105ef9.webp",
     url: "https://www.chw.co.in",

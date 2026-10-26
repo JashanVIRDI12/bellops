@@ -17,6 +17,7 @@ export function StudioHero({
   hour,
   crumbs,
   heading,
+  headingSubline,
   lead,
   note,
   children,
@@ -24,6 +25,8 @@ export function StudioHero({
   hour: Hour;
   crumbs: readonly Crumb[];
   heading: string;
+  /** The rest of the <h1>, set smaller on its own line (see RevealTitle). */
+  headingSubline?: string;
   lead: string;
   /** A short line under the lead, such as the starting price. */
   note?: string;
@@ -63,7 +66,11 @@ export function StudioHero({
       </div>
       <div className="wrap hero-copy">
         <Crumbs trail={crumbs} />
-        <RevealTitle text={heading} className="hero-title" />
+        <RevealTitle
+          text={heading}
+          subline={headingSubline}
+          className="hero-title"
+        />
         <div className="hero-foot">
           <div>
             <p className="hero-lead">{lead}</p>

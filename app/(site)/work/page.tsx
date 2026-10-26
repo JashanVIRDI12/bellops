@@ -37,6 +37,7 @@ export default function Work() {
         hour={{ shot: shot("work"), mood: "day" }}
         crumbs={trail}
         heading={workPage.heading}
+        headingSubline={workPage.headingSubline}
         lead={workPage.lead}
       >
         <Link

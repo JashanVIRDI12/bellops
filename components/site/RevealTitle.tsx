@@ -8,9 +8,16 @@ import type { Crumb } from "@/lib/schema";
  */
 export function RevealTitle({
   text,
+  subline,
   className = "",
 }: {
   text: string;
+  /**
+   * The rest of the heading, set smaller on its own line: the <h1> reads
+   * "{text}: {subline}" (the colon is there for search engines and screen
+   * readers, not shown).
+   */
+  subline?: string;
   className?: string;
 }) {
   const words = text.split(" ");
@@ -24,6 +31,12 @@ export function RevealTitle({
           {index < words.length - 1 ? " " : null}
         </Fragment>
       ))}
+      {subline && (
+        <>
+          <span className="sr-only">: </span>
+          <span className="reveal-subline">{subline}</span>
+        </>
+      )}
     </h1>
   );
 }
