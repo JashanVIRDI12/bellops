@@ -82,7 +82,7 @@ const person = (name: string) => ({
   worksFor: { "@id": organizationId },
 });
 
-/** A blog post (BlogPosting, a kind of Article), published by the studio. */
+/** A blog post (BlogPosting and Article), published by the studio. */
 export function blogPosting(post: {
   path: string;
   title: string;
@@ -94,7 +94,8 @@ export function blogPosting(post: {
 }) {
   const url = `${siteUrl}${post.path}`;
   return {
-    "@type": "BlogPosting",
+    // An Article for search engines; BlogPosting says which kind.
+    "@type": ["BlogPosting", "Article"],
     "@id": `${url}#article`,
     headline: post.title,
     description: post.description,

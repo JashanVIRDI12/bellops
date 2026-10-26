@@ -27,12 +27,9 @@ import {
   site,
   workPage,
 } from "@/lib/content";
-import { blogPage, publishedPosts } from "@/lib/blog";
+import { blogPage } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 import { threeDPage } from "@/lib/three-d";
-
-/** The blog joins the menus with its first published post. */
-const hasBlog = publishedPosts.length > 0;
 
 /**
  * The Services menus (the panel and the phone menu): every service, with 3D
@@ -146,17 +143,15 @@ export function SiteHeader({ variant }: { variant: Variant }) {
           >
             Work
           </Link>
-          {hasBlog && (
-            <Link
-              href={blogPage.path}
-              className="nav-link"
-              aria-current={
-                pathname.startsWith(blogPage.path) ? "page" : undefined
-              }
-            >
-              Blog
-            </Link>
-          )}
+          <Link
+            href={blogPage.path}
+            className="nav-link"
+            aria-current={
+              pathname.startsWith(blogPage.path) ? "page" : undefined
+            }
+          >
+            Blog
+          </Link>
           <Link href="/#contact" className="nav-link" onClick={goToContact}>
             Contact
           </Link>
@@ -397,14 +392,12 @@ function MobileMenu({
                 Services
               </Link>
             </li>
-            {hasBlog && (
-              <li style={{ "--i": 2 } as CSSProperties}>
-                <Link href={blogPage.path} onClick={close}>
-                  Blog
-                </Link>
-              </li>
-            )}
-            <li style={{ "--i": hasBlog ? 3 : 2 } as CSSProperties}>
+            <li style={{ "--i": 2 } as CSSProperties}>
+              <Link href={blogPage.path} onClick={close}>
+                Blog
+              </Link>
+            </li>
+            <li style={{ "--i": 3 } as CSSProperties}>
               <Link href="/#contact" onClick={onContact}>
                 Contact
               </Link>
@@ -412,10 +405,7 @@ function MobileMenu({
           </ul>
           <ul className="nav-sheet-services">
             {menuServices.map((item, index) => (
-              <li
-                key={item.href}
-                style={{ "--i": index + (hasBlog ? 4 : 3) } as CSSProperties}
-              >
+              <li key={item.href} style={{ "--i": index + 4 } as CSSProperties}>
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : undefined}
