@@ -18,12 +18,13 @@ type GtagWindow = Window & {
 let started = false;
 
 /**
- * Google's tag (gtag.js), the standard snippet, loaded once the page is idle
- * so it never holds up the first paint. Like the site's own analytics, it
- * stays off for browsers that ask not to be tracked (Do Not Track, Global
- * Privacy Control), on the admin pages and on localhost. Page views on
- * client-side navigation come from GA4's enhanced measurement (history
- * changes), which is on by default.
+ * Google's tag (gtag.js), the standard snippet. The gtag queue is set up at
+ * once, so events (lib/track.ts) sent early are kept; gtag.js itself loads
+ * once the page is idle so it never holds up the first paint. Like the
+ * site's own analytics, it stays off for browsers that ask not to be tracked
+ * (Do Not Track, Global Privacy Control), on the admin pages and on
+ * localhost. Page views on client-side navigation come from GA4's enhanced
+ * measurement (history changes), which is on by default.
  */
 export function GoogleAnalytics() {
   const pathname = usePathname();
@@ -32,18 +33,18 @@ export function GoogleAnalytics() {
   useEffect(() => {
     if (started || admin || !trackingAllowed()) return;
     if (/^(localhost|127\.|\[::1\])/.test(window.location.hostname)) return;
-    return whenIdle(() => {
-      if (started) return;
-      started = true;
-      const w = window as GtagWindow;
-      w.dataLayer = w.dataLayer || [];
-      w.gtag = function gtag() {
-        // gtag.js expects each call's own `arguments` object, not an array.
-        // eslint-disable-next-line prefer-rest-params
-        w.dataLayer!.push(arguments);
-      };
-      w.gtag("js", new Date());
-      w.gtag("config", MEASUREMENT_ID);
+    started = true;
+    const w = window as GtagWindow;
+    w.dataLayer = w.dataLayer || [];
+    w.gtag = function gtag() {
+      // gtag.js expects each call's own `arguments` object, not an array.
+      // eslint-disable-next-line prefer-rest-params
+      w.dataLayer!.push(arguments);
+    };
+    w.gtag("js", new Date());
+    w.gtag("config", MEASUREMENT_ID);
+    // Not cancelled on unmount: the queue above is already in use.
+    whenIdle(() => {
       const script = document.createElement("script");
       script.async = true;
       script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
