@@ -34,6 +34,14 @@
   background: #eeeae2;
   color: #23222a;
 }
+/* Focus rings: the soft violet on the dark sections (the brand violet is too
+   dark to see there), the brand violet on paper. */
+.studio-experience :focus-visible {
+  outline-color: var(--color-violet-soft);
+}
+.studio-experience .paper-section :focus-visible {
+  outline-color: var(--color-violet);
+}
 .studio-experience em,
 .closing em {
   font-family: Georgia, serif;

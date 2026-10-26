@@ -2058,7 +2058,9 @@ body {
   color: #fff;
 }
 
-:focus-visible {
+/* A visible keyboard focus ring everywhere. :where() keeps it at zero
+   specificity, so pill buttons keep their own radius while focused. */
+:where(:focus-visible) {
   outline: 2px solid var(--color-violet);
   outline-offset: 4px;
   border-radius: 4px;
