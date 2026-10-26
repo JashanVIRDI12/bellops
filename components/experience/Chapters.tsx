@@ -108,7 +108,9 @@ export function Chapters() {
                 width={1600}
                 height={1000}
                 sizes="(min-width: 900px) 45vw, 85vw"
-                fetchPriority="high"
+                // The home page's LCP on phones and desktops: the one image
+                // preloaded at high priority. Everything else waits (lazy).
+                preload
               />
             </Link>
             <Link

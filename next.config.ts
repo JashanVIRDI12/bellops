@@ -75,6 +75,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   images: {
+    // AVIF where the browser takes it (smaller), WebP otherwise.
+    formats: ["image/avif", "image/webp"],
     // Widths offered for full-screen images. The stills are at most 1920 px
     // wide, so larger versions would only cost bytes.
     deviceSizes: [640, 828, 1080, 1280, 1920],

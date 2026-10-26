@@ -106,10 +106,9 @@ export function SiteHeader({ variant }: { variant: Variant }) {
           <Image
             src="/brand/bellops-wordmark-transparent.png"
             alt={site.name}
-            width={984}
-            height={304}
+            width={112}
+            height={35}
             sizes="(min-width: 768px) 112px, (min-width: 360px) 96px, 80px"
-            preload
             className="h-auto w-20 min-[360px]:w-24 md:w-28"
           />
         </Link>
