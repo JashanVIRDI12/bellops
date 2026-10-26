@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { services, type Service } from "./content";
-import { homeUrl, shareMetadata, siteUrl } from "./seo";
+import { services, servicesPage, type Service } from "./content";
+import { breadcrumbList, organizationId, type Crumb } from "./schema";
+import { shareMetadata, siteUrl } from "./seo";
 
 export const allServices: readonly Service[] = services.items;
 
@@ -9,6 +10,13 @@ export function serviceByHref(href: string): Service {
   if (!service) throw new Error(`No service at ${href}`);
   return service;
 }
+
+/** Where a service page sits: Home, Services, the service. */
+export const serviceTrail = (service: Service): Crumb[] => [
+  { label: "Home", href: "/" },
+  { label: "Services", href: servicesPage.path },
+  { label: service.nav },
+];
 
 /** Structured data for a service page: the service itself, and where it sits. */
 export function serviceStructuredData(service: Service) {
@@ -24,33 +32,12 @@ export function serviceStructuredData(service: Service) {
         url,
         serviceType: service.title,
         areaServed: { "@type": "Country", name: "India" },
-        provider: { "@id": `${siteUrl}/#organization` },
+        provider: { "@id": organizationId },
       },
-      breadcrumbs([
-        { name: "Home", url: homeUrl },
-        { name: "Services", url: `${siteUrl}/services` },
-        { name: service.nav, url },
-      ]),
+      breadcrumbList(serviceTrail(service), service.href),
     ],
   };
 }
-
-/** A BreadcrumbList for a trail of pages. */
-export function breadcrumbs(trail: readonly { name: string; url: string }[]) {
-  return {
-    "@type": "BreadcrumbList",
-    itemListElement: trail.map((crumb, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: crumb.name,
-      item: crumb.url,
-    })),
-  };
-}
-
-/** Serializes structured data for a <script type="application/ld+json">. */
-export const jsonLd = (data: unknown) =>
-  JSON.stringify(data).replace(/</g, "\\u003c");
 
 /** A service page's metadata: its own title, description, canonical and share card. */
 export function serviceMetadata(service: Service): Metadata {

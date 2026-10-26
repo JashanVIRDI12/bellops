@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Service } from "@/lib/content";
-import { serviceByHref, serviceStructuredData, jsonLd } from "@/lib/services";
+import { jsonLd } from "@/lib/schema";
+import {
+  serviceByHref,
+  serviceStructuredData,
+  serviceTrail,
+} from "@/lib/services";
 import { projects } from "@/lib/work";
 import { ContactCta } from "./ContactCta";
 import { Faq } from "./Faq";
@@ -27,10 +32,7 @@ export function ServicePage({ service }: { service: Service }) {
       />
       <StudioHero
         hour={service.page.hour}
-        crumbs={[
-          { label: "Services", href: "/services" },
-          { label: service.nav },
-        ]}
+        crumbs={serviceTrail(service)}
         heading={service.page.heading}
         lead={service.page.lead}
       >

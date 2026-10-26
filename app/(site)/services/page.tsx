@@ -7,8 +7,9 @@ import { Capabilities } from "@/components/site/Capabilities";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { servicesPage } from "@/lib/content";
-import { homeUrl, shareMetadata, siteUrl } from "@/lib/seo";
-import { allServices, breadcrumbs, jsonLd } from "@/lib/services";
+import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { shareMetadata, siteUrl } from "@/lib/seo";
+import { allServices } from "@/lib/services";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
@@ -21,6 +22,8 @@ export const metadata: Metadata = {
     path: servicesPage.path,
   }),
 };
+
+const trail: Crumb[] = [{ label: "Home", href: "/" }, { label: "Services" }];
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -35,10 +38,7 @@ const structuredData = {
         url: `${siteUrl}${service.href}`,
       })),
     },
-    breadcrumbs([
-      { name: "Home", url: homeUrl },
-      { name: "Services", url: `${siteUrl}${servicesPage.path}` },
-    ]),
+    breadcrumbList(trail, servicesPage.path),
   ],
 };
 
@@ -52,7 +52,7 @@ export default function Services() {
       />
       <StudioHero
         hour={servicesPage.hour}
-        crumbs={[{ label: "Home", href: "/" }, { label: "Services" }]}
+        crumbs={trail}
         heading={servicesPage.heading}
         lead={servicesPage.lead}
       >

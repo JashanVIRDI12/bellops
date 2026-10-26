@@ -5,8 +5,8 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { workPage } from "@/lib/content";
-import { homeUrl, shareMetadata, siteUrl } from "@/lib/seo";
-import { breadcrumbs, jsonLd } from "@/lib/services";
+import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { shareMetadata } from "@/lib/seo";
 import { caseStudyPath, projectHost, projects } from "@/lib/work";
 
 const projectFor = (slug: string) =>
@@ -40,13 +40,14 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   const project = projectFor((await params).slug);
   if (!project) notFound();
   const others = projects.filter((other) => other.slug !== project.slug);
+  const trail: Crumb[] = [
+    { label: "Home", href: "/" },
+    { label: "Work", href: workPage.path },
+    { label: project.client },
+  ];
   const structuredData = {
     "@context": "https://schema.org",
-    ...breadcrumbs([
-      { name: "Home", url: homeUrl },
-      { name: "Work", url: `${siteUrl}${workPage.path}` },
-      { name: project.client, url: `${siteUrl}${caseStudyPath(project)}` },
-    ]),
+    ...breadcrumbList(trail, caseStudyPath(project)),
   };
 
   return (
@@ -56,12 +57,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
       <section className="wrap case-intro">
-        <Crumbs
-          trail={[
-            { label: "Work", href: workPage.path },
-            { label: project.client },
-          ]}
-        />
+        <Crumbs trail={trail} />
         <RevealTitle text={project.client} className="case-title" />
         <div className="hero-foot">
           <p className="hero-lead">{project.title}.</p>

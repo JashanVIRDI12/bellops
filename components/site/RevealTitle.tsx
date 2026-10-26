@@ -1,5 +1,6 @@
 import { Fragment, type CSSProperties } from "react";
 import Link from "next/link";
+import type { Crumb } from "@/lib/schema";
 
 /**
  * A page's <h1>, its words rising from a mask on arrival. Only transforms
@@ -26,8 +27,6 @@ export function RevealTitle({
     </h1>
   );
 }
-
-type Crumb = { label: string; href?: string };
 
 /** Where a page sits: links back up the trail, the current page last. */
 export function Crumbs({ trail }: { trail: readonly Crumb[] }) {

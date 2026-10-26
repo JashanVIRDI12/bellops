@@ -4,8 +4,8 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { workPage } from "@/lib/content";
-import { homeUrl, shareMetadata, siteUrl } from "@/lib/seo";
-import { breadcrumbs, jsonLd } from "@/lib/services";
+import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { shareMetadata } from "@/lib/seo";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
@@ -19,12 +19,11 @@ export const metadata: Metadata = {
   }),
 };
 
+const trail: Crumb[] = [{ label: "Home", href: "/" }, { label: "Work" }];
+
 const structuredData = {
   "@context": "https://schema.org",
-  ...breadcrumbs([
-    { name: "Home", url: homeUrl },
-    { name: "Work", url: `${siteUrl}${workPage.path}` },
-  ]),
+  ...breadcrumbList(trail, workPage.path),
 };
 
 export default function Work() {
@@ -36,7 +35,7 @@ export default function Work() {
       />
       <StudioHero
         hour={{ shot: 3, mood: "day" }}
-        crumbs={[{ label: "Home", href: "/" }, { label: "Work" }]}
+        crumbs={trail}
         heading={workPage.heading}
         lead={workPage.lead}
       >

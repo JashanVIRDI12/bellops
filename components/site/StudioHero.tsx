@@ -2,9 +2,8 @@ import type { ReactNode } from "react";
 import { preload } from "react-dom";
 import { stillImage } from "@/components/experience/still-image";
 import type { Hour } from "@/lib/content";
+import type { Crumb } from "@/lib/schema";
 import { Crumbs, RevealTitle } from "./RevealTitle";
-
-type Crumb = { label: string; href?: string };
 
 /**
  * A window into the studio: one of its camera shots at a chosen hour, full
