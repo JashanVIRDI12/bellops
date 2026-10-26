@@ -87,7 +87,7 @@ export function ServicePage({ service }: { service: Service }) {
             <h2>
               A little more
               <br />
-              than the expected.
+              than expected.
             </h2>
             <p>{service.page.lead}</p>
           </div>
