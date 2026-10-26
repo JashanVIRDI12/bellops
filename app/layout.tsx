@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { SpeedInsights } from "@/components/analytics/SpeedInsights";
 import { site } from "@/lib/content";
 import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <GoogleAnalytics />
         <MetaPixel />
+        <SpeedInsights />
       </body>
     </html>
   );

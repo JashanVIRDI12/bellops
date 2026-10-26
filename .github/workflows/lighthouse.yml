@@ -1,0 +1,34 @@
+# Weekly Lighthouse check of the live site, on a simulated mid-range phone
+# (Lighthouse's default mobile run). Budgets, in lighthouserc.json:
+# - LCP under 2.5 s
+# - page weight under 1.5 MB
+# A page over budget fails the run (GitHub emails the repo's owners). The
+# reports are attached to each run as an artifact.
+name: Lighthouse
+
+on:
+  schedule:
+    - cron: "30 3 * * 1" # Mondays, 03:30 UTC (09:00 in India)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run Lighthouse against www.bellops.in
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports
+          retention-days: 30
