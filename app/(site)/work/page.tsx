@@ -4,9 +4,9 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { shot, workPage } from "@/lib/content";
-import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { breadcrumbList, itemList, jsonLd, type Crumb } from "@/lib/schema";
 import { shareMetadata } from "@/lib/seo";
-import { projects } from "@/lib/work";
+import { caseStudyPath, projects } from "@/lib/work";
 
 export const metadata: Metadata = {
   title: { absolute: `${workPage.title} | Bellops` },
@@ -23,7 +23,18 @@ const trail: Crumb[] = [{ label: "Home", href: "/" }, { label: "Work" }];
 
 const structuredData = {
   "@context": "https://schema.org",
-  ...breadcrumbList(trail, workPage.path),
+  "@graph": [
+    breadcrumbList(trail, workPage.path),
+    // The case studies, in the order the page shows them.
+    itemList(
+      workPage.path,
+      "Website case studies by Bellops",
+      projects.map((project) => ({
+        path: caseStudyPath(project),
+        name: `${project.client}: ${project.headline}`,
+      })),
+    ),
+  ],
 };
 
 export default function Work() {
@@ -48,6 +59,13 @@ export default function Work() {
           Get a quote
         </Link>
       </StudioHero>
+      <section aria-label="About this work" className="wrap block">
+        <div className="page-copy">
+          {workPage.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
       <WorkShowcase
         projects={projects}
         heading={null}

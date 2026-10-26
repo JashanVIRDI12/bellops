@@ -434,6 +434,11 @@ export const workPage = {
   // The rest of the <h1>: "Selected work: websites designed and built by Bellops".
   headingSubline: "websites designed and built by Bellops",
   lead: "Websites we've designed and built, from first sketch to launch.",
+  // Under the hero. Facts only: what's in each case study is in lib/work.ts.
+  intro: [
+    "Three websites, each planned, designed and coded in-house by the same small team: a showroom for hand-picked luxury cars in Delhi, a home for a content, creative and performance agency, and an export site for a WHO-GMP healthcare manufacturer.",
+    "Each case study shows the site on a laptop and on a phone, links to the live site, and leads to the service behind it.",
+  ],
   // A case study's WhatsApp links type this in; {name} is the client.
   whatsappMessage:
     "Hi Bellops, I saw the {name} case study and want something similar.",

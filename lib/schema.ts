@@ -143,6 +143,26 @@ export function breadcrumbList(trail: readonly Crumb[], path: string) {
   };
 }
 
+/** A list of pages in order (ItemList), e.g. the case studies on /work. */
+export function itemList(
+  path: string,
+  name: string,
+  items: readonly { path: string; name: string }[],
+) {
+  return {
+    "@type": "ItemList",
+    "@id": `${siteUrl}${path}#list`,
+    name,
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteUrl}${item.path}`,
+      name: item.name,
+    })),
+  };
+}
+
 /** Serializes structured data for a <script type="application/ld+json">. */
 export const jsonLd = (data: unknown) =>
   JSON.stringify(data).replace(/</g, "\\u003c");
