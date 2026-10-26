@@ -7,6 +7,7 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { contact, workPage } from "@/lib/content";
+import { draftPagesFor } from "@/lib/drafts";
 import { caseStudyWhatsappHref } from "@/lib/contact-links";
 import { breadcrumbList, creativeWork, jsonLd, type Crumb } from "@/lib/schema";
 import { serviceByHref } from "@/lib/services";
@@ -104,6 +105,30 @@ function Details({ details }: { details?: CaseStudyDetails }) {
           </figure>
         )}
       </div>
+    </section>
+  );
+}
+
+/** Pages about this kind of work (industries, services) that list this project. */
+function MoreLikeThis({ slug }: { slug: string }) {
+  const pages = draftPagesFor(slug);
+  if (pages.length === 0) return null;
+  return (
+    <section aria-labelledby="more-like-this" className="wrap block">
+      <h2 id="more-like-this" className="block-title">
+        More like this
+      </h2>
+      <ul className="points">
+        {pages.map((page) => (
+          <li key={page.path}>
+            <h3>
+              <Link href={page.path} className="text-link">
+                {page.name}
+              </Link>
+            </h3>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
@@ -215,6 +240,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
       </section>
 
       <Details details={project.details} />
+      <MoreLikeThis slug={project.slug} />
       <WorkShowcase projects={others} heading="More work" />
       <ContactCta whatsapp={whatsapp} />
     </>

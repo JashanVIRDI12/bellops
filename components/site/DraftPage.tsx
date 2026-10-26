@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import type { DraftPage as Draft } from "@/lib/drafts";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
 import { shareMetadata } from "@/lib/seo";
+import { projects } from "@/lib/work";
 import { ContactCta } from "./ContactCta";
+import { WorkShowcase } from "./WorkShowcase";
 import { Crumbs, RevealTitle } from "./RevealTitle";
 
 /** A draft's metadata: its own title and canonical, kept out of search until it's ready. */
@@ -49,6 +51,14 @@ export function DraftPage({ page }: { page: Draft }) {
           </p>
         </div>
       </section>
+      {page.caseStudies && (
+        <WorkShowcase
+          projects={projects.filter((project) =>
+            page.caseStudies!.includes(project.slug),
+          )}
+          heading="Related work"
+        />
+      )}
       <ContactCta />
     </>
   );

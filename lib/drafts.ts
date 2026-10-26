@@ -25,6 +25,11 @@ export type DraftPage = {
   description: string;
   /** The hub above it in the breadcrumb, if it has a page. */
   parent?: Required<Crumb>;
+  /**
+   * Case studies (slugs in lib/work.ts) this page shows, and that link back
+   * to it once it's live. Only work that really fits.
+   */
+  caseStudies?: readonly string[];
   ready: boolean;
 };
 
@@ -50,18 +55,21 @@ export const draftPages: readonly DraftPage[] = [
     path: "/industries/luxury-cars",
     name: "Websites for luxury cars",
     description: placeholder,
+    caseStudies: ["baba-luxury-cars"],
     ready: false,
   },
   {
     path: "/industries/healthcare",
     name: "Websites for healthcare",
     description: placeholder,
+    caseStudies: ["chase-healthcare-wellness"],
     ready: false,
   },
   {
     path: "/industries/luxury-brands",
     name: "Websites for luxury brands",
     description: placeholder,
+    caseStudies: ["baba-luxury-cars"],
     ready: false,
   },
 ];
@@ -76,3 +84,12 @@ export function draftPage(path: string): DraftPage {
 export const hiddenDraftPaths: ReadonlySet<string> = new Set(
   draftPages.filter((draft) => !draft.ready).map((draft) => draft.path),
 );
+
+/**
+ * The draft pages that list a case study and can be linked from it here:
+ * on the live site only those that are ready (the rest answer 404 there).
+ */
+export const draftPagesFor = (slug: string) =>
+  draftPages.filter(
+    (page) => page.caseStudies?.includes(slug) && (page.ready || !liveSite),
+  );
