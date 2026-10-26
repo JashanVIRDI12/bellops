@@ -6,7 +6,7 @@ import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { workPage } from "@/lib/content";
-import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
+import { breadcrumbList, creativeWork, jsonLd, type Crumb } from "@/lib/schema";
 import { serviceByHref } from "@/lib/services";
 import { shareMetadata } from "@/lib/seo";
 import { caseStudyPath, projectHost, projects } from "@/lib/work";
@@ -53,7 +53,17 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
   ];
   const structuredData = {
     "@context": "https://schema.org",
-    ...breadcrumbList(trail, caseStudyPath(project)),
+    "@graph": [
+      creativeWork({
+        path: caseStudyPath(project),
+        name: `${project.client} website`,
+        description: `${project.title}. Designed and built by Bellops.`,
+        url: project.url,
+        images: [project.image, project.mobileImage],
+        servicePath: websiteDesign.href,
+      }),
+      breadcrumbList(trail, caseStudyPath(project)),
+    ],
   };
 
   return (

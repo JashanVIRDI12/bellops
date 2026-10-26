@@ -1,7 +1,9 @@
 /*
- * Structured data (schema.org JSON-LD) shared by the inner pages. Every node
- * that names who made or offers something points at the one Organization on
- * the home page (lib/seo.ts), by its @id.
+ * Structured data (schema.org JSON-LD) templates for the inner pages:
+ * Service (service pages), CreativeWork (case studies), BlogPosting (blog
+ * posts), BreadcrumbList (every inner page) and page nodes. Every node that
+ * names who made, offers or published something points at the one
+ * Organization on the home page (lib/seo.ts), by its @id.
  */
 
 import { siteUrl } from "./seo";
@@ -22,6 +24,54 @@ export function webPage(
     description: page.description,
     isPartOf: { "@id": websiteId },
     about: { "@id": organizationId },
+  };
+}
+
+/** A service the studio offers, on its own page. */
+export function service(item: {
+  path: string;
+  name: string;
+  description: string;
+}) {
+  const url = `${siteUrl}${item.path}`;
+  return {
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: item.name,
+    description: item.description,
+    url,
+    serviceType: item.name,
+    areaServed: { "@type": "Country", name: "India" },
+    provider: { "@id": organizationId },
+  };
+}
+
+/**
+ * A project the studio made (a case study): the client's website itself,
+ * with the case-study page as its main page. Real facts only: no results
+ * until there are approved ones.
+ */
+export function creativeWork(work: {
+  path: string;
+  name: string;
+  description: string;
+  /** The live project. */
+  url: string;
+  images: readonly string[];
+  /** The service page it was made under. */
+  servicePath: string;
+}) {
+  const page = `${siteUrl}${work.path}`;
+  return {
+    "@type": "CreativeWork",
+    "@id": `${page}#work`,
+    name: work.name,
+    description: work.description,
+    url: work.url,
+    mainEntityOfPage: page,
+    image: work.images.map((image) => `${siteUrl}${image}`),
+    creator: { "@id": organizationId },
+    about: { "@id": `${siteUrl}${work.servicePath}#service` },
   };
 }
 
