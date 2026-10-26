@@ -18,12 +18,15 @@ export function StudioHero({
   crumbs,
   heading,
   lead,
+  note,
   children,
 }: {
   hour: Hour;
   crumbs: readonly Crumb[];
   heading: string;
   lead: string;
+  /** A short line under the lead, such as the starting price. */
+  note?: string;
   /** Calls to action under the lead. */
   children?: ReactNode;
 }) {
@@ -62,7 +65,10 @@ export function StudioHero({
         <Crumbs trail={crumbs} />
         <RevealTitle text={heading} className="hero-title" />
         <div className="hero-foot">
-          <p className="hero-lead">{lead}</p>
+          <div>
+            <p className="hero-lead">{lead}</p>
+            {note && <p className="hero-note">{note}</p>}
+          </div>
           {children && <div className="hero-actions">{children}</div>}
         </div>
       </div>

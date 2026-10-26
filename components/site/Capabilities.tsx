@@ -5,6 +5,7 @@ import { useState } from "react";
 import { WhatsAppIcon } from "@/components/contact/icons";
 import { services, site, type Service } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
+import { formatPrice } from "@/lib/pricing";
 import { Arrow } from "./Arrow";
 
 /** "Landing pages" -> "landing pages"; names like Google or SEO stay as they are. */
@@ -54,6 +55,9 @@ export function Capabilities({
               <div className="capability-copy">
                 <h3>{item.nav}</h3>
                 <span>{item.body}</span>
+                <span className="capability-price">
+                  {formatPrice(item.price)}
+                </span>
               </div>
               <span className="capability-arrow">
                 <Arrow diagonal />

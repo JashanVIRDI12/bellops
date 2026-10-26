@@ -1,3 +1,5 @@
+import type { Price } from "./content";
+
 /**
  * Rupee amounts as people in India say them: ₹50,000, ₹1 lakh, ₹1.5 lakh.
  */
@@ -7,4 +9,11 @@ export function formatInr(amount: number) {
     return `₹${lakh} lakh`;
   }
   return `₹${amount.toLocaleString("en-IN")}`;
+}
+
+/** A service's starting price, as shown on its card and page. */
+export function formatPrice(price: Price) {
+  const per = price.per ? `/${price.per}` : "";
+  const extra = price.extra ? ` + ${price.extra}` : "";
+  return `From ${formatInr(price.from)}${per}${extra}`;
 }

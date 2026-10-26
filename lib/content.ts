@@ -90,6 +90,9 @@ export type Hour = {
   portrait?: { shot: number; mood: "day" | "dusk" | "night" };
 };
 
+/** A starting price: "From ₹15,000/month + ad spend". */
+export type Price = { from: number; per?: "month"; extra?: string };
+
 export type Service = {
   title: string;
   body: string;
@@ -99,6 +102,12 @@ export type Service = {
   nav: string;
   /** Decorative image shown when this service is hovered or focused. */
   navImage: string;
+  /**
+   * The starting price on its card and page. Premium websites (₹50,000) and
+   * landing pages (₹20,000) are Bellops' own; the rest were set in October
+   * 2026 from Indian agency rates, at the entry end. Change them freely.
+   */
+  price: Price;
   page: {
     title: string;
     description: string;
@@ -122,6 +131,7 @@ export const services = {
       href: "/premium-website-design",
       nav: "Premium websites",
       navImage: "/navigation/services-v1/premium-websites.webp",
+      price: { from: 50_000 },
       page: {
         title: "Premium & Luxury Website Design Company in India | Bellops",
         description:
@@ -145,6 +155,7 @@ export const services = {
       href: "/landing-pages",
       nav: "Landing pages",
       navImage: "/navigation/services-v1/landing-pages.webp",
+      price: { from: 20_000 },
       page: {
         title: "Landing Page Design Agency in India for Ads | Bellops",
         description:
@@ -172,6 +183,7 @@ export const services = {
       href: "/google-meta-ads",
       nav: "Google & Meta ads",
       navImage: "/navigation/services-v1/google-meta-ads.webp",
+      price: { from: 15_000, per: "month", extra: "ad spend" },
       page: {
         title: "Google & Meta Ads Agency in India | Bellops",
         description:
@@ -199,6 +211,7 @@ export const services = {
       href: "/social-media-management",
       nav: "Social media",
       navImage: "/navigation/services-v1/social-media.webp",
+      price: { from: 15_000, per: "month" },
       page: {
         title: "Social Media Management Agency in India | Bellops",
         description:
@@ -222,6 +235,7 @@ export const services = {
       href: "/seo-services",
       nav: "SEO & speed",
       navImage: "/navigation/services-v1/seo-speed.webp",
+      price: { from: 12_000, per: "month" },
       page: {
         title: "SEO & Website Speed Optimization Services in India | Bellops",
         description:
@@ -249,6 +263,7 @@ export const services = {
       href: "/website-care-plans",
       nav: "Website care",
       navImage: "/navigation/services-v1/website-care.webp",
+      price: { from: 3_000, per: "month" },
       page: {
         title: "Website Maintenance & Care Plans in India | Bellops",
         description:
@@ -271,6 +286,7 @@ export const services = {
       href: "/branding",
       nav: "Branding",
       navImage: "/navigation/services-v1/branding.webp",
+      price: { from: 15_000 },
       page: {
         title: "Branding Starter Packs: Logo & Brand Identity Design | Bellops",
         description:

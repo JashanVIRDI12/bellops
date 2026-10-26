@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Service } from "@/lib/content";
+import { formatPrice } from "@/lib/pricing";
 import { jsonLd } from "@/lib/schema";
 import {
   serviceByHref,
@@ -35,6 +36,7 @@ export function ServicePage({ service }: { service: Service }) {
         crumbs={serviceTrail(service)}
         heading={service.page.heading}
         lead={service.page.lead}
+        note={formatPrice(service.price)}
       >
         <Link
           href="/#contact"

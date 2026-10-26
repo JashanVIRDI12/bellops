@@ -816,6 +816,16 @@
   line-height: 1.6;
   margin-top: 0.6rem;
 }
+.capability-copy > .capability-price {
+  display: block;
+  margin-top: 0.7rem;
+  color: #5b36e8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.services-editorial .capability-copy > .capability-price {
+  color: #cfbafa;
+}
 .capability-arrow {
   display: grid;
   place-items: center;
