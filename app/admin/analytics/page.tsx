@@ -50,6 +50,9 @@ const actionNames: Record<string, string> = {
   "whatsapp-dock": "WhatsApp, floating button",
   "whatsapp-contact": "WhatsApp, contact section",
   "whatsapp-faq": "WhatsApp, questions section",
+  "whatsapp-footer": "WhatsApp, footer",
+  "whatsapp-closing": "WhatsApp, closing section",
+  "whatsapp-contact-page": "WhatsApp, contact page",
   "whatsapp-form": "WhatsApp, after the form",
   whatsapp: "WhatsApp, other link",
   "call-dock": "Call, floating button",
@@ -70,6 +73,14 @@ function actionName(name: string) {
     return `Opened ${project?.client ?? name.slice(8)}`;
   }
   if (name.startsWith("social-")) return `Opened ${name.slice(7)}`;
+  if (name.startsWith("whatsapp-service-"))
+    return `WhatsApp, /${name.slice(17)} page`;
+  if (name.startsWith("whatsapp-case-")) {
+    const project = projects.find(
+      (item) => `whatsapp-case-${item.slug}` === name,
+    );
+    return `WhatsApp, ${project?.client ?? name.slice(14)} case study`;
+  }
   return name;
 }
 

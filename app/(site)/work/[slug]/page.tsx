@@ -147,7 +147,7 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
-      <section className="wrap case-intro">
+      <section className="wrap case-intro" data-ga-location="hero">
         <Crumbs trail={trail} />
         <RevealTitle
           text={project.client}

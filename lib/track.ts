@@ -15,7 +15,13 @@ type Gtag = (...args: unknown[]) => void;
 export const track = (name: string, params: Record<string, string> = {}) => {
   if (typeof window === "undefined") return;
   const gtag = (window as Window & { gtag?: Gtag }).gtag;
-  gtag?.("event", name, { page_path: window.location.pathname, ...params });
+  gtag?.("event", name, {
+    page_path: window.location.pathname,
+    // Sent with navigator.sendBeacon, so it still arrives when the click
+    // opens WhatsApp and the page goes to the background or unloads.
+    transport_type: "beacon",
+    ...params,
+  });
 };
 
 /** Where a link sits: the nearest data-ga-location (header, hero, footer…). */
@@ -28,14 +34,18 @@ function locationOf(element: Element) {
 
 /**
  * The events a click can send, from what was clicked:
- * - a WhatsApp link: whatsapp_click {location}
+ * - a WhatsApp link: whatsapp_click {location, button}
  * - a tel: or mailto: link: contact_click {method: phone | email}
  * - anything with data-cta: cta_click {cta, location}
  */
 export function trackClick(element: Element) {
   const href = element.getAttribute("href") ?? "";
   if (href.startsWith("https://wa.me/"))
-    track("whatsapp_click", { location: locationOf(element) });
+    track("whatsapp_click", {
+      location: locationOf(element),
+      // Which button: whatsapp-dock, whatsapp-service-landing-pages, …
+      button: element.getAttribute("data-track") ?? "whatsapp",
+    });
   else if (href.startsWith("tel:")) track("contact_click", { method: "phone" });
   else if (href.startsWith("mailto:"))
     track("contact_click", { method: "email" });

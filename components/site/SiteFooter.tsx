@@ -79,6 +79,7 @@ export function SiteFooter({ children }: { children?: ReactNode }) {
                 href={whatsappHref()}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track="whatsapp-footer"
               >
                 WhatsApp
                 <span className="sr-only"> (opens in a new tab)</span>
