@@ -50,9 +50,9 @@ export function ServicePage({ service }: { service: Service }) {
           href="/#contact"
           className="button button--solid"
           data-track={`service-start-${service.href.slice(1)}`}
-          data-cta="start_project"
+          data-cta="get_quote"
         >
-          Start a project
+          Get a quote
         </Link>
         <a
           href={whatsapp.href}

@@ -42,9 +42,9 @@ export default function Work() {
         <Link
           href="/#contact"
           className="button button--solid"
-          data-cta="start_project"
+          data-cta="get_quote"
         >
-          Start a project
+          Get a quote
         </Link>
       </StudioHero>
       <WorkShowcase

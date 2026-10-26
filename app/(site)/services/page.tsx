@@ -59,9 +59,9 @@ export default function Services() {
         <Link
           href="/#contact"
           className="button button--solid"
-          data-cta="start_project"
+          data-cta="get_quote"
         >
-          Start a project
+          Get a quote
         </Link>
       </StudioHero>
       <section aria-label="All services" className="wrap services-editorial">

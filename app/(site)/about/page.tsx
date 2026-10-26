@@ -51,9 +51,9 @@ export default function About() {
         <Link
           href="/#contact"
           className="button button--solid"
-          data-cta="start_project"
+          data-cta="get_quote"
         >
-          Start a project
+          Get a quote
         </Link>
         <Link href="/services" className="button button--ghost">
           Our services

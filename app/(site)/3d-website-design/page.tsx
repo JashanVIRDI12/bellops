@@ -85,9 +85,9 @@ export default function ThreeDWebsiteDesign() {
         <Link
           href="/#contact"
           className="button button--solid"
-          data-cta="start_3d_project"
+          data-cta="get_quote"
         >
-          Start your 3D project
+          Get a quote
         </Link>
         <a
           href={whatsapp.href}

@@ -328,12 +328,12 @@ export const services = {
       page: {
         title: "Branding Starter Packs: Logo & Brand Identity Design | Bellops",
         description:
-          "Branding starter packs by Bellops in India: logo design, a color palette and a social media kit, for a brand that looks the same everywhere it appears.",
+          "Branding starter packs by Bellops in India: logo design, a colour palette and a social media kit, for a brand that looks the same everywhere it appears.",
         heading: "Branding Starter Packs for a Consistent Brand",
-        lead: "Logo design, a color palette and a social media kit, so your brand looks the same on your website, your posts and your ads.",
+        lead: "Logo design, a colour palette and a social media kit, so your brand looks the same on your website, your posts and your ads.",
         included: [
           "Logo design",
-          "Color palette",
+          "Colour palette",
           "Social media kit",
           "A consistent brand identity",
         ],

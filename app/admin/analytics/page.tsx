@@ -58,7 +58,7 @@ const actionNames: Record<string, string> = {
   "email-contact": "Email, contact section",
   "email-form": "Email, from the form",
   email: "Email, other link",
-  "start-project": "Pressed “Start a project”",
+  "start-project": "Pressed “Get a quote” (home hero)",
   "enquiry-started": "Started the enquiry form",
   "enquiry-sent": "Sent an enquiry",
 };

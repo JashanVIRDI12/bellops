@@ -30,9 +30,9 @@ export function ContactCta({
               href="/#contact"
               className="button button--solid"
               data-track="closing-enquiry"
-              data-cta="send_enquiry"
+              data-cta="get_quote"
             >
-              Send an enquiry
+              Get a quote
             </Link>
             <a
               href={whatsapp.href}
