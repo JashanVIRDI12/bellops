@@ -10,7 +10,7 @@ import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SmoothScroll } from "./SmoothScroll";
 import { Stage } from "./Stage";
 import { useBeatTracker } from "./useBeatTracker";
-import { useReveals } from "./useReveals";
+import { useStudioMotion } from "@/components/site/useStudioMotion";
 
 /**
  * The home page: a scroll-driven walk through the Bellops studio, shown in the
@@ -22,14 +22,15 @@ import { useReveals } from "./useReveals";
 export function Experience() {
   const content = useRef<HTMLElement>(null);
   useBeatTracker(content);
-  useReveals(content);
+  useStudioMotion(content);
 
   return (
     <>
       <SmoothScroll />
       <Stage projects={projects} />
       <SiteHeader variant="tour" />
-      <main ref={content} className="relative">
+      <main id="main" ref={content} className="studio-experience relative">
+        <div className="reading-progress" aria-hidden="true" />
         <Chapters />
       </main>
       <ContactDock />

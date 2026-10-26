@@ -125,6 +125,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   const markStillShown = useCallback(() => setStillShown(true), []);
   /** The page has settled enough to start on the 3D. */
   const [idle, setIdle] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
   const [stillWaitOver, setStillWaitOver] = useState(false);
   const markFailed = useCallback(() => setRetired("off"), []);
   const markTooSlow = useCallback(() => {
@@ -134,6 +135,18 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       /* fine: the check runs again next time */
     }
     setRetired((state) => (state === "no" ? "fading" : state));
+  }, []);
+
+  // The editorial sections cover the stage. Rest the GPU while it is hidden,
+  // and don't start downloading the live scene after someone scrolls past it.
+  useEffect(() => {
+    const hero = document.getElementById("intro");
+    if (!hero) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroVisible(entry?.isIntersecting ?? false);
+    });
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -154,9 +167,9 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
     return () => window.clearTimeout(timer);
   }, [live, stillShown]);
   useEffect(() => {
-    if (!live || idle || !(stillShown || stillWaitOver)) return;
+    if (!live || idle || !heroVisible || !(stillShown || stillWaitOver)) return;
     return whenIdle(() => setIdle(true), IDLE_WAIT);
-  }, [live, idle, stillShown, stillWaitOver]);
+  }, [live, idle, heroVisible, stillShown, stillWaitOver]);
   const started = live && idle;
   const showing = live && ready && retired === "no";
   // The still for the current shot paints first everywhere; the live scene
@@ -187,6 +200,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
         className="fixed inset-x-0 top-0 z-0 h-lvh bg-[#151c29]"
         data-backdrop={stillShown || showing ? "ready" : "pending"}
         data-scene-mood={atmosphere.still}
+        data-stage-active={heroVisible || undefined}
         data-scene-renderer={live && liveTier ? liveTier : "stills"}
         data-scene-source={
           mode !== "auto" ? "preview" : weather ? "weather" : "clock"
@@ -214,7 +228,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
                 tier={liveTier}
                 projects={projects}
                 atmosphere={atmosphere}
-                active
+                active={heroVisible}
                 onReady={markReady}
                 onProgress={setLoaded}
                 onWarmup={setWarmup}

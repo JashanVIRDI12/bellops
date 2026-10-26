@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Service } from "@/lib/content";
 import { serviceByHref, serviceStructuredData, jsonLd } from "@/lib/services";
 import { projects } from "@/lib/work";
@@ -44,6 +45,30 @@ export function ServicePage({ service }: { service: Service }) {
           See the work
         </Link>
       </StudioHero>
+      <section className="wrap block">
+        <div className="service-image-band">
+          <div data-photo>
+            <Image
+              src={service.navImage}
+              alt={
+                "A closer look at the work behind " + service.nav.toLowerCase()
+              }
+              width={960}
+              height={600}
+              sizes="(min-width: 900px) 50vw, 90vw"
+            />
+          </div>
+          <div data-enter>
+            <p className="studio-label">Thought through. Built with care.</p>
+            <h2>
+              A little more
+              <br />
+              than the expected.
+            </h2>
+            <p>{service.page.lead}</p>
+          </div>
+        </div>
+      </section>
       <Included items={service.page.included} />
       <Process />
       <WorkShowcase projects={projects} />

@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { site } from "@/lib/content";
 import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
+import "./studio.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -64,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="text-ink font-sans antialiased">
         {children}
         <GoogleAnalytics />
+        <MetaPixel />
       </body>
     </html>
   );

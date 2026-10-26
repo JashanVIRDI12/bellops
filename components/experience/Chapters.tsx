@@ -1,398 +1,435 @@
-import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { EnquiryForm } from "@/components/contact/EnquiryForm";
 import { WhatsAppIcon } from "@/components/contact/icons";
-import {
-  approach,
-  contact,
-  intro,
-  services,
-  servicesPage,
-  site,
-  studio,
-  workPage,
-} from "@/lib/content";
+import { Arrow } from "@/components/site/Arrow";
+import { Capabilities } from "@/components/site/Capabilities";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { INSTAGRAM_URL, approach, contact, studio } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
-import { caseStudyPath, projectHost, projects } from "@/lib/work";
+import { caseStudyPath, projects } from "@/lib/work";
 import { GlideLink } from "./GlideLink";
 
-/*
- * The tour's text. Each `data-beat` section is one camera shot; its height sets
- * how long the camera holds there (see useBeatTracker). Inside, a sticky frame
- * keeps the text on screen while the shot holds.
- *
- * Text stays white over a feathered scrim so it reads during camera moves as
- * well as on the settled shot. Copy sits below the laptop or beside it;
- * the narrower mobile framing uses a compact services grid.
- *
- * On phones, copy in the middle sections sits a little higher (pb-24) to
- * leave room for the floating WhatsApp button (ContactDock).
- */
+const disciplines = [
+  "Strategy",
+  "Web design",
+  "Development",
+  "3D & motion",
+  "Digital growth",
+];
+const projectTypes = [
+  "Automotive / Digital showroom",
+  "Creative / Agency website",
+  "Healthcare / Corporate website",
+];
 
-const frame = "scene-frame sticky top-0 flex h-svh px-6 md:px-12 lg:px-16";
-
-function Scrim() {
-  return <div aria-hidden data-scrim className="scene-scrim" />;
-}
-
+/** Eight editorial scenes keep the original studio camera's eight beats. */
 export function Chapters() {
   return (
     <>
-      {/* 0 · Intro: a full-screen headline over the view out of the window,
-          filling the large pane left of the window frame. Description and
-          buttons share a strip along the bottom. Two layers overlap here: the
-          headline's colors invert whatever is behind it, the rest keeps its
-          own colors (see IntroLayer). */}
-      <section
-        id="intro"
-        data-beat
-        className="intro-section relative h-[125svh]"
-      >
-        <IntroLayer part="headline" />
-        <IntroLayer part="rest" />
-      </section>
-
-      {/* 1 · Studio: stacked in the lower left, below the desk. */}
-      <section id="studio" data-beat className="relative h-[165svh]">
-        <div className={`${frame} items-end pb-24 md:pb-14`}>
-          <Scrim />
-          <div data-reveal-block className="scene-copy w-full max-w-xl">
-            <h2
-              data-reveal
-              className="text-display font-heading font-medium text-balance"
+      <section id="intro" data-beat className="tour-hero">
+        <div className="hero-grid" aria-hidden="true" />
+        <div className="tour-hero-top">
+          <p>
+            <span className="status-dot" /> Independent minds. Shared ambition.
+          </p>
+          <span>Delhi, India · Working everywhere</span>
+        </div>
+        <div className="tour-hero-body">
+          <div className="tour-hero-copy">
+            <p className="studio-label hero-intro">
+              Independent web design & digital growth studio.
+            </p>
+            <h1 className="tour-title" aria-label="Built to be remembered.">
+              <span className="hero-line">
+                <span>Built to be</span>
+              </span>
+              <span className="hero-line">
+                <span className="tour-title-accent">remembered.</span>
+              </span>
+            </h1>
+            <div className="tour-hero-description hero-intro">
+              <p>
+                We build websites people feel.
+                <br />
+                And the strategy that moves them forward.
+              </p>
+              <GlideLink
+                to="contact"
+                className="studio-button studio-button--violet"
+                data-magnetic
+                data-track="start-project"
+              >
+                Let&apos;s make it happen <Arrow diagonal />
+              </GlideLink>
+            </div>
+          </div>
+          <div
+            className="hero-composition"
+            aria-label="Websites designed and built by BellOps"
+          >
+            <div className="composition-orbit" aria-hidden="true">
+              <span />
+              <span />
+            </div>
+            <Link
+              href={caseStudyPath(projects[0]!)}
+              className="composition-browser hero-art"
             >
-              {studio.heading}
+              <span className="browser-bar">
+                <i />
+                <i />
+                <i />
+                <span>babaluxurycar.com</span>
+                <Arrow diagonal />
+              </span>
+              <Image
+                src={projects[0]!.image}
+                alt="Baba Luxury Cars website, designed by BellOps"
+                width={1600}
+                height={1000}
+                sizes="(min-width: 900px) 45vw, 85vw"
+                fetchPriority="high"
+              />
+            </Link>
+            <Link
+              href={caseStudyPath(projects[1]!)}
+              className="composition-phone hero-art"
+            >
+              <Image
+                src={projects[1]!.mobileImage}
+                alt="PUSHWebb mobile website"
+                width={390}
+                height={845}
+                sizes="(min-width: 900px) 12vw, 26vw"
+              />
+            </Link>
+            <div className="composition-note hero-art">
+              <span className="note-star" aria-hidden="true">
+                ✳
+              </span>
+              <p>
+                Good-looking.
+                <br />
+                Hard-working.
+              </p>
+              <span>That&apos;s the standard.</span>
+            </div>
+            <span className="composition-caption">
+              Real projects. Thoughtfully built.
+            </span>
+          </div>
+        </div>
+        <div className="tour-hero-bottom">
+          <a href="#studio" className="scroll-invitation">
+            <span className="scroll-circle">
+              <Arrow />
+            </span>
+            <span>
+              Take a closer look<span>Scroll to explore</span>
+            </span>
+          </a>
+          <p>
+            Premium website design & digital marketing
+            <br />
+            <span>One independent studio. Every detail connected.</span>
+          </p>
+          <span className="hero-edition">
+            BELL / OPS
+            <br />
+            EST. IN DELHI
+          </span>
+        </div>
+      </section>
+      <section id="studio" data-beat className="studio-story paper-section">
+        <div
+          className="studio-ticker"
+          aria-label="Strategy, web design, development, 3D and motion, digital growth"
+        >
+          <div className="ticker-track" aria-hidden="true">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="ticker-group">
+                {disciplines.map((item) => (
+                  <span key={item}>
+                    {item}
+                    <i>✳</i>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="studio-wrap story-grid">
+          <div className="story-images" data-enter>
+            <div className="story-main-photo" data-photo>
+              <Image
+                src="/navigation/services-v1/premium-websites.webp"
+                alt="A website taking shape from a sketched wireframe to a finished design"
+                width={960}
+                height={600}
+                sizes="(min-width: 900px) 40vw, 90vw"
+              />
+            </div>
+            <div className="story-detail-photo" data-photo>
+              <Image
+                src="/navigation/services-v1/branding.webp"
+                alt="Pencil explorations, colour swatches and printed identity samples"
+                width={960}
+                height={600}
+                sizes="(min-width: 900px) 24vw, 50vw"
+              />
+            </div>
+            <span className="story-caption">
+              <span>01 / THE STUDIO</span>
+              <span>A little curiosity goes a long way.</span>
+            </span>
+          </div>
+          <div className="story-copy">
+            <p className="studio-label" data-enter>
+              Small team. Whole picture.
+            </p>
+            <h2 className="editorial-title" data-enter>
+              A bigger
+              <br />
+              point of <em>view.</em>
             </h2>
-            <p className="mt-5 max-w-[46ch] font-medium text-white/90">
+            <p
+              className="story-manifesto"
+              aria-label="We connect how your brand looks, how your website works, and how your business grows."
+            >
+              {"We connect how your brand looks, how your website works, and how your business grows."
+                .split(" ")
+                .map((word, index) => (
+                  <span className="manifesto-word" key={index}>
+                    {word}{" "}
+                  </span>
+                ))}
+            </p>
+            <p className="story-body" data-enter>
               {studio.body}
             </p>
+            <Link href="/services" className="studio-text-link" data-enter>
+              Meet your next creative partner <Arrow diagonal />
+            </Link>
           </div>
         </div>
       </section>
-
-      {/* 2 · Approach: left aligned over the glass, beside the plant. */}
-      <section id="approach" data-beat className="relative h-[165svh]">
-        <div
-          className={`${frame} scene-frame-side scene-frame-left items-end pb-24 md:items-center md:pb-0`}
-        >
-          <Scrim />
-          <div data-reveal-block className="scene-copy w-full max-w-sm">
-            <h2
-              data-reveal
-              className="text-title font-heading font-medium text-balance"
-            >
-              {approach.heading}
-            </h2>
-            <ul className="mt-7 space-y-5">
-              {approach.points.map((point) => (
-                <li key={point.title}>
-                  <h3 className="text-violet-soft font-bold">{point.title}</h3>
-                  <p className="mt-1 font-medium text-white/90">{point.body}</p>
-                </li>
-              ))}
-            </ul>
+      <section id="approach" data-beat className="studio-approach">
+        <div className="studio-wrap">
+          <div className="section-topline" data-enter>
+            <span className="studio-label">
+              02 / A little method to the magic
+            </span>
+            <span>Clarity first. Every time.</span>
+          </div>
+          <div className="approach-grid">
+            <div className="approach-art" aria-hidden="true">
+              <div className="method-orbit">
+                <span />
+                <span />
+                <span />
+                <i>✳</i>
+              </div>
+              <p>
+                Different disciplines.
+                <br />
+                One direction.
+              </p>
+            </div>
+            <div className="approach-copy">
+              <h2 className="editorial-title" data-enter>
+                Think.
+                <br />
+                Make.
+                <br />
+                <em>Move.</em>
+              </h2>
+              <ol>
+                {approach.points.map((point, index) => (
+                  <li key={point.title} data-enter>
+                    <span>0{index + 1}</span>
+                    <div>
+                      <h3>{point.title}</h3>
+                      <p>{point.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* 3–5 · Work: over the dark desk, bottom left; the laptop shows the site. */}
       {projects.map((project, index) => (
         <section
           key={project.slug}
           id={index === 0 ? "work" : undefined}
           data-beat
-          aria-label={`Project ${index + 1} of ${projects.length}: ${project.client}`}
-          className="relative h-[150svh]"
+          className={"tour-project project-tone-" + index}
+          aria-labelledby={"project-title-" + index}
         >
-          <div className={`${frame} items-end pb-24 md:pb-14`}>
-            <Scrim />
-            <div data-reveal-block className="scene-copy w-full max-w-md">
-              <p className="text-violet-soft text-sm font-bold">
-                Selected work, {index + 1} of {projects.length}
-              </p>
-              <h2
-                data-reveal
-                className="text-title font-heading mt-3 font-medium"
-              >
-                {project.client}
-              </h2>
-              <p className="mt-3 max-w-[42ch] font-medium text-white/90">
-                {project.title}
-              </p>
-              <p className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-                <Link
-                  href={caseStudyPath(project)}
-                  className="text-violet-soft font-bold underline decoration-2 underline-offset-4 transition-colors hover:text-white"
-                  data-track={`case-study-${project.slug}`}
-                >
-                  Read the case study
-                </Link>
-                <ExternalLink
-                  href={project.url}
-                  track={`project-${project.slug}`}
-                >
-                  Visit {projectHost(project)}
-                </ExternalLink>
-              </p>
+          <div className="studio-wrap project-sticky">
+            <div className="section-topline" data-enter>
+              <span className="studio-label">
+                {index === 0
+                  ? "03 / A few things we put into the world"
+                  : "Selected work / Continued"}
+              </span>
+              <span>
+                0{index + 1} / 0{projects.length}
+              </span>
+            </div>
+            <div className="project-heading" data-enter>
+              <h2 id={"project-title-" + index}>{project.client}</h2>
+              <span>{projectTypes[index]}</span>
+            </div>
+            <Link
+              href={caseStudyPath(project)}
+              className="project-canvas"
+              aria-label={"Explore " + project.client + " case study"}
+            >
+              <span className="project-watermark" aria-hidden="true">
+                0{index + 1}
+              </span>
+              <div className="project-browser" data-project-image>
+                <div className="browser-bar">
+                  <i />
+                  <i />
+                  <i />
+                  <span>
+                    {new URL(project.url).hostname.replace("www.", "")}
+                  </span>
+                  <Arrow diagonal />
+                </div>
+                <Image
+                  src={project.image}
+                  alt={project.client + " desktop website"}
+                  width={1600}
+                  height={1000}
+                  sizes="(min-width: 900px) 68vw, 88vw"
+                />
+              </div>
+              <div className="project-phone" data-project-phone>
+                <Image
+                  src={project.mobileImage}
+                  alt={project.client + " mobile website"}
+                  width={390}
+                  height={845}
+                  sizes="(min-width: 900px) 15vw, 24vw"
+                />
+              </div>
+              <span className="project-explore" aria-hidden="true">
+                <Arrow diagonal />
+              </span>
+            </Link>
+            <div className="project-bottom">
+              <p>{project.title}</p>
+              <Link href={caseStudyPath(project)} className="studio-text-link">
+                Explore the project <Arrow diagonal />
+              </Link>
             </div>
           </div>
         </section>
       ))}
-
-      {/* 6 · Services: the signature offer leads a grid that can grow on phones. */}
-      <section id="services" data-beat className="relative h-[165svh]">
-        <div className="scene-frame services-frame sticky top-0 flex min-h-svh items-end px-6 pt-24 pb-24 md:items-center md:justify-end md:px-12 md:pt-28 md:pb-14 lg:px-16">
-          <Scrim />
-          <div data-reveal-block className="scene-copy w-full max-w-xl">
-            <h2 data-reveal className="text-title font-heading font-medium">
-              {services.heading}
+      <section
+        id="services"
+        data-beat
+        className="tour-capabilities paper-section"
+      >
+        <div className="studio-wrap">
+          <div className="section-topline" data-enter>
+            <span className="studio-label">
+              04 / What we bring to the table
+            </span>
+            <Link href="/services" className="studio-text-link">
+              All services <Arrow diagonal />
+            </Link>
+          </div>
+          <div className="capabilities-heading" data-enter>
+            <h2 className="editorial-title">
+              All the right
+              <br />
+              <em>connections.</em>
             </h2>
-            <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 md:mt-7">
-              {services.items.map((item, index) => (
-                <li
-                  key={item.title}
-                  className={
-                    index === 0
-                      ? "col-span-2 border-b border-white/20 pb-5"
-                      : ""
-                  }
-                >
-                  <h3
-                    className={`font-heading font-medium text-white ${
-                      index === 0
-                        ? "text-xl/tight md:text-2xl/tight"
-                        : "text-base/tight"
-                    }`}
-                  >
-                    <Link
-                      href={item.href}
-                      className="decoration-violet-soft/60 hover:decoration-violet-soft underline decoration-1 underline-offset-4 transition-colors"
-                    >
-                      {item.title}
-                    </Link>
-                  </h3>
-                  <p className="mt-2 text-[0.8125rem]/relaxed font-medium text-white/85 md:text-sm/relaxed">
-                    {item.body}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* 7 · Contact: the last shot. The way to reach us sits lower left; the
-          form takes the right, over the dark stone wall. The section grows
-          with the form, so it never clips on short screens. */}
-      <section id="contact" data-beat className="relative min-h-svh">
-        <div className="scene-frame contact-frame relative flex min-h-svh flex-col justify-end px-6 pt-28 pb-10 md:px-12 md:pb-14 lg:px-16">
-          <Scrim />
-          <div data-reveal-block className="scene-copy w-full">
-            <div className="contact-layout">
-              <div className="contact-intro">
-                <h2
-                  data-reveal
-                  className="text-display font-heading font-medium text-balance"
-                >
-                  {contact.heading}
-                </h2>
-                <p className="mt-4 max-w-[44ch] font-medium text-white/90">
-                  {contact.body}
-                </p>
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <a
-                    href={whatsappHref()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="contact-button contact-button--light"
-                    data-track="whatsapp-contact"
-                  >
-                    <WhatsAppIcon />
-                    {contact.whatsapp}
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                </div>
-              </div>
-              <EnquiryForm />
-            </div>
-            <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/25 pt-5 text-sm font-medium text-white/85 md:mt-14">
-              <p>
-                © {site.copyrightYear} {site.name}
-                <span className="mt-1 block text-xs font-normal text-white/60">
-                  The studio follows your local time and weather. Weather data
-                  from{" "}
-                  <a
-                    href="https://www.met.no/en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-white"
-                  >
-                    MET Norway
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                  .
-                </span>
-              </p>
-              <ul className="flex flex-wrap gap-x-6 gap-y-2">
-                <li>
-                  <Link href={servicesPage.path} className="hover:text-white">
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link href={workPage.path} className="hover:text-white">
-                    Work
-                  </Link>
-                </li>
-                {site.socials.map((social) => (
-                  <li key={social.label}>
-                    <ExternalLink
-                      href={social.href}
-                      track={`social-${social.label.toLowerCase()}`}
-                    >
-                      {social.label}
-                    </ExternalLink>
-                  </li>
-                ))}
-              </ul>
-            </footer>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-/** Marks the invisible copies that hold another layer's space. */
-const ghost = { "aria-hidden": true, "data-intro-ghost": "" } as const;
-
-/**
- * One layer of the opening scene. Both layers lay out every part, so they line
- * up exactly at any screen size; each shows its own parts and keeps invisible
- * copies of the others (hidden from screen readers, with no links).
- * - "headline": the large tagline in white with mix-blend-mode: difference, so
- *   each letter shows the inverse of the sky, clouds or window frame behind it.
- * - "rest": the shade, the <h1>, description and buttons in their usual colors.
- *
- * Screen readers hear the "rest" layer in order: the <h1>, then the tagline
- * (a visually hidden copy, since the visible one is drawn by the other
- * layer), then the description and buttons.
- */
-function IntroLayer({ part }: { part: "headline" | "rest" }) {
-  const headline = part === "headline";
-  const lines = intro.taglineLines.map((line) => (
-    <span key={line}>{line} </span>
-  ));
-  return (
-    <div
-      className={`${frame} intro-frame ${headline ? "intro-frame--headline" : ""}`}
-    >
-      {!headline && <Scrim />}
-      <div className="scene-copy intro-copy">
-        {headline ? (
-          <p className="intro-eyebrow" {...ghost}>
-            {intro.heading}
-          </p>
-        ) : (
-          <h1 className="intro-eyebrow">{intro.heading}</h1>
-        )}
-        {headline ? (
-          <p aria-hidden className="intro-title font-heading">
-            {lines}
-          </p>
-        ) : (
-          <>
-            <p className="intro-title font-heading" {...ghost}>
-              {lines}
+            <p>
+              A considered identity. A website with a point of view. A plan for
+              what comes next.
             </p>
-            <p className="sr-only">{intro.taglineLines.join(" ")}</p>
-          </>
-        )}
-        <div className="intro-footer" {...(headline ? ghost : {})}>
-          <p className="intro-description">{intro.body}</p>
-          <div className="intro-actions">
-            {headline ? (
-              <>
-                <span className="intro-cta">{intro.cta}</span>
-                <span className="contact-button contact-button--outline">
-                  <WhatsAppIcon />
-                  {intro.whatsapp}
-                </span>
-                <span className="intro-scroll">
-                  <span>{intro.hint}</span>
-                  <ArrowDownIcon />
-                </span>
-              </>
-            ) : (
-              <>
-                <GlideLink
-                  to="contact"
-                  className="intro-cta"
-                  data-track="start-project"
-                >
-                  {intro.cta}
-                </GlideLink>
+          </div>
+          <Capabilities />
+        </div>
+      </section>
+      <section id="contact" data-beat className="tour-contact">
+        <div className="studio-wrap">
+          <div className="section-topline" data-enter>
+            <span className="studio-label">
+              05 / Your next chapter starts here
+            </span>
+            <span className="contact-location">
+              <span className="status-dot" /> Based in Delhi. Open to ideas.
+            </span>
+          </div>
+          <h2 className="contact-display" data-enter>
+            Something good
+            <br />
+            starts with <em>hello.</em>
+            <span aria-hidden="true">↗</span>
+          </h2>
+          <div className="contact-layout">
+            <div className="contact-intro" data-enter>
+              <h3>{contact.heading}</h3>
+              <p>{contact.body}</p>
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="studio-button studio-button--cream"
+                data-track="whatsapp-contact"
+                data-magnetic
+              >
+                <WhatsAppIcon /> Let&apos;s talk on WhatsApp <Arrow diagonal />
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+              <p className="instagram-invitation">
+                Prefer Instagram? DM “START” to{" "}
                 <a
-                  href={whatsappHref()}
+                  href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="contact-button contact-button--outline"
-                  data-track="whatsapp-intro"
+                  data-track="instagram-dm-start"
                 >
-                  <WhatsAppIcon />
-                  {intro.whatsapp}
+                  @bellops.in
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
-                <a href="#studio" className="intro-scroll">
-                  <span>{intro.hint}</span>
-                  <ArrowDownIcon />
-                </a>
-              </>
-            )}
+              </p>
+              <div className="contact-monogram" aria-hidden="true">
+                b<span>o.</span>
+                <i>
+                  GOOD DESIGN.
+                  <br />
+                  REAL CONNECTION.
+                </i>
+              </div>
+            </div>
+            <div className="contact-form-wrap" data-enter>
+              <p className="studio-label">Tell us a little about it.</p>
+              <EnquiryForm />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function ArrowDownIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 4v16m-6-6 6 6 6-6" />
-    </svg>
-  );
-}
-
-function ExternalLink({
-  href,
-  track,
-  children,
-}: {
-  href: string;
-  track?: string;
-  children: ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      data-track={track}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-violet-soft font-bold underline decoration-2 underline-offset-4 transition-colors hover:text-white"
-    >
-      {children}
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
+        <SiteFooter />
+        <p className="weather-credit">
+          The studio scene follows your local time and weather. Weather data
+          from{" "}
+          <a
+            href="https://www.met.no/en"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            MET Norway<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          .
+        </p>
+      </section>
+    </>
   );
 }

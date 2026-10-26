@@ -25,7 +25,8 @@ export function setScrollLocked(locked: boolean) {
 export function scrollToSection(id: string) {
   const element = document.getElementById(id);
   if (!element) return;
-  if (lenis) lenis.scrollTo(element, { duration: 1.8 });
+  // Lenis and native scrolling both honour the sections' scroll-margin-top.
+  if (lenis) lenis.scrollTo(element, { duration: 1.6 });
   else element.scrollIntoView();
 }
 

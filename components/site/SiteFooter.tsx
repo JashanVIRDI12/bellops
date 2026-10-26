@@ -1,11 +1,22 @@
 import Link from "next/link";
-import { services, servicesPage, site, workPage } from "@/lib/content";
+import {
+  INSTAGRAM_URL,
+  services,
+  servicesPage,
+  site,
+  workPage,
+} from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
 
 /** The inner pages' footer: every service, the work, and how to reach us. */
 export function SiteFooter() {
   return (
     <footer className="foot">
+      <div className="foot-masthead" aria-hidden="true">
+        <span>
+          Bell<span>Ops</span>.
+        </span>
+      </div>
       <div className="wrap foot-grid">
         <div className="foot-studio">
           <p className="foot-name">{site.name}</p>
@@ -55,7 +66,12 @@ export function SiteFooter() {
             </li>
             {site.socials.map((social) => (
               <li key={social.label}>
-                <a href={social.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track={"social-" + social.label.toLowerCase()}
+                >
                   {social.label}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
@@ -65,7 +81,20 @@ export function SiteFooter() {
         </nav>
       </div>
       <p className="wrap foot-legal">
-        © {site.copyrightYear} {site.name}
+        <span>
+          © {site.copyrightYear} {site.name} · Independently minded.
+        </span>
+        <span>
+          Prefer Instagram? DM “START” to{" "}
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="instagram-dm-start"
+          >
+            @bellops.in<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </span>
       </p>
     </footer>
   );

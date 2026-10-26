@@ -54,6 +54,15 @@ export function WorkShowcase({
                       : "(min-width: 768px) 45vw, 100vw"
                   }
                 />
+                <span className="showcase-phone">
+                  <Image
+                    src={project.mobileImage}
+                    alt=""
+                    width={390}
+                    height={845}
+                    sizes="(min-width: 768px) 14vw, 22vw"
+                  />
+                </span>
               </span>
               <span className="showcase-caption">
                 <Title className="showcase-client">{project.client}</Title>

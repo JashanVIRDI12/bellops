@@ -1,6 +1,33 @@
 # Bellops
 
-The Bellops site. The home page is a scroll-driven studio tour with a glowing 3D sign, projects on a laptop, and daylight and weather that follow the visitor.
+The Bellops site. The home page pairs an editorial studio story with a live 3D
+backdrop, project presentations, and daylight and weather that follow the visitor.
+
+## Design and motion
+
+The shared design system is in `app/studio.css`. Home-page scenes live in
+`components/experience/Chapters.tsx`; service and work pages reuse the same
+photography, typography, device compositions, and footer.
+
+`components/site/useStudioMotion.ts` owns the GSAP entrance timeline, scroll
+reveals, photo and project parallax, manifesto, marquee, and magnetic buttons.
+Animations are scoped and reverted on navigation, and disabled for reduced
+motion. The live studio renderer rests while the editorial sections cover it.
+
+## October updates
+
+The package in `Downloads/website-fixes 2` has been adapted to the current site:
+
+- Instagram links and structured data share `INSTAGRAM_URL` (`@bellops.in`).
+- Contact and footer include the tracked Instagram DM “START” invitation.
+- The privacy page and links are deferred at the owner's request.
+- Meta Pixel is ready in `components/analytics/MetaPixel.tsx`. Leave
+  `NEXT_PUBLIC_META_PIXEL_ID` empty until the real pixel and privacy notice are
+  ready. It stays off on localhost, admin routes, and browsers requesting
+  Do Not Track or Global Privacy Control. PageView follows route changes;
+  Contact covers WhatsApp links across public pages; Lead fires once after a
+  successful enquiry, without sending the form's personal fields to Meta.
+  Conversions API is not enabled.
 
 ## Run
 
@@ -68,7 +95,7 @@ their own.
 
 Contact details live in `lib/content.ts`: WhatsApp goes to `whatsapp`
 (+91 85868 75703), and the footer links to Instagram
-([@bellops.ai](https://www.instagram.com/bellops.ai/)). The budget ranges and
+([@bellops.in](https://www.instagram.com/bellops.in/)). The budget ranges and
 form wording are there too.
 
 **Cookie notice.** A small notice explains that the site uses cookies and

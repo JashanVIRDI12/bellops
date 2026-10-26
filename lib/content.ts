@@ -3,6 +3,8 @@
  * Items marked PLACEHOLDER need real details before launch.
  */
 
+export const INSTAGRAM_URL = "https://www.instagram.com/bellops.in/";
+
 export const site = {
   name: "Bellops",
   // The search-result snippet and share-card text. Keep it under ~160 characters.
@@ -13,9 +15,7 @@ export const site = {
   whatsapp: "+91 85868 75703",
   whatsappGreeting: "Hi Bellops, I'd like to talk about a project.", // typed for the visitor, editable before sending
   copyrightYear: 2026, // static on purpose: the page is prerendered, so no new Date()
-  socials: [
-    { label: "Instagram", href: "https://www.instagram.com/bellops.ai/" },
-  ],
+  socials: [{ label: "Instagram", href: INSTAGRAM_URL }],
   // Where the studio is, for search engines (structured data). Add the street
   // and PIN code here if they should be public.
   address: { locality: "Moti Nagar", region: "Delhi", country: "IN" },
@@ -96,6 +96,8 @@ export type Service = {
   href: string;
   /** Short name for menus. */
   nav: string;
+  /** Decorative image shown when this service is hovered or focused. */
+  navImage: string;
   page: {
     title: string;
     description: string;
@@ -116,6 +118,7 @@ export const services = {
       body: "Custom website design and development with immersive 3D, smooth motion and a premium finish.",
       href: "/premium-website-design",
       nav: "Premium websites",
+      navImage: "/navigation/services-v1/premium-websites.webp",
       page: {
         title: "Premium & Luxury Website Design Company in India | Bellops",
         description:
@@ -138,6 +141,7 @@ export const services = {
       body: "High-converting landing pages for ad campaigns, product launches and lead generation.",
       href: "/landing-pages",
       nav: "Landing pages",
+      navImage: "/navigation/services-v1/landing-pages.webp",
       page: {
         title: "Landing Page Design Agency in India for Ads | Bellops",
         description:
@@ -160,6 +164,7 @@ export const services = {
       body: "Google, Instagram and Facebook ads with the creative and targeting to turn clicks into customers.",
       href: "/google-meta-ads",
       nav: "Google & Meta ads",
+      navImage: "/navigation/services-v1/google-meta-ads.webp",
       page: {
         title: "Google & Meta Ads Agency in India | Bellops",
         description:
@@ -182,6 +187,7 @@ export const services = {
       body: "Content planning, post and reel design, and scheduling that keep your Instagram consistent.",
       href: "/social-media-management",
       nav: "Social media",
+      navImage: "/navigation/services-v1/social-media.webp",
       page: {
         title: "Social Media Management Agency in India | Bellops",
         description:
@@ -204,6 +210,7 @@ export const services = {
       body: "Technical, on-page and local SEO, plus faster load times, so customers find you on Google.",
       href: "/seo",
       nav: "SEO & speed",
+      navImage: "/navigation/services-v1/seo-speed.webp",
       page: {
         title: "SEO & Website Speed Optimization Services in India | Bellops",
         description:
@@ -230,6 +237,7 @@ export const services = {
       body: "Website maintenance: hosting, security updates, backups and small edits, every month.",
       href: "/website-care-plans",
       nav: "Website care",
+      navImage: "/navigation/services-v1/website-care.webp",
       page: {
         title: "Website Maintenance & Care Plans in India | Bellops",
         description:
@@ -251,6 +259,7 @@ export const services = {
       body: "Logo design, color palette and a social media kit for a consistent brand identity.",
       href: "/branding",
       nav: "Branding",
+      navImage: "/navigation/services-v1/branding.webp",
       page: {
         title: "Branding Starter Packs: Logo & Brand Identity Design | Bellops",
         description:
@@ -377,7 +386,7 @@ export const enquiryForm = {
   ],
   message: "About the project",
   messagePlaceholder: "What you're building, your timeline, any links.",
-  privacy: "We only use these details to reply to you.",
+  privacy: "We use these details to reply to your enquiry.",
   submit: "Send enquiry",
   pending: "Sending…",
   // Both end with a WhatsApp link.

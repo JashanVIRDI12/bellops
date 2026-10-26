@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Faq } from "@/components/site/Faq";
 import { Process } from "@/components/site/Process";
-import { ServiceRows } from "@/components/site/ServiceRows";
+import { Capabilities } from "@/components/site/Capabilities";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { servicesPage } from "@/lib/content";
@@ -60,8 +60,9 @@ export default function Services() {
           Start a project
         </Link>
       </StudioHero>
-      <section aria-label="All services" className="wrap block">
-        <ServiceRows items={allServices} titleLevel="h2" preview />
+      <section aria-label="All services" className="wrap services-editorial">
+        <p className="studio-label">The right expertise, all in one place.</p>
+        <Capabilities items={allServices} />
       </section>
       <Process />
       <WorkShowcase projects={projects} />

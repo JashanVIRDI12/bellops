@@ -8,6 +8,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { currentVisit, track } from "@/lib/analytics/client";
+import { trackMeta } from "@/lib/analytics/meta";
 import { enquiryForm, services } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
 import {
@@ -49,13 +50,21 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
   const formRef = useRef<HTMLFormElement>(null);
   const sentRef = useRef<HTMLHeadingElement>(null);
   const started = useRef(false);
+  const reported = useRef(false);
   const visit = useVisitJson();
 
   // Move focus to what changed: the first problem, or the confirmation.
   useEffect(() => {
     if (state.status === "sent") {
       sentRef.current?.focus();
-      track("action", "enquiry-sent");
+      if (!reported.current) {
+        reported.current = true;
+        track("action", "enquiry-sent");
+        trackMeta("Lead", {
+          content_name: "Start a project enquiry",
+          content_category: "enquiry-form",
+        });
+      }
     }
     if (state.status === "invalid")
       formRef.current

@@ -17,7 +17,6 @@ import {
   scrollToSection,
   setScrollLocked,
 } from "@/components/experience/SmoothScroll";
-import { stillImage } from "@/components/experience/still-image";
 import { useBeat } from "@/components/experience/store";
 import {
   chapters,
@@ -40,7 +39,7 @@ type Variant = "tour" | "page";
  * other page ("page").
  *
  * - Wide screens: Services opens a panel listing every service, previewing
- *   each one's studio shot as it's pointed at; Work and Contact go straight
+ *   each one's service image as it's pointed at; Work and Contact go straight
  *   there; "Start a project" is always one click away.
  * - Phones: a Menu button opens a full-screen menu.
  *
@@ -249,24 +248,18 @@ function ServicesMenu({
           <div className="nav-panel-aside">
             <div className="nav-panel-preview" aria-hidden="true">
               {open &&
-                services.items.map((item) => {
-                  const image = stillImage(
-                    item.page.hour.shot,
-                    "landscape",
-                    item.page.hour.mood,
-                    false,
-                    "22rem",
-                  );
-                  return (
-                    // eslint-disable-next-line @next/next/no-img-element -- next/image props, via getImageProps
-                    <img
-                      key={item.href}
-                      {...image}
-                      alt=""
-                      data-shown={item.href === shown.href || undefined}
-                    />
-                  );
-                })}
+                services.items.map((item) => (
+                  <Image
+                    key={item.href}
+                    src={item.navImage}
+                    alt=""
+                    fill
+                    sizes="22rem"
+                    loading="eager"
+                    fetchPriority="low"
+                    data-shown={item.href === shown.href || undefined}
+                  />
+                ))}
             </div>
             <Link
               href={servicesPage.path}
