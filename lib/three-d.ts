@@ -56,7 +56,7 @@ export const threeDPage = {
     label: "3D websites",
     body: "Immersive Three.js and WebGL websites, configurators and 3D landing pages that still load fast.",
   },
-  heading: "Premium 3D Website Design Agency in India",
+  heading: "3D Website Design with Three.js & WebGL",
   lead: "Immersive 3D websites that load fast, rank on Google and turn visitors into enquiries.",
   hour: { shot: shot("three-d"), mood: "night" } as Hour,
   intro:

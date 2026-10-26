@@ -592,9 +592,15 @@ function IntroLayer({ part }: { part: "headline" | "rest" }) {
           {...(headline ? { "aria-hidden": true } : {})}
         >
           {headline ? (
-            <Ghost as="p" className="intro-description" text={intro.body} />
+            <div>
+              <Ghost as="p" className="intro-lead" text={intro.subheading} />
+              <Ghost as="p" className="intro-description" text={intro.body} />
+            </div>
           ) : (
-            <p className="intro-description">{intro.body}</p>
+            <div>
+              <p className="intro-lead">{intro.subheading}</p>
+              <p className="intro-description">{intro.body}</p>
+            </div>
           )}
           <div className="intro-actions">
             {headline ? (

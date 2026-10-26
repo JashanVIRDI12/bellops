@@ -12,7 +12,7 @@ export const siteUrl = new URL(
 export const homeUrl = `${siteUrl}/`;
 
 // The home page's title in search results and tabs. Keep it under ~60 characters.
-export const siteTitle = `3D Website Design Agency India | Premium Sites | ${site.name}`;
+export const siteTitle = `3D & Premium Website Design Agency in India | ${site.name}`;
 
 export const socialImage = {
   url: "/brand/share-banner.jpg",

@@ -63,7 +63,9 @@ export const intro = {
   // The page's one headline: the <h1>, in the words people search for, set
   // large over the view out of the window. One entry per line (wide screens
   // keep these breaks; phones may wrap them).
-  headingLines: ["3D website design", "agency in India,", "built to perform"],
+  headingLines: ["Premium 3D", "Website Design", "Agency in India"],
+  // The subheading under it, above the description.
+  subheading: "Premium 3D websites that load fast and bring in enquiries.",
   body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small studio, Delhi-based, working remotely across India.",
   cta: "Get a quote for your website",
   whatsapp: "Chat on WhatsApp",
