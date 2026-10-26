@@ -42,6 +42,62 @@
 .studio-experience .paper-section :focus-visible {
   outline-color: var(--color-violet);
 }
+/* Under the hero: the brands we've worked with. */
+.proof-strip {
+  position: relative;
+  border-bottom: 1px solid #28222f22;
+}
+.proof-strip-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem 3rem;
+  padding-block: 2.25rem;
+}
+.proof-strip h2 {
+  color: #6a646b;
+  max-width: 18ch;
+}
+.proof-logos {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.75rem 2.5rem;
+}
+.proof-logos li {
+  display: flex;
+  align-items: center;
+  opacity: 0.72;
+}
+.proof-logos img {
+  display: block;
+  max-width: 100%;
+}
+.proof-wordmark {
+  font:
+    700 1.2rem/1 var(--font-space-grotesk),
+    sans-serif;
+  letter-spacing: -0.03em;
+  color: #000;
+}
+@media (max-width: 899px) {
+  .proof-strip-inner {
+    display: block;
+    padding-block: 1.75rem;
+  }
+  .proof-strip h2 {
+    max-width: none;
+    margin-bottom: 1.25rem;
+  }
+  .proof-logos {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+    gap: 1.5rem 1rem;
+  }
+}
 .studio-experience em,
 .closing em {
   font-family: Georgia, serif;

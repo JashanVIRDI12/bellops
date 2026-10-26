@@ -4,6 +4,7 @@ import { EnquiryForm } from "@/components/contact/EnquiryForm";
 import { WhatsAppIcon } from "@/components/contact/icons";
 import { Arrow } from "@/components/site/Arrow";
 import { Capabilities } from "@/components/site/Capabilities";
+import { ProofStrip } from "@/components/site/ProofStrip";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { INSTAGRAM_URL, approach, contact, intro, studio } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
@@ -166,6 +167,7 @@ export function Chapters() {
           </span>
         </div>
       </section>
+      <ProofStrip />
       <section id="studio" data-beat className="studio-story paper-section">
         <div
           className="studio-ticker"
