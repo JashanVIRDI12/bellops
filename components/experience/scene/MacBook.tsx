@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { shot } from "@/lib/content";
 import { projects as defaultProjects, type WorkProject } from "@/lib/work";
 import { MACBOOK_URL } from "./models";
 import { rig } from "./rig";
@@ -17,7 +18,7 @@ const POSITION: [number, number, number] = [3.86, -0.6294, 0];
 const SCALE = 0.01;
 const SCREEN_INTENSITY = 2.1; // bright enough to hold its own in daylight; above ~1 it blooms
 const SWITCH_SPEED = 6; // how quickly the screen fades back in after changing project
-const FIRST_WORK_BEAT = 3; // the camera beat that shows the first project (see shots.ts)
+const FIRST_WORK_BEAT = shot("work"); // the camera beat that shows the first project
 
 /* ════════════════════════════════════════════════════════════════════════ */
 

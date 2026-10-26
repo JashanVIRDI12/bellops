@@ -25,8 +25,8 @@ export function SiteFooter() {
         <div className="foot-studio">
           <p className="foot-name">{site.name}</p>
           <p>
-            A web design and digital marketing studio in Moti Nagar, Delhi, for
-            brands across India.
+            A remote web design and digital marketing studio, for brands across
+            India and abroad.
           </p>
         </div>
         <nav aria-label="Services" className="foot-col">

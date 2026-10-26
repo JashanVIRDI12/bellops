@@ -1,4 +1,4 @@
-import type { Hour } from "./content";
+import { shot, type Hour } from "./content";
 import { formatInr } from "./pricing";
 
 /*
@@ -53,9 +53,9 @@ export const threeDPage = {
   nav: "3D website design",
   heading: "Premium 3D Website Design Agency in India",
   lead: "Immersive 3D websites that load fast, rank on Google and turn visitors into enquiries.",
-  hour: { shot: 0, mood: "night" } as Hour,
+  hour: { shot: shot("three-d"), mood: "night" } as Hour,
   intro:
-    "Bellops is an independent web design studio in Moti Nagar, Delhi. We design and build premium websites with real-time 3D, smooth motion and a finish people remember. We also make sure they work properly: quick on a mid-range phone, readable by search engines and built around what your customers actually need to do.",
+    "Bellops is an independent, remote web design studio. We design and build premium websites with real-time 3D, smooth motion and a finish people remember. We also make sure they work properly: quick on a mid-range phone, readable by search engines and built around what your customers actually need to do.",
   why: {
     heading: "Why brands come to a 3D website design agency",
     body: [
@@ -249,7 +249,7 @@ export const threeDPage = {
     {
       question: "Do you work with clients outside Delhi?",
       answer:
-        "Yes. We're based in Moti Nagar, Delhi, and work remotely with brands across India and abroad.",
+        "Yes. We're a remote studio and work with brands across India and abroad.",
     },
   ],
 };

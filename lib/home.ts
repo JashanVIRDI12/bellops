@@ -21,7 +21,7 @@ const names = (list: readonly string[]) =>
 
 export const aboutBellops = {
   heading: "About Bellops",
-  body: `Bellops is an independent web design studio in Moti Nagar, Delhi, run by ${names(site.founders)}. We are a small team that plans, designs and codes every site ourselves, from premium brochure sites to interactive 3D experiences built with Three.js and WebGL. Recent work includes ${names(projects.map((project) => project.client))}.`,
+  body: `Bellops is an independent, remote web design studio run by ${names(site.founders)}. We are a small team that plans, designs and codes every site ourselves, from premium brochure sites to interactive 3D experiences built with Three.js and WebGL. Recent work includes ${names(projects.map((project) => project.client))}.`,
 };
 
 export const workIntro =
@@ -55,7 +55,7 @@ export const homeFaqs = [
   {
     question: "Do you work with clients outside Delhi?",
     answer:
-      "Yes. We're based in Moti Nagar, Delhi, and work remotely with brands across India and abroad.",
+      "Yes. We're a remote studio and work with brands across India and abroad.",
   },
   {
     question: "Do you maintain the website after launch?",

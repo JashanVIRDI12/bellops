@@ -30,9 +30,8 @@ const OfficeScene = dynamic(() => import("./scene/OfficeScene"), {
  * Starts downloading the first still before any JavaScript runs: a tiny
  * inline script works out the visitor's mood from their clock (the same hours
  * as resolveAtmosphere in lib/atmosphere.ts, or a ?scene= preview) and adds a
- * preload for that mood's still, in this screen's orientation. The server
- * can't know either, so it can't preload the right one itself. Low priority:
- * the hero covers the stage, and its screenshot (the LCP) goes first.
+ * high-priority preload for that mood's still, in this screen's orientation.
+ * The server can't know either, so it can't preload the right one itself.
  */
 const MOODS: StillMood[] = ["day", "dusk", "night", "overcast", "rain"];
 const firstStills = Object.fromEntries(
@@ -44,7 +43,7 @@ const firstStills = Object.fromEntries(
     ],
   ]),
 );
-const preloadFirstStill = `(function(){try{var s=${JSON.stringify(firstStills)};var q=new URLSearchParams(location.search).get("scene");var d=new Date(),h=d.getHours()+d.getMinutes()/60;var m=s[q]?q:h<6||h>=19?"night":h<8||h>=17?"dusk":"day";var l=document.createElement("link");l.rel="preload";l.as="image";l.setAttribute("fetchpriority","low");l.setAttribute("imagesrcset",s[m][matchMedia("(orientation: portrait)").matches?1:0]);l.setAttribute("imagesizes","100vw");document.head.appendChild(l)}catch(e){}})()`;
+const preloadFirstStill = `(function(){try{var s=${JSON.stringify(firstStills)};var q=new URLSearchParams(location.search).get("scene");var d=new Date(),h=d.getHours()+d.getMinutes()/60;var m=s[q]?q:h<6||h>=19?"night":h<8||h>=17?"dusk":"day";var l=document.createElement("link");l.rel="preload";l.as="image";l.setAttribute("fetchpriority","high");l.setAttribute("imagesrcset",s[m][matchMedia("(orientation: portrait)").matches?1:0]);l.setAttribute("imagesizes","100vw");document.head.appendChild(l)}catch(e){}})()`;
 
 /* Remembers, for the browser session, that this device was too slow for 3D. */
 const TOO_SLOW_KEY = "bellops:stills";
@@ -127,7 +126,6 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   const markStillShown = useCallback(() => setStillShown(true), []);
   /** The page has settled enough to start on the 3D. */
   const [idle, setIdle] = useState(false);
-  const [heroVisible, setHeroVisible] = useState(true);
   const [stillWaitOver, setStillWaitOver] = useState(false);
   const markFailed = useCallback(() => setRetired("off"), []);
   const markTooSlow = useCallback(() => {
@@ -137,18 +135,6 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       /* fine: the check runs again next time */
     }
     setRetired((state) => (state === "no" ? "fading" : state));
-  }, []);
-
-  // The editorial sections cover the stage. Rest the GPU while it is hidden,
-  // and don't start downloading the live scene after someone scrolls past it.
-  useEffect(() => {
-    const hero = document.getElementById("intro");
-    if (!hero) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      setHeroVisible(entry?.isIntersecting ?? false);
-    });
-    observer.observe(hero);
-    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -169,9 +155,9 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
     return () => window.clearTimeout(timer);
   }, [live, stillShown]);
   useEffect(() => {
-    if (!live || idle || !heroVisible || !(stillShown || stillWaitOver)) return;
+    if (!live || idle || !(stillShown || stillWaitOver)) return;
     return whenIdle(() => setIdle(true), IDLE_WAIT);
-  }, [live, idle, heroVisible, stillShown, stillWaitOver]);
+  }, [live, idle, stillShown, stillWaitOver]);
   const started = live && idle;
   const showing = live && ready && retired === "no";
   // The still for the current shot paints first everywhere; the live scene
@@ -202,7 +188,6 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
         className="fixed inset-x-0 top-0 z-0 h-lvh bg-[#151c29]"
         data-backdrop={stillShown || showing ? "ready" : "pending"}
         data-scene-mood={atmosphere.still}
-        data-stage-active={heroVisible || undefined}
         data-scene-renderer={live && liveTier ? liveTier : "stills"}
         data-scene-source={
           mode !== "auto" ? "preview" : weather ? "weather" : "clock"
@@ -230,7 +215,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
                 tier={liveTier}
                 projects={projects}
                 atmosphere={atmosphere}
-                active={heroVisible}
+                active
                 onReady={markReady}
                 onProgress={setLoaded}
                 onWarmup={setWarmup}

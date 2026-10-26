@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ContactCta } from "@/components/site/ContactCta";
 import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
-import { workPage } from "@/lib/content";
+import { shot, workPage } from "@/lib/content";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
 import { shareMetadata } from "@/lib/seo";
 import { projects } from "@/lib/work";
@@ -34,7 +34,7 @@ export default function Work() {
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
       <StudioHero
-        hour={{ shot: 3, mood: "day" }}
+        hour={{ shot: shot("work"), mood: "day" }}
         crumbs={trail}
         heading={workPage.heading}
         lead={workPage.lead}

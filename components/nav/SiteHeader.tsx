@@ -429,7 +429,7 @@ function MobileMenu({
             WhatsApp
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
-          <p className="nav-sheet-place">Moti Nagar, Delhi</p>
+          <p className="nav-sheet-place">Remote studio</p>
         </div>
       </div>
     </>

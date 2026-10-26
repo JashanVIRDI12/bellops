@@ -71,7 +71,6 @@ export const structuredData = {
       telephone: site.whatsapp.replace(/[^\d+]/g, ""),
       address: {
         "@type": "PostalAddress",
-        addressLocality: site.address.locality,
         addressRegion: site.address.region,
         addressCountry: site.address.country,
       },

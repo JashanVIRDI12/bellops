@@ -36,8 +36,12 @@ const chapterNames: Record<string, string> = {
   intro: "Opening scene",
   studio: "Studio",
   approach: "Approach",
+  "three-d": "3D websites",
   work: "Work",
+  clients: "Clients",
   services: "Services",
+  about: "About",
+  faq: "Questions",
   contact: "Contact",
 };
 
@@ -45,6 +49,7 @@ const actionNames: Record<string, string> = {
   "whatsapp-intro": "WhatsApp, opening scene",
   "whatsapp-dock": "WhatsApp, floating button",
   "whatsapp-contact": "WhatsApp, contact section",
+  "whatsapp-faq": "WhatsApp, questions section",
   "whatsapp-form": "WhatsApp, after the form",
   whatsapp: "WhatsApp, other link",
   "call-dock": "Call, floating button",

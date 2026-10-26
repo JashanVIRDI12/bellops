@@ -20,9 +20,9 @@ export const site = {
   // Who runs the studio: named on the home and about pages, and in the
   // structured data.
   founders: ["Jashan Singh", "Shivam Ahuja"],
-  // Where the studio is, for search engines (structured data). Add the street
-  // and PIN code here if they should be public.
-  address: { locality: "Moti Nagar", region: "Delhi", country: "IN" },
+  // Where the studio is registered, for search engines (structured data).
+  // Bellops works remotely, so no street or neighbourhood is published.
+  address: { region: "Delhi", country: "IN" },
 };
 
 /**
@@ -33,18 +33,39 @@ export const chapters = [
   { id: "intro", label: "Intro", beats: 1 },
   { id: "studio", label: "Studio", beats: 1 },
   { id: "approach", label: "Approach", beats: 1 },
+  { id: "three-d", label: "3D websites", beats: 1 },
   { id: "work", label: "Work", beats: 3 },
+  { id: "clients", label: "Clients", beats: 1 },
   { id: "services", label: "Services", beats: 1 },
+  { id: "about", label: "About", beats: 1 },
+  { id: "faq", label: "FAQ", beats: 1 },
   { id: "contact", label: "Contact", beats: 1 },
 ] as const;
 
 export type ChapterId = (typeof chapters)[number]["id"];
 
+/**
+ * The camera shot (and still) number of a chapter's beat: shot("work", 2) is
+ * the third project. Inner pages pick their hero's shot this way, so adding
+ * a chapter never points them at the wrong one.
+ */
+export function shot(id: ChapterId, beat = 0) {
+  let start = 0;
+  for (const chapter of chapters) {
+    if (chapter.id === id) return start + Math.min(beat, chapter.beats - 1);
+    start += chapter.beats;
+  }
+  return 0;
+}
+
 export const intro = {
   // The page's <h1>, in the words people search for. It sits small, above
-  // the large display line.
+  // the large tagline.
   heading: "3D Website Design Agency in India, Built to Perform",
-  body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small studio in Moti Nagar, Delhi.",
+  // The large display tagline under it, one entry per line (wide screens keep
+  // these breaks). Keep each line to about 11 characters so four lines fit the window.
+  taglineLines: ["Web design,", "3D, ads", "and social.", "One studio."],
+  body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small, remote studio.",
   cta: "Get a quote for your website",
   whatsapp: "Chat on WhatsApp",
   hint: "See our work",
@@ -145,7 +166,7 @@ export const services = {
           "Technical SEO and Core Web Vitals built in",
           "A lighter version of every 3D scene for slower phones",
         ],
-        hour: { shot: 5, mood: "dusk" },
+        hour: { shot: shot("work", 2), mood: "dusk" },
         related: ["/landing-pages", "/seo-services", "/website-care-plans"],
       },
     },
@@ -169,7 +190,7 @@ export const services = {
           "Fast on every device",
           "Technical SEO built in",
         ],
-        hour: { shot: 4, mood: "day" },
+        hour: { shot: shot("work", 1), mood: "day" },
         related: [
           "/google-meta-ads",
           "/premium-website-design",
@@ -197,7 +218,7 @@ export const services = {
           "Audience targeting",
           "Landing pages to match each campaign",
         ],
-        hour: { shot: 1, mood: "day" },
+        hour: { shot: shot("studio"), mood: "day" },
         related: [
           "/landing-pages",
           "/social-media-management",
@@ -225,7 +246,7 @@ export const services = {
           "Scheduling",
           "A consistent look across your Instagram",
         ],
-        hour: { shot: 2, mood: "day" },
+        hour: { shot: shot("approach"), mood: "day" },
         related: ["/branding", "/google-meta-ads", "/premium-website-design"],
       },
     },
@@ -249,7 +270,7 @@ export const services = {
           "Faster load times",
           "Core Web Vitals",
         ],
-        hour: { shot: 6, mood: "day" },
+        hour: { shot: shot("services"), mood: "day" },
         related: [
           "/premium-website-design",
           "/landing-pages",
@@ -276,7 +297,7 @@ export const services = {
           "Backups",
           "Small edits, every month",
         ],
-        hour: { shot: 2, mood: "night" },
+        hour: { shot: shot("approach"), mood: "night" },
         related: ["/seo-services", "/premium-website-design", "/landing-pages"],
       },
     },
@@ -300,7 +321,11 @@ export const services = {
           "A consistent brand identity",
         ],
         // Phones see the lit BellOps sign; wide screens the corner at dusk.
-        hour: { shot: 7, mood: "dusk", portrait: { shot: 3, mood: "night" } },
+        hour: {
+          shot: shot("contact"),
+          mood: "dusk",
+          portrait: { shot: shot("work"), mood: "night" },
+        },
         related: [
           "/social-media-management",
           "/premium-website-design",
@@ -318,8 +343,8 @@ export const servicesPage = {
   description:
     "Bellops' services: premium 3D websites, landing pages, Google and Meta ads, social media management, SEO, website care and branding, from one studio in Delhi.",
   heading: "Everything your brand needs online, from one studio",
-  lead: "Strategy, design, development, ads and social media, from one small team in Moti Nagar, Delhi, for brands across India.",
-  hour: { shot: 1, mood: "dusk" } as Hour,
+  lead: "Strategy, design, development, ads and social media, from one small, remote team, for brands across India.",
+  hour: { shot: shot("studio"), mood: "dusk" } as Hour,
 };
 
 /**
@@ -352,7 +377,8 @@ export const projectProcess = {
 export const faqs = [
   {
     question: "Where are you based?",
-    answer: "In Moti Nagar, Delhi. We work with brands across India.",
+    answer:
+      "We're a remote studio and work with brands across India and abroad.",
   },
   {
     question: "How do we get started?",
@@ -396,16 +422,17 @@ export const aboutPage = {
   path: "/about",
   title: "About Bellops: Web Design & Digital Marketing Studio in Delhi",
   description:
-    "Bellops is an independent web design and digital marketing studio in Moti Nagar, Delhi: strategy, design, development, ads and social media from one small team.",
-  hour: { shot: 1, mood: "day" } as Hour,
+    "Bellops is an independent, remote web design and digital marketing studio: strategy, design, development, ads and social media from one small team.",
+  // The BellOps sign on the studio wall.
+  hour: { shot: shot("about"), mood: "dusk" } as Hour,
 };
 
 export const contactPage = {
   path: "/contact",
-  title: "Contact Bellops: Web Design Studio in Moti Nagar, Delhi",
+  title: "Contact Bellops: Remote Web Design & Marketing Studio",
   description:
     "Tell Bellops about your website, ad campaign or social media goals. Send an enquiry or chat on WhatsApp; we usually reply within a working day.",
-  hour: { shot: 7, mood: "night" } as Hour,
+  hour: { shot: shot("faq"), mood: "night" } as Hour,
 };
 
 /** The cookie notice shown once per browser, until the visitor presses OK. */

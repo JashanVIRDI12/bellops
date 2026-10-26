@@ -1,18 +1,27 @@
 # Bellops
 
-The Bellops site. The home page pairs an editorial studio story with a live 3D
-backdrop, project presentations, and daylight and weather that follow the visitor.
+The Bellops site. The home page is a scroll-driven walk through a live 3D
+studio (the USP): twelve camera shots, with daylight and weather that follow
+the visitor. The inner pages use an editorial design over stills of the same
+studio.
 
 ## Design and motion
 
-The shared design system is in `app/studio.css`. Home-page scenes live in
-`components/experience/Chapters.tsx`; service and work pages reuse the same
-photography, typography, device compositions, and footer.
+Home page: the tour's sections are in `components/experience/Chapters.tsx`,
+their styles in `components/experience/tour.css` (loaded with the home page
+only), and its scroll reveals in `components/experience/useReveals.ts`. Each
+section is one camera shot (`components/experience/scene/shots.ts`); the order
+is the `chapters` list in `lib/content.ts`.
 
-`components/site/useStudioMotion.ts` owns the GSAP entrance timeline, scroll
-reveals, photo and project parallax, manifesto, marquee, and magnetic buttons.
-Animations are scoped and reverted on navigation, and disabled for reduced
-motion. The live studio renderer rests while the editorial sections cover it.
+Inner pages: the editorial layer is `app/studio.css` over `app/globals.css`.
+`components/site/useStudioMotion.ts` owns their scroll reveals, photo
+settling and reading line. Animations are scoped and reverted on navigation,
+and disabled for reduced motion.
+
+Each inner page's hero is one of the tour's shots at a chosen hour
+(`hour: { shot: shot("about"), mood: "dusk" }`). Name shots with `shot()` from
+`lib/content.ts`, never a raw number, so adding a section can't point a page at
+the wrong one.
 
 ## October updates
 
@@ -204,6 +213,13 @@ query.
 
 The page scrolls normally. A fixed stage behind it plays the camera shot that matches each section.
 
+The sections, in order (one shot each, three for the work): the opening view
+out of the window; the studio; the approach along the glass; 3D websites (low
+across the desk toward the sun); three projects on the laptop; clients (a
+crane up into the far corner); services (straight down); about (the BellOps
+sign); questions (high in the window corner); and contact. The questions are
+word for word the page's FAQPage data (`lib/home.ts`).
+
 - **Desktop:** the live 3D scene. It loads in its own chunk once the page has painted and the browser is idle, and renders only while something moves.
 - **Phones and tablets:** the same live scene, tuned for phone graphics chips
   (see "On phones" below).
@@ -282,7 +298,7 @@ The forecast changes the scene's appearance; it is not an observed weather stati
 The automatic IP response is private; coordinate-based responses can be cached.
 
 To preview a mood directly, open `/?scene=night` (also `day`, `dusk`, `overcast`
-or `rain`). Slow devices use matching images from `public/experience/atmosphere-v5/`;
+or `rain`). Slow devices use matching images from `public/experience/atmosphere-v6/`;
 re-capture them with `STILLS_URL=http://localhost:3000 node scripts/capture-stills.mjs`
 after changing the scene, and bump the folder version so no stale images are served.
 
@@ -321,7 +337,7 @@ pnpm build && pnpm start   # in one terminal
 pnpm stills                # in another (needs Google Chrome)
 ```
 
-The capture includes all eight shots in landscape and portrait for five moods.
+The capture includes all twelve shots in landscape and portrait for five moods.
 Use `STILLS_MOODS=night`, `STILLS_SHOTS=0` or `STILLS_SIZES=portrait` to limit a refresh. If the server is
 on another port, set `STILLS_URL=http://localhost:3002`.
 

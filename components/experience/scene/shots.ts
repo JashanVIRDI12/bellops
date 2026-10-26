@@ -56,6 +56,18 @@ export const SHOTS: Shot[] = [
     exposure: 1,
     screen: 0.4,
   },
+  // 3D websites: low across the desk from the sign wall, toward the sun: the
+  // chair, the back of the laptop, the plant and the sea of clouds beyond.
+  // From the end of the desk, so the move to the work swings wide of the
+  // laptop. Phones tilt down: the desk on top, the dark rug under the copy.
+  {
+    position: [5.4, -0.45, 1.5],
+    target: [3.4, -0.55, -0.4],
+    fov: 38,
+    exposure: 1,
+    screen: 0.5,
+    portrait: { position: [5.9, 0.05, 1.55], target: [3.7, -2.0, -0.3] },
+  },
   // Work 1–3: over the chair at the laptop, closer each time. The laptop sits
   // right of center so the project name has the bottom left. Phones stack
   // it instead: the sign on top, the laptop in the middle, the name below.
@@ -83,6 +95,15 @@ export const SHOTS: Shot[] = [
     screen: 1,
     portrait: { position: [3.12, -0.24, 0.06], target: [4.0, -0.42, 0] },
   },
+  // Clients: the camera cranes up into the far corner and looks down across
+  // the desk to the glass, on its way up to the services shot.
+  {
+    position: [7.6, 1.9, 3.3],
+    target: [2.6, -1.1, -1.2],
+    fov: 50,
+    exposure: 1,
+    screen: 0.7,
+  },
   // Services: straight down; window shadows stripe the floor, desk in the left third.
   // Phones: the desk near the top, above the list.
   {
@@ -92,6 +113,25 @@ export const SHOTS: Shot[] = [
     exposure: 1,
     screen: 0.8,
     portrait: { position: [3.05, 2.4, 0.2], target: [3.09, -1.45, 0.2] },
+  },
+  // About: the BellOps sign on the back wall, at an angle and right of
+  // center (clear of the copy), window shadows across the plaster.
+  // Phones: square on from below, the sign in the top third, clear of the copy.
+  {
+    position: [5.9, 0.1, -2.9],
+    target: [9.16, 0.38, -1.0],
+    fov: 42,
+    exposure: 1,
+    screen: 0.6,
+    portrait: { position: [5.6, 0.25, -1.2], target: [9.16, -0.7, 0] },
+  },
+  // FAQ: high in the window corner, looking back down at the desk and the sign.
+  {
+    position: [1.4, 2.1, -3.3],
+    target: [5.5, -1.2, 1.2],
+    fov: 52,
+    exposure: 1,
+    screen: 0.6,
   },
   // Contact: from the back corner toward the sunlit glass corner.
   {

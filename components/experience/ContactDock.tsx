@@ -8,19 +8,27 @@ import { WhatsAppIcon } from "@/components/contact/icons";
 /**
  * WhatsApp, one tap away on phones, on every public page: a round button in
  * the bottom-right corner with a quote request typed in. Wider screens don't
- * show it. It steps aside while the home page's contact section is on screen,
- * so it never covers the form.
+ * show it. On the home page it steps aside during the opening scene and the
+ * contact section, which have WhatsApp buttons of their own, so it never
+ * covers the hero's links or the form.
  */
 export function ContactDock() {
   const [contactShown, setContactShown] = useState(false);
 
   useEffect(() => {
-    const contact = document.getElementById("contact");
-    if (!contact) return;
-    const observer = new IntersectionObserver(([entry]) =>
-      setContactShown(entry?.isIntersecting ?? false),
-    );
-    observer.observe(contact);
+    const sections = ["intro", "contact"]
+      .map((id) => document.getElementById(id))
+      .filter((section) => section !== null);
+    if (!sections.length) return;
+    const shown = new Set<Element>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) shown.add(entry.target);
+        else shown.delete(entry.target);
+      }
+      setContactShown(shown.size > 0);
+    });
+    for (const section of sections) observer.observe(section);
     return () => observer.disconnect();
   }, []);
 
