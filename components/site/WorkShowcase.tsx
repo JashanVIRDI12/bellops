@@ -12,16 +12,20 @@ export function WorkShowcase({
   heading = "Selected work",
   showAll = true,
   titleLevel = "h3",
+  id,
 }: {
   projects: readonly WorkProject[];
   heading?: string | null;
   /** Link to the work page. */
   showAll?: boolean;
   titleLevel?: "h2" | "h3";
+  /** For links to the block (#selected-work). */
+  id?: string;
 }) {
   const Title = titleLevel;
   return (
     <section
+      id={id}
       aria-labelledby={heading ? "work-heading" : undefined}
       aria-label={heading ? undefined : "Projects"}
       className="wrap block"

@@ -110,6 +110,20 @@ export function blogPosting(post: {
   };
 }
 
+/** Questions and answers shown on the page, word for word. */
+export function faqPage(
+  items: readonly { question: string; answer: string }[],
+) {
+  return {
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
 /** One step of a breadcrumb trail. The current page, last, has no href. */
 export type Crumb = { label: string; href?: string };
 

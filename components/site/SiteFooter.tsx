@@ -10,6 +10,7 @@ import {
 } from "@/lib/content";
 import { blogPage, publishedPosts } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
+import { threeDPage } from "@/lib/three-d";
 
 /** The inner pages' footer: every service, the work, and how to reach us. */
 export function SiteFooter() {
@@ -38,6 +39,9 @@ export function SiteFooter() {
                 <Link href={item.href}>{item.nav}</Link>
               </li>
             ))}
+            <li>
+              <Link href={threeDPage.path}>3D websites</Link>
+            </li>
           </ul>
         </nav>
         <nav aria-label="Studio" className="foot-col">

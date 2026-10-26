@@ -1,14 +1,22 @@
 import { faqs } from "@/lib/content";
 
-/** Common questions, each opening in place. */
-export function Faq() {
+type Question = { question: string; answer: string };
+
+/** Common questions, each opening in place. Defaults to the service pages' set. */
+export function Faq({
+  items = faqs,
+  heading = "Questions",
+}: {
+  items?: readonly Question[];
+  heading?: string;
+}) {
   return (
     <section aria-labelledby="faq" className="wrap split block">
       <h2 id="faq" className="block-title">
-        Questions
+        {heading}
       </h2>
       <div className="faq">
-        {faqs.map((faq) => (
+        {items.map((faq) => (
           <details key={faq.question} className="faq-item">
             <summary>
               <span>{faq.question}</span>

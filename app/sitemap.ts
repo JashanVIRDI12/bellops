@@ -8,6 +8,7 @@ import {
 } from "@/lib/content";
 import { blogPage, postPath, publishedPosts } from "@/lib/blog";
 import { draftPages } from "@/lib/drafts";
+import { threeDPage } from "@/lib/three-d";
 import { homeUrl, siteUrl } from "@/lib/seo";
 import { caseStudyPath, projects } from "@/lib/work";
 
@@ -21,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const paths = [
     servicesPage.path,
     ...services.items.map((service) => service.href),
+    threeDPage.path,
     workPage.path,
     ...projects.map(caseStudyPath),
     aboutPage.path,
