@@ -55,7 +55,7 @@ export const threeDPage = {
   lead: "Immersive 3D websites that load fast, rank on Google and turn visitors into enquiries.",
   hour: { shot: shot("three-d"), mood: "night" } as Hour,
   intro:
-    "Bellops is an independent, remote web design studio. We design and build premium websites with real-time 3D, smooth motion and a finish people remember. We also make sure they work properly: quick on a mid-range phone, readable by search engines and built around what your customers actually need to do.",
+    "Bellops is an independent web design studio, Delhi-based and working remotely across India. We design and build premium websites with real-time 3D, smooth motion and a finish people remember. We also make sure they work properly: quick on a mid-range phone, readable by search engines and built around what your customers actually need to do.",
   why: {
     heading: "Why brands come to a 3D website design agency",
     body: [
@@ -248,8 +248,7 @@ export const threeDPage = {
     },
     {
       question: "Do you work with clients outside Delhi?",
-      answer:
-        "Yes. We're a remote studio and work with brands across India and abroad.",
+      answer: "Yes. We're Delhi-based, working remotely across India.",
     },
   ],
 };

@@ -9,7 +9,7 @@ export const site = {
   name: "Bellops",
   // The search-result snippet and share-card text. Keep it under ~160 characters.
   description:
-    "Bellops is a Delhi studio building premium, fast 3D websites with Three.js and WebGL, plus landing pages, ads and SEO for brands across India.",
+    "Delhi-based, working remotely across India, Bellops builds premium, fast 3D websites with Three.js and WebGL, plus landing pages, ads and SEO.",
   // WhatsApp is the only direct contact for now (no call or email buttons).
   // With the country code; spaces are fine.
   whatsapp: "+91 85868 75703",
@@ -64,7 +64,7 @@ export const intro = {
   // large over the view out of the window. One entry per line (wide screens
   // keep these breaks; phones may wrap them).
   headingLines: ["3D website design", "agency in India,", "built to perform"],
-  body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small, remote studio.",
+  body: "We design and code premium, interactive websites in-house, from immersive Three.js and WebGL scenes to fast landing pages. Then we grow them with Google and Meta ads, social media and SEO. One small studio, Delhi-based, working remotely across India.",
   cta: "Get a quote for your website",
   whatsapp: "Chat on WhatsApp",
   hint: "See our work",
@@ -341,9 +341,9 @@ export const servicesPage = {
   path: "/services",
   title: "Web Design & Digital Marketing Services in India | Bellops",
   description:
-    "Bellops' services: premium 3D websites, landing pages, Google and Meta ads, social media management, SEO, website care and branding, from one studio in Delhi.",
+    "Premium 3D websites, landing pages, Google and Meta ads, social media, SEO, website care and branding from Bellops: Delhi-based, working remotely across India.",
   heading: "Everything your brand needs online, from one studio",
-  lead: "Strategy, design, development, ads and social media, from one small, remote team, for brands across India.",
+  lead: "Strategy, design, development, ads and social media, from one small team: Delhi-based, working remotely across India.",
   hour: { shot: shot("studio"), mood: "dusk" } as Hour,
 };
 
@@ -377,8 +377,7 @@ export const projectProcess = {
 export const faqs = [
   {
     question: "Where are you based?",
-    answer:
-      "We're a remote studio and work with brands across India and abroad.",
+    answer: "We're Delhi-based, working remotely across India.",
   },
   {
     question: "How do we get started?",
@@ -420,16 +419,16 @@ export const workPage = {
  */
 export const aboutPage = {
   path: "/about",
-  title: "About Bellops: Web Design & Digital Marketing Studio in Delhi",
+  title: "About Bellops: Delhi-Based Web Design Studio",
   description:
-    "Bellops is an independent, remote web design and digital marketing studio: strategy, design, development, ads and social media from one small team.",
+    "Bellops is an independent web design and digital marketing studio, Delhi-based, working remotely across India: design, code, ads and social, one small team.",
   // The BellOps sign on the studio wall.
   hour: { shot: shot("about"), mood: "dusk" } as Hour,
 };
 
 export const contactPage = {
   path: "/contact",
-  title: "Contact Bellops: Remote Web Design & Marketing Studio",
+  title: "Contact Bellops: Delhi-Based Web Design & Marketing Studio",
   description:
     "Tell Bellops about your website, ad campaign or social media goals. Send an enquiry or chat on WhatsApp; we usually reply within a working day.",
   hour: { shot: shot("faq"), mood: "night" } as Hour,

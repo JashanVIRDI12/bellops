@@ -21,7 +21,7 @@ const names = (list: readonly string[]) =>
 
 export const aboutBellops = {
   heading: "About Bellops",
-  body: `Bellops is an independent, remote web design studio run by ${names(site.founders)}. We are a small team that plans, designs and codes every site ourselves, from premium brochure sites to interactive 3D experiences built with Three.js and WebGL. Recent work includes ${names(projects.map((project) => project.client))}.`,
+  body: `Bellops is an independent web design studio run by ${names(site.founders)}: Delhi-based, working remotely across India. We are a small team that plans, designs and codes every site ourselves, from premium brochure sites to interactive 3D experiences built with Three.js and WebGL. Recent work includes ${names(projects.map((project) => project.client))}.`,
 };
 
 export const workIntro =
@@ -54,8 +54,7 @@ export const homeFaqs = [
   },
   {
     question: "Do you work with clients outside Delhi?",
-    answer:
-      "Yes. We're a remote studio and work with brands across India and abroad.",
+    answer: "Yes. We're Delhi-based, working remotely across India.",
   },
   {
     question: "Do you maintain the website after launch?",

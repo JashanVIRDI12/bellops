@@ -429,7 +429,9 @@ function MobileMenu({
             WhatsApp
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
-          <p className="nav-sheet-place">Remote studio</p>
+          <p className="nav-sheet-place">
+            Delhi-based, working remotely across India
+          </p>
         </div>
       </div>
     </>

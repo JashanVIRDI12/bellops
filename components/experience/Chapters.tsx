@@ -341,7 +341,7 @@ export function Chapters() {
         >
           <Scrim />
           <div data-reveal-block className="scene-copy w-full max-w-md">
-            <Eyebrow>Remote studio</Eyebrow>
+            <Eyebrow>Delhi-based, working remotely across India</Eyebrow>
             <h2
               id="about-title"
               data-reveal

@@ -25,8 +25,8 @@ export function SiteFooter() {
         <div className="foot-studio">
           <p className="foot-name">{site.name}</p>
           <p>
-            A remote web design and digital marketing studio, for brands across
-            India and abroad.
+            A web design and digital marketing studio. Delhi-based, working
+            remotely across India.
           </p>
         </div>
         <nav aria-label="Services" className="foot-col">
