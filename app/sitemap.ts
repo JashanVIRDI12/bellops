@@ -6,6 +6,7 @@ import {
   servicesPage,
   workPage,
 } from "@/lib/content";
+import { blogPage, postPath, publishedPosts } from "@/lib/blog";
 import { draftPages } from "@/lib/drafts";
 import { homeUrl, siteUrl } from "@/lib/seo";
 import { caseStudyPath, projects } from "@/lib/work";
@@ -27,8 +28,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Scaffolds join once their copy is in (lib/drafts.ts).
     ...draftPages.filter((page) => page.ready).map((page) => page.path),
   ];
+  // The blog joins with its first published post; each post dates itself.
+  const blog = publishedPosts.length
+    ? [
+        { url: `${siteUrl}${blogPage.path}`, lastModified },
+        ...publishedPosts.map((post) => ({
+          url: `${siteUrl}${postPath(post)}`,
+          lastModified: new Date(post.updated ?? post.published),
+        })),
+      ]
+    : [];
   return [
     { url: homeUrl, lastModified },
     ...paths.map((path) => ({ url: `${siteUrl}${path}`, lastModified })),
+    ...blog,
   ];
 }

@@ -1,0 +1,31 @@
+{/* A template, never published: it's marked draft: true in lib/blog.ts. */}
+
+This file is the starting point for a weekly post. It only shows on local
+and preview builds, so you can see how a post looks before it goes live.
+
+## Add a post
+
+1. Copy this file to `content/blog/<slug>.mdx`. The slug is the address:
+   `content/blog/3d-website-cost-india.mdx` becomes `/blog/3d-website-cost-india`.
+2. Add its entry at the top of `posts` in `lib/blog.ts`: the title, the
+   description, the publish date, and the service page it supports (`hub`).
+   Leave `draft: true` until it's approved.
+3. Remove `draft: true` and deploy. The post joins `/blog`, the sitemap and
+   its structured data (BlogPosting, by Jashan Singh).
+
+## What the text can use
+
+Headings start at `##` (the title is the page's only H1), then `###`.
+Paragraphs, **bold**, _italics_, lists and [links to a page](/services) or
+[to another site](https://www.example.com) all work, and so do tables:
+
+| Write        | Shows             |
+| ------------ | ----------------- |
+| `## Heading` | A section heading |
+| `- item`     | A list            |
+
+## Before you publish
+
+Only real numbers, prices, results and quotes, each one approved. The end
+of every post links to its service page and to the contact form, so the
+text doesn't need to.

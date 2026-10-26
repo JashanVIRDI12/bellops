@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -40,4 +41,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Blog posts are MDX (content/blog). Plugins are named as strings so
+// Turbopack can load them; GFM adds tables, strikethrough and autolinks.
+const withMDX = createMDX({
+  options: { remarkPlugins: ["remark-gfm"] },
+});
+
+export default withMDX(nextConfig);

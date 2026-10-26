@@ -8,6 +8,7 @@ import {
   site,
   workPage,
 } from "@/lib/content";
+import { blogPage, publishedPosts } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 
 /** The inner pages' footer: every service, the work, and how to reach us. */
@@ -51,6 +52,11 @@ export function SiteFooter() {
             <li>
               <Link href={workPage.path}>Work</Link>
             </li>
+            {publishedPosts.length > 0 && (
+              <li>
+                <Link href={blogPage.path}>Blog</Link>
+              </li>
+            )}
             <li>
               <Link href={contactPage.path}>Contact</Link>
             </li>

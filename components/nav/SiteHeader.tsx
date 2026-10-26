@@ -25,7 +25,11 @@ import {
   site,
   workPage,
 } from "@/lib/content";
+import { blogPage, publishedPosts } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
+
+/** The blog joins the menus with its first published post. */
+const hasBlog = publishedPosts.length > 0;
 
 const LAST_BEAT = chapters.reduce((sum, chapter) => sum + chapter.beats, 0) - 1;
 /* Tweakable (ms): hover intent for the services panel. */
@@ -125,6 +129,17 @@ export function SiteHeader({ variant }: { variant: Variant }) {
           >
             Work
           </Link>
+          {hasBlog && (
+            <Link
+              href={blogPage.path}
+              className="nav-link"
+              aria-current={
+                pathname.startsWith(blogPage.path) ? "page" : undefined
+              }
+            >
+              Blog
+            </Link>
+          )}
           <Link href="/#contact" className="nav-link" onClick={goToContact}>
             Contact
           </Link>
@@ -365,7 +380,14 @@ function MobileMenu({
                 Services
               </Link>
             </li>
-            <li style={{ "--i": 2 } as CSSProperties}>
+            {hasBlog && (
+              <li style={{ "--i": 2 } as CSSProperties}>
+                <Link href={blogPage.path} onClick={close}>
+                  Blog
+                </Link>
+              </li>
+            )}
+            <li style={{ "--i": hasBlog ? 3 : 2 } as CSSProperties}>
               <Link href="/#contact" onClick={onContact}>
                 Contact
               </Link>
@@ -373,7 +395,10 @@ function MobileMenu({
           </ul>
           <ul className="nav-sheet-services">
             {services.items.map((item, index) => (
-              <li key={item.href} style={{ "--i": index + 3 } as CSSProperties}>
+              <li
+                key={item.href}
+                style={{ "--i": index + (hasBlog ? 4 : 3) } as CSSProperties}
+              >
                 <Link
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : undefined}

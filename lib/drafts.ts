@@ -1,6 +1,12 @@
 import type { Crumb } from "./schema";
 
 /**
+ * Vercel's production deployment (www.bellops.in), not a preview or a local
+ * build. Drafts (here and in lib/blog.ts) only show where this is false.
+ */
+export const liveSite = process.env.VERCEL_ENV === "production";
+
+/**
  * Pages scaffolded ahead of their copy, which comes from the Content Writer
  * once Jashan approves it. Until then each one:
  * - shows a placeholder (components/site/DraftPage.tsx),

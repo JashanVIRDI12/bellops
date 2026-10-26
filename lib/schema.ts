@@ -25,6 +25,41 @@ export function webPage(
   };
 }
 
+/** The author of a post: a person who works for the studio. */
+const person = (name: string) => ({
+  "@type": "Person",
+  name,
+  worksFor: { "@id": organizationId },
+});
+
+/** A blog post (BlogPosting, a kind of Article), published by the studio. */
+export function blogPosting(post: {
+  path: string;
+  title: string;
+  description: string;
+  published: string;
+  updated?: string;
+  author: string;
+  hubUrl: string;
+}) {
+  const url = `${siteUrl}${post.path}`;
+  return {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    headline: post.title,
+    description: post.description,
+    url,
+    mainEntityOfPage: url,
+    datePublished: post.published,
+    dateModified: post.updated ?? post.published,
+    inLanguage: "en",
+    author: person(post.author),
+    publisher: { "@id": organizationId },
+    isPartOf: { "@id": `${siteUrl}/blog#blog` },
+    about: { "@id": `${post.hubUrl}#service` },
+  };
+}
+
 /** One step of a breadcrumb trail. The current page, last, has no href. */
 export type Crumb = { label: string; href?: string };
 
