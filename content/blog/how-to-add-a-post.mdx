@@ -1,31 +1,75 @@
-{/* A template, never published: it's marked draft: true in lib/blog.ts. */}
+---
+title: How to add a blog post
+description: "The template for a post: where the file goes, what its frontmatter needs, and what the text can use."
+slug: how-to-add-a-post
+date: 2026-10-26
+author: Jashan Singh
+tags:
+  - Template
+draft: true
+template: true
+---
 
-This file is the starting point for a weekly post. It only shows on local
-and preview builds, so you can see how a post looks before it goes live.
+{/* A template, never published or listed (template: true). */}
+
+This file is the starting point for a post. It's never listed on the blog,
+and like every draft it only opens in development and on preview builds.
 
 ## Add a post
 
 1. Copy this file to `content/blog/<slug>.mdx`. The slug is the address:
    `content/blog/3d-website-cost-india.mdx` becomes `/blog/3d-website-cost-india`.
-2. Add its entry at the top of `posts` in `lib/blog.ts`: the title, the
-   description, the publish date, and the service page it supports (`hub`).
-   Leave `draft: true` until it's approved.
-3. Remove `draft: true` and deploy. The post joins `/blog`, the sitemap and
-   its structured data (BlogPosting, by Jashan Singh).
+2. Fill in the frontmatter at the top: `title` (under ~60 characters),
+   `description` (under ~160), `slug` (the file name without `.mdx`),
+   `date` (YYYY-MM-DD), `author`, `tags`, and `ogImage` (the share picture,
+   a file in `public/`, 1200×630). Delete the `template: true` line.
+3. Keep `draft: true` until the post is approved, then set `draft: false`
+   and deploy. The post then joins `/blog`, the sitemap and the RSS feed.
+
+`updated: YYYY-MM-DD` can be added when a post changes in substance. The
+`author` "Bellops" credits the studio; a name credits that person.
+
+## Seeing a draft
+
+Drafts open in development and on Vercel preview deployments. On the live
+site they answer 404, except with the preview secret: open
+`/blog/<slug>?preview=<DRAFT_PREVIEW_SECRET>` once (a cookie remembers it
+for a week). Drafts are never indexed.
 
 ## What the text can use
 
-Headings start at `##` (the title is the page's only H1), then `###`.
-Paragraphs, **bold**, _italics_, lists and [links to a page](/services) or
-[to another site](https://www.example.com) all work, and so do tables:
+Headings: the title is the page's only H1, so start at `##` (or `###`:
+the top level becomes the page's H2 either way). H2s and H3s make the
+contents list. Paragraphs, **bold**, _italics_, lists and
+[links to a page](/services) or [to another site](https://www.example.com)
+all work, and so do tables:
 
 | Write        | Shows             |
 | ------------ | ----------------- |
 | `## Heading` | A section heading |
 | `- item`     | A list            |
 
+Pictures go in `public/blog/<post>/` and in the text as
+`![What it shows](/blog/<post>/picture.png)`; the first one loads first.
+
+These components work too:
+
+- `<Callout title="Note">…</Callout>`: a boxed aside.
+- `<DraftNote>…</DraftNote>`: a note for reviewers, shown only while the
+  post is a draft.
+- `<CsvDownloadLink href="/blog/<post>/data.csv">data.csv</CsvDownloadLink>`:
+  a download link that reports `blog_csv_download` to Google Analytics.
+- `<SortableRankingTable>` around a Markdown table (blank lines inside):
+  the same table, sortable by its column headings.
+
+## FAQ
+
+**How does a post get its FAQ rich result?**
+Under a heading that starts with "FAQ", write each question in bold, ending
+in "?", with the answer on the next line of the same paragraph. The page
+sends them as FAQPage structured data, word for word.
+
 ## Before you publish
 
-Only real numbers, prices, results and quotes, each one approved. The end
-of every post links to its service page and to the contact form, so the
-text doesn't need to.
+Only real numbers, prices, results and quotes, each one approved. Replace
+any example pictures, then set `draft: false`.

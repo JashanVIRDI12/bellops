@@ -20,6 +20,7 @@ import {
 import { stillSrc } from "@/components/experience/still-image";
 import { useBeat } from "@/components/experience/store";
 import {
+  blogPage,
   chapters,
   services,
   servicesPage,
@@ -27,7 +28,6 @@ import {
   site,
   workPage,
 } from "@/lib/content";
-import { blogPage } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 import { threeDPage } from "@/lib/three-d";
 

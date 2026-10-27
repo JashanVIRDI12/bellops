@@ -1,0 +1,320 @@
+{
+  "posts": [
+    {
+      "slug": "3d-website-cost-india",
+      "title": "3D Website Cost in India: Real Prices and What Actually Drives Them",
+      "description": "What does a 3D website cost in India? Real Bellops prices, from ₹30,000 to add 3D to a site to ₹1.5 lakh for a full build, and what moves the number.",
+      "date": "2026-10-27",
+      "author": "Bellops",
+      "tags": [
+        "3D Websites",
+        "Pricing",
+        "Three.js",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/d2c-speed-study/01-hero-og.png",
+      "ogImageVersion": "b2830ed7",
+      "readingMinutes": 9,
+      "toc": [
+        {
+          "id": "why-this-guide-uses-our-own-prices",
+          "text": "Why this guide uses our own prices",
+          "depth": 2
+        },
+        {
+          "id": "3d-website-price-in-india-cost-by-type-of-site",
+          "text": "3D website price in India: cost by type of site",
+          "depth": 2
+        },
+        {
+          "id": "what-affects-the-price-of-a-3d-website",
+          "text": "What affects the price of a 3D website",
+          "depth": 2
+        },
+        {
+          "id": "1-scope-how-many-pages-and-how-many-of-them-are-3d",
+          "text": "1. Scope: how many pages, and how many of them are 3D",
+          "depth": 3
+        },
+        {
+          "id": "2-the-number-and-complexity-of-3d-models",
+          "text": "2. The number and complexity of 3D models",
+          "depth": 3
+        },
+        {
+          "id": "3-interactions-and-animation",
+          "text": "3. Interactions and animation",
+          "depth": 3
+        },
+        {
+          "id": "4-a-3d-product-configurator",
+          "text": "4. A 3D product configurator",
+          "depth": 3
+        },
+        {
+          "id": "5-mobile-performance-work",
+          "text": "5. Mobile performance work",
+          "depth": 3
+        },
+        {
+          "id": "6-cms-integrations-and-languages",
+          "text": "6. CMS, integrations and languages",
+          "depth": 3
+        },
+        {
+          "id": "7-content-and-copywriting",
+          "text": "7. Content and copywriting",
+          "depth": 3
+        },
+        {
+          "id": "8-ongoing-care",
+          "text": "8. Ongoing care",
+          "depth": 3
+        },
+        {
+          "id": "how-to-save-on-a-3d-website-without-making-it-worse",
+          "text": "How to save on a 3D website without making it worse",
+          "depth": 2
+        },
+        {
+          "id": "bellops-vs-diy-or-a-template-an-honest-comparison",
+          "text": "Bellops vs DIY or a template: an honest comparison",
+          "depth": 2
+        },
+        {
+          "id": "how-we-quote-a-3d-project",
+          "text": "How we quote a 3D project",
+          "depth": 2
+        },
+        {
+          "id": "faq-3d-website-cost-in-india",
+          "text": "FAQ: 3D website cost in India",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "How much does a 3D website cost in India?",
+          "answer": "At Bellops, a one-page 3D landing page starts from ₹50,000 and a full 3D website costs ₹1 lakh to ₹1.5 lakh. The final price depends on the number of 3D scenes, the models and how interactive the site is. You get a fixed, itemised quote after discovery."
+        },
+        {
+          "question": "What is the cheapest way to get 3D on my website?",
+          "answer": "Add 3D to your existing site, such as a 3D hero or product viewer, from ₹30,000. Or build one 3D page with standard pages for the rest, from ₹75,000."
+        },
+        {
+          "question": "How much does a 3D product configurator cost?",
+          "answer": "A 3D product configurator starts from ₹1 lakh. The number of options, the custom models needed and any integrations such as pricing or a CRM decide where your project lands."
+        },
+        {
+          "question": "Do I need to provide 3D models, and what do custom models cost?",
+          "answer": "No. Licensed models from trusted marketplaces are included. We can also work from your CAD files. Custom models made just for you start from ₹5,000 per model."
+        },
+        {
+          "question": "Why does a Three.js website cost more than a normal website?",
+          "answer": "Each 3D scene needs models, lighting, animation, a lighter version for slower phones and extra device testing. Our premium websites start from ₹50,000, and 3D adds work on top of that, depending on how much 3D there is."
+        },
+        {
+          "question": "Will a 3D website be slow on mobile?",
+          "answer": "It doesn't have to be. We compress models and textures, load scenes only when needed and ship a lighter version of every 3D scene for slower phones, while keeping Core Web Vitals in check."
+        },
+        {
+          "question": "How long does a 3D website take?",
+          "answer": "A 3D landing page takes about 2 weeks and a full 3D website about a month. A configurator takes about a month, or longer with custom models."
+        },
+        {
+          "question": "Are there ongoing costs after launch?",
+          "answer": "Yes, if you want hosting, security updates, backups and small edits handled for you. Our website care plans start from ₹3,000/month."
+        }
+      ]
+    },
+    {
+      "slug": "indian-d2c-website-speed-study",
+      "title": "How Fast Do India's Top D2C Brand Websites Load on a ₹10,000 Phone?",
+      "description": "Bellops lab-tested 49 ranked Indian D2C homepages (50 brands attempted) on a budget-phone Slow 4G profile. Median LCP 12.7s; 0% hit Google's 2.5s lab target. Rankings, methodology, and fixes.",
+      "date": "2026-10-27",
+      "author": "Bellops",
+      "tags": [
+        "Technical SEO",
+        "Core Web Vitals",
+        "D2C",
+        "Performance",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/d2c-speed-study/01-hero-og.png",
+      "ogImageVersion": "b2830ed7",
+      "readingMinutes": 10,
+      "toc": [
+        {
+          "id": "why-speed-on-budget-phones-matters-in-india",
+          "text": "Why speed on budget phones matters in India",
+          "depth": 2
+        },
+        {
+          "id": "what-we-tested-methodology-summary",
+          "text": "What we tested (methodology summary)",
+          "depth": 2
+        },
+        {
+          "id": "headline-numbers",
+          "text": "Headline numbers",
+          "depth": 2
+        },
+        {
+          "id": "overall-ranking-homepage-lab-medians",
+          "text": "Overall ranking (homepage lab medians)",
+          "depth": 2
+        },
+        {
+          "id": "results-by-category",
+          "text": "Results by category",
+          "depth": 2
+        },
+        {
+          "id": "fastest-10-homepage-lab",
+          "text": "Fastest 10 (homepage lab)",
+          "depth": 2
+        },
+        {
+          "id": "slowest-10-homepage-lab--largest-opportunity",
+          "text": "Slowest 10 (homepage lab) — largest opportunity",
+          "depth": 2
+        },
+        {
+          "id": "homepage-vs-product-page",
+          "text": "Homepage vs product page",
+          "depth": 2
+        },
+        {
+          "id": "patterns-visible-in-the-medians-not-a-full-opportunity-audit",
+          "text": "Patterns visible in the medians (not a full opportunity audit)",
+          "depth": 2
+        },
+        {
+          "id": "what-the-faster-sites-tend-to-do-differently",
+          "text": "What the faster sites tend to do differently",
+          "depth": 2
+        },
+        {
+          "id": "actionable-fixes-prioritised",
+          "text": "Actionable fixes (prioritised)",
+          "depth": 2
+        },
+        {
+          "id": "how-to-read-this-study-fairly",
+          "text": "How to read this study fairly",
+          "depth": 2
+        },
+        {
+          "id": "soft-cta--bellops",
+          "text": "Soft CTA — Bellops",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "What did this Bellops study measure?",
+          "answer": "Lab mobile performance (LCP, TBT, CLS, Performance score, transfer size, request count) for 50 Indian D2C homepages. 49 brands ranked by median LCP; Yoga Bar excluded for NO_LCP. CrUX field metrics were not available this pass and will be added later."
+        },
+        {
+          "question": "Does a ₹10,000 phone really change the results?",
+          "answer": "Low-end CPU and Slow 4G network profiles expose main-thread and weight issues that flagship devices hide. This pass used Lighthouse mobile simulation (not a named physical handset). Absolute times are further affected by the Toronto lab vantage."
+        },
+        {
+          "question": "Is lab data the same as what Google uses for ranking?",
+          "answer": "No. Google uses real-user (field) experience among many factors. Lab data is for diagnosis; CrUX is closer to field reality when available. We do not yet have CrUX for this cohort."
+        },
+        {
+          "question": "Why are some famous brands missing or footnoted?",
+          "answer": "Dead domains, non-D2C primary models, or unresolved storefronts were replaced during list building. Lenskart is included but measured on /en-us. Yoga Bar is listed but unranked (NO_LCP). Bewakoof and Wakefit returned curl 403 from datacenter IPs but succeeded under Chrome/Lighthouse and are ranked."
+        },
+        {
+          "question": "Will you name the slowest brands to shame them?",
+          "answer": "No. We publish numbers constructively and welcome right-of-reply / addenda after meaningful fixes."
+        },
+        {
+          "question": "How can a D2C team improve LCP quickly?",
+          "answer": "Optimise the true LCP element (usually the hero image), reduce competing above-the-fold requests, and defer non-critical scripts."
+        },
+        {
+          "question": "Do 3D or premium visuals always hurt speed?",
+          "answer": "Not if they are progressively enhanced, lazy-loaded, and kept off the critical path. Fast base experience first."
+        },
+        {
+          "question": "How do we get our site retested?",
+          "answer": "Contact Bellops via /contact after meaningful performance changes for a possible addendum."
+        }
+      ],
+      "dataset": {
+        "name": "Bellops Indian D2C mobile speed study: homepage lab medians",
+        "description": "Median of 3 Lighthouse 12.8.2 lab runs (mobile emulation, simulated Slow 4G) on the homepages of 50 Indian D2C brands, tested 27 Oct 2026 from a Toronto server, so absolute times are pessimistic for users in India. Per brand: LCP, TBT, CLS, Performance score, transfer size, request count, FCP, TTFB and Speed Index. 49 brands are ranked by median LCP; Yoga Bar is listed but unranked (NO_LCP). Lab data, not CrUX field data.",
+        "file": "/blog/d2c-speed-study/bellops-d2c-mobile-speed-50.csv",
+        "measurementTechnique": "Lighthouse 12.8.2 lab test, mobile emulation, simulated Slow 4G; median of 3 runs; run from Toronto",
+        "variableMeasured": [
+          "Largest Contentful Paint (LCP, ms)",
+          "Total Blocking Time (TBT, ms)",
+          "Cumulative Layout Shift (CLS)",
+          "Lighthouse Performance score",
+          "Transfer size (KB)",
+          "Request count",
+          "First Contentful Paint (FCP, ms)",
+          "Time to First Byte (TTFB, ms)",
+          "Speed Index (ms)"
+        ],
+        "temporalCoverage": "2026-10-27"
+      }
+    },
+    {
+      "slug": "how-to-add-a-post",
+      "title": "How to add a blog post",
+      "description": "The template for a post: where the file goes, what its frontmatter needs, and what the text can use.",
+      "date": "2026-10-26",
+      "author": "Jashan Singh",
+      "tags": [
+        "Template"
+      ],
+      "draft": true,
+      "template": true,
+      "readingMinutes": 2,
+      "toc": [
+        {
+          "id": "add-a-post",
+          "text": "Add a post",
+          "depth": 2
+        },
+        {
+          "id": "seeing-a-draft",
+          "text": "Seeing a draft",
+          "depth": 2
+        },
+        {
+          "id": "what-the-text-can-use",
+          "text": "What the text can use",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        },
+        {
+          "id": "before-you-publish",
+          "text": "Before you publish",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "How does a post get its FAQ rich result?",
+          "answer": "Under a heading that starts with \"FAQ\", write each question in bold, ending in \"?\", with the answer on the next line of the same paragraph. The page sends them as FAQPage structured data, word for word."
+        }
+      ]
+    }
+  ]
+}

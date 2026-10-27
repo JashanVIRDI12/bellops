@@ -3,13 +3,13 @@ import Link from "next/link";
 import {
   INSTAGRAM_URL,
   aboutPage,
+  blogPage,
   contactPage,
   services,
   servicesPage,
   site,
   workPage,
 } from "@/lib/content";
-import { blogPage } from "@/lib/blog";
 import { whatsappHref } from "@/lib/contact-links";
 import { threeDPage } from "@/lib/three-d";
 

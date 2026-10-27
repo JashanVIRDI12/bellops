@@ -5,3 +5,6 @@ public/fonts
 public/hdri
 .claude
 artifacts
+
+# Written by scripts/blog-index.mjs
+lib/blog-index.json

@@ -459,6 +459,16 @@ export const aboutPage = {
   hour: { shot: shot("about"), mood: "dusk" } as Hour,
 };
 
+/** The blog's index page (posts: lib/blog.ts). */
+export const blogPage = {
+  path: "/blog",
+  rss: "/blog/rss.xml",
+  title: "Blog | Bellops",
+  description:
+    "Articles from Bellops on 3D websites, website speed and SEO for Indian brands.",
+  heading: "Blog",
+};
+
 export const contactPage = {
   path: "/contact",
   title: "Contact Bellops: Delhi-Based Web Design & Marketing Studio",

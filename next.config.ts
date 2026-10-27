@@ -1,4 +1,8 @@
+import { execFileSync } from "node:child_process";
+import { watch } from "node:fs";
+import path from "node:path";
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 import createMDX from "@next/mdx";
 import { MACBOOK_URL, OFFICE_URL } from "./components/experience/scene/models";
 import { projects } from "./lib/work";
@@ -147,10 +151,55 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Blog posts are MDX (content/blog). Plugins are named as strings so
-// Turbopack can load them; GFM adds tables, strikethrough and autolinks.
+/*
+ * Blog posts are MDX (content/blog). Plugins are named as strings (or
+ * absolute paths) so Turbopack can load them: frontmatter (the post's
+ * details, not shown), GFM (tables, strikethrough, autolinks), and the
+ * site's own plugin (heading ids, images, sortable tables).
+ */
 const withMDX = createMDX({
-  options: { remarkPlugins: ["remark-gfm"] },
+  options: {
+    remarkPlugins: [
+      "remark-frontmatter",
+      "remark-gfm",
+      path.resolve("lib/mdx/remark-post.mjs"),
+    ],
+  },
 });
 
-export default withMDX(nextConfig);
+/*
+ * The post index, lib/blog-index.json (scripts/blog-index.mjs): written
+ * whenever Next starts, and in dev again whenever a post changes, so the
+ * blog, the sitemap, RSS and proxy.ts always have every post's frontmatter
+ * without reading files at request time. A post with broken frontmatter
+ * stops the build.
+ */
+function writeBlogIndex() {
+  execFileSync(process.execPath, [path.resolve("scripts/blog-index.mjs")], {
+    stdio: "inherit",
+  });
+}
+
+function watchPosts() {
+  const key = Symbol.for("bellops.blogIndexWatcher");
+  const store = globalThis as typeof globalThis & { [key]?: true };
+  if (store[key]) return;
+  store[key] = true;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  watch(path.resolve("content/blog"), () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        writeBlogIndex();
+      } catch {
+        // The script printed what's wrong; the last good index stays.
+      }
+    }, 150);
+  });
+}
+
+export default function config(phase: string): NextConfig {
+  writeBlogIndex();
+  if (phase === PHASE_DEVELOPMENT_SERVER) watchPosts();
+  return withMDX(nextConfig);
+}

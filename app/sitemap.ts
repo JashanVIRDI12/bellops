@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import {
   aboutPage,
+  blogPage,
   contactPage,
   services,
   servicesPage,
   workPage,
 } from "@/lib/content";
-import { blogPage, postPath, publishedPosts } from "@/lib/blog";
+import { getPublishedPosts, postDate, postPath } from "@/lib/blog";
 import { draftPages } from "@/lib/drafts";
 import { threeDPage } from "@/lib/three-d";
 import { homeUrl, siteUrl } from "@/lib/seo";
@@ -46,9 +47,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteUrl}${blogPage.path}`,
       lastModified: changed(blogPage.path, built),
     },
-    ...publishedPosts.map((post) => ({
+    ...getPublishedPosts().map((post) => ({
       url: `${siteUrl}${postPath(post)}`,
-      lastModified: new Date(post.updated ?? post.published),
+      lastModified: postDate(post.updated ?? post.date),
     })),
   ];
   return [

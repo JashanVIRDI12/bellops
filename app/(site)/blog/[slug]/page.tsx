@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { PostToc } from "@/components/blog/PostToc";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs } from "@/components/site/RevealTitle";
 import { ServiceRows } from "@/components/site/ServiceRows";
 import {
-  blogPage,
-  defaultAuthor,
-  postBySlug,
+  allSlugs,
+  byStudio,
+  formatPostDate,
+  getPostBySlug,
+  postImage,
   postPath,
-  posts,
 } from "@/lib/blog";
-import { blogPosting, breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
-import { shareMetadata, siteUrl } from "@/lib/seo";
+import { blogPage } from "@/lib/content";
+import {
+  blogPosting,
+  breadcrumbList,
+  dataset,
+  faqPage,
+  jsonLd,
+  type Crumb,
+} from "@/lib/schema";
+import { shareMetadata, siteUrl, socialImage } from "@/lib/seo";
 import { serviceByHref } from "@/lib/services";
 
 /*
@@ -22,50 +33,58 @@ import { serviceByHref } from "@/lib/services";
  */
 export const instant = false;
 
-// Every post, drafts included: proxy.ts keeps drafts and unknown slugs off
-// the live site with a real 404.
+// Every post, drafts and the template included: proxy.ts answers 404 for
+// drafts on the live site (unless the preview secret is sent) and for
+// unknown slugs.
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return allSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/blog/[slug]">): Promise<Metadata> {
-  const post = postBySlug((await params).slug);
+  const post = getPostBySlug((await params).slug);
   if (!post) return {};
   const title = `${post.title} | Bellops`;
   const path = postPath(post);
   const share = shareMetadata({ title, description: post.description, path });
+  const image = postImage(post);
+  const images = image ? [{ url: image, alt: post.title }] : [socialImage];
   return {
     title: { absolute: title },
     description: post.description,
-    alternates: { canonical: path },
-    ...(post.draft ? { robots: { index: false, follow: true } } : {}),
-    ...share,
+    alternates: {
+      canonical: path,
+      types: { "application/rss+xml": blogPage.rss },
+    },
+    // Drafts are never indexed, wherever they can be opened.
+    ...(post.draft ? { robots: { index: false, follow: false } } : {}),
+    authors: [{ name: post.author }],
+    keywords: post.tags,
     openGraph: {
       ...share.openGraph,
       type: "article",
-      publishedTime: post.published,
-      modifiedTime: post.updated ?? post.published,
-      authors: [post.author ?? defaultAuthor],
+      publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
+      authors: [post.author],
+      tags: post.tags,
+      images,
     },
+    twitter: { ...share.twitter, images },
   };
 }
 
-const dateFormat = new Intl.DateTimeFormat("en-IN", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-});
+/** A published post's <DraftNote>: nothing (drafts show it). */
+function Hidden({}: { children: ReactNode }) {
+  return null;
+}
 
-/** One post: the text, who wrote it and when, its service page, the way in. */
+/** One post: who wrote it and when, its contents, the text, the way in. */
 export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
-  const post = postBySlug((await params).slug);
+  const post = getPostBySlug((await params).slug);
   if (!post) notFound();
   const { default: Text } = await import(`@/content/blog/${post.slug}.mdx`);
-  const hub = serviceByHref(post.hub);
-  const author = post.author ?? defaultAuthor;
+  const hub = post.hub ? serviceByHref(post.hub) : undefined;
   const path = postPath(post);
   const trail: Crumb[] = [
     { label: "Home", href: "/" },
@@ -79,12 +98,29 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
         path,
         title: post.title,
         description: post.description,
-        published: post.published,
+        published: post.date,
         updated: post.updated,
-        author,
-        hubUrl: `${siteUrl}${hub.href}`,
+        author: post.author,
+        byStudio: byStudio(post),
+        image: `${siteUrl}${postImage(post) ?? socialImage.url}`,
+        tags: post.tags,
+        hubUrl: hub ? `${siteUrl}${hub.href}` : undefined,
       }),
       breadcrumbList(trail, path),
+      ...(post.faq.length ? [faqPage(post.faq)] : []),
+      ...(post.dataset
+        ? [
+            dataset({
+              path,
+              ...post.dataset,
+              fileUrl: `${siteUrl}${post.dataset.file}`,
+              encodingFormat: post.dataset.file.endsWith(".csv")
+                ? "text/csv"
+                : "application/octet-stream",
+              published: post.date,
+            }),
+          ]
+        : []),
     ],
   };
 
@@ -99,25 +135,46 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
           <Crumbs trail={trail} />
           <h1 className="post-title">{post.title}</h1>
           <p className="post-meta">
-            {author} ·{" "}
-            <time dateTime={post.published}>
-              {dateFormat.format(new Date(post.published))}
-            </time>
+            <span>{post.author}</span>
+            <span aria-hidden="true">·</span>
+            <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{post.readingMinutes} min read</span>
             {post.draft && <span className="post-draft">Draft</span>}
           </p>
+          {post.updated && (
+            <p className="post-updated">
+              Updated{" "}
+              <time dateTime={post.updated}>
+                {formatPostDate(post.updated)}
+              </time>
+            </p>
+          )}
+          {post.tags.length > 0 && (
+            <ul className="post-tags" aria-label="Tags">
+              {post.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          )}
         </header>
-        <div className="post-body">
-          <Text />
+        <div className="post-layout">
+          <PostToc toc={post.toc} />
+          <div className="post-body">
+            <Text components={post.draft ? undefined : { DraftNote: Hidden }} />
+          </div>
         </div>
       </article>
-      <section aria-labelledby="post-hub" className="wrap block">
-        <div className="block-head">
-          <h2 id="post-hub" className="block-title">
-            The service behind this post
-          </h2>
-        </div>
-        <ServiceRows items={[hub]} />
-      </section>
+      {hub && (
+        <section aria-labelledby="post-hub" className="wrap block">
+          <div className="block-head">
+            <h2 id="post-hub" className="block-title">
+              The service behind this post
+            </h2>
+          </div>
+          <ServiceRows items={[hub]} />
+        </section>
+      )}
       <ContactCta />
     </>
   );

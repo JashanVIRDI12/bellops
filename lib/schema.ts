@@ -1,14 +1,27 @@
 /*
  * Structured data (schema.org JSON-LD) templates for the inner pages:
- * Service (service pages), CreativeWork (case studies), BlogPosting (blog
- * posts), BreadcrumbList (every inner page) and page nodes. Every node that
+ * Service (service pages), CreativeWork (case studies), BlogPosting, FAQPage
+ * and Dataset (blog posts), BreadcrumbList (every inner page) and page nodes. Every node that
  * names who made, offers or published something points at the one
  * Organization on the home page (lib/seo.ts), by its @id.
  */
 
+import { site } from "./content";
 import { siteUrl } from "./seo";
 
 export const organizationId = `${siteUrl}/#organization`;
+
+/**
+ * The studio, by its @id with its name and address: the full Organization
+ * is on the home page only, and a blog post's author, publisher or a
+ * dataset's creator needs a name on the post's own page.
+ */
+const studio = {
+  "@type": "Organization",
+  "@id": organizationId,
+  name: site.name,
+  url: `${siteUrl}/`,
+};
 export const websiteId = `${siteUrl}/#website`;
 
 /** A page node (AboutPage, ContactPage, …) inside the site. */
@@ -79,10 +92,14 @@ export function creativeWork(work: {
 const person = (name: string) => ({
   "@type": "Person",
   name,
-  worksFor: { "@id": organizationId },
+  worksFor: studio,
 });
 
-/** A blog post (BlogPosting and Article), published by the studio. */
+/**
+ * A blog post (BlogPosting and Article), published by the studio. Its
+ * author is the studio itself (byStudio) or a person who works there.
+ * Dates are YYYY-MM-DD, India time.
+ */
 export function blogPosting(post: {
   path: string;
   title: string;
@@ -90,9 +107,15 @@ export function blogPosting(post: {
   published: string;
   updated?: string;
   author: string;
-  hubUrl: string;
+  byStudio: boolean;
+  /** Absolute URL of its share picture. */
+  image: string;
+  tags: readonly string[];
+  /** Absolute URL of the service page it supports, if any. */
+  hubUrl?: string;
 }) {
   const url = `${siteUrl}${post.path}`;
+  const indiaTime = (date: string) => `${date}T00:00:00+05:30`;
   return {
     // An Article for search engines; BlogPosting says which kind.
     "@type": ["BlogPosting", "Article"],
@@ -100,14 +123,60 @@ export function blogPosting(post: {
     headline: post.title,
     description: post.description,
     url,
-    mainEntityOfPage: url,
-    datePublished: post.published,
-    dateModified: post.updated ?? post.published,
-    inLanguage: "en",
-    author: person(post.author),
-    publisher: { "@id": organizationId },
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    image: [post.image],
+    datePublished: indiaTime(post.published),
+    dateModified: indiaTime(post.updated ?? post.published),
+    inLanguage: "en-IN",
+    keywords: post.tags.join(", "),
+    author: post.byStudio ? studio : person(post.author),
+    publisher: studio,
     isPartOf: { "@id": `${siteUrl}/blog#blog` },
-    about: { "@id": `${post.hubUrl}#service` },
+    ...(post.hubUrl ? { about: { "@id": `${post.hubUrl}#service` } } : {}),
+  };
+}
+
+/**
+ * Data a post publishes as a download (a CSV), made by the studio:
+ * schema.org Dataset, for Google's dataset search.
+ */
+export function dataset(data: {
+  path: string;
+  name: string;
+  description: string;
+  /** The file's absolute URL. */
+  fileUrl: string;
+  encodingFormat: string;
+  measurementTechnique: string;
+  variableMeasured: readonly string[];
+  temporalCoverage?: string;
+  published: string;
+}) {
+  const url = `${siteUrl}${data.path}`;
+  return {
+    "@type": "Dataset",
+    "@id": `${url}#dataset`,
+    name: data.name,
+    description: data.description,
+    url,
+    creator: studio,
+    publisher: studio,
+    datePublished: data.published,
+    ...(data.temporalCoverage
+      ? { temporalCoverage: data.temporalCoverage }
+      : {}),
+    measurementTechnique: data.measurementTechnique,
+    variableMeasured: data.variableMeasured,
+    isAccessibleForFree: true,
+    inLanguage: "en-IN",
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: data.encodingFormat,
+        contentUrl: data.fileUrl,
+      },
+    ],
+    subjectOf: { "@id": `${url}#article` },
   };
 }
 

@@ -1,69 +1,110 @@
+import index from "./blog-index.json";
+import { site } from "./content";
 import { liveSite } from "./drafts";
 
 /**
- * The blog: one entry here per post, newest first, with its text in
- * content/blog/<slug>.mdx. content/blog/how-to-add-a-post.mdx explains the
- * steps; copy it to start a post.
+ * The blog. Each post is one file, content/blog/<slug>.mdx: its frontmatter
+ * (title, description, slug, date, author, ogImage, tags, draft) and its
+ * text. content/blog/how-to-add-a-post.mdx explains the steps.
  *
- * Drafts (draft: true) show on local and preview builds only; on the live
- * site they answer 404 and stay out of the sitemap. /blog itself goes live
- * with the first published post, and the header and footer link to it then.
+ * scripts/blog-index.mjs reads the posts into lib/blog-index.json whenever
+ * Next starts (and on every change in dev), so the pages, the sitemap, RSS
+ * and proxy.ts share one list and never read files at request time.
+ *
+ * Drafts (draft: true) show in development and on Vercel preview
+ * deployments. On the live site they answer 404 (proxy.ts) unless the
+ * request carries the preview secret, and they're never in /blog, the
+ * sitemap or RSS, and never indexed (noindex).
  */
+export type TocEntry = { id: string; text: string; depth: number };
+export type FaqEntry = { question: string; answer: string };
+
+/** A data file a post publishes (schema.org Dataset), from its frontmatter. */
+export type PostDataset = {
+  name: string;
+  description: string;
+  /** The download, a file in public/ (/blog/…/data.csv). */
+  file: string;
+  measurementTechnique: string;
+  variableMeasured: string[];
+  temporalCoverage?: string;
+};
+
 export type Post = {
   /** The address, /blog/<slug>, and the file name, content/blog/<slug>.mdx. */
   slug: string;
-  /** The H1 and the title in search results (keep it under ~60 characters). */
   title: string;
-  /** The search snippet (under ~160 characters). */
   description: string;
-  /** YYYY-MM-DD. */
-  published: string;
-  /** YYYY-MM-DD, when the post was last changed in substance. */
+  /** YYYY-MM-DD, India time. */
+  date: string;
+  /** YYYY-MM-DD, when the post last changed in substance. */
   updated?: string;
-  /** The service page (hub) the post supports, linked at its end. */
-  hub: string;
-  /** Defaults to Jashan Singh. */
-  author?: string;
-  draft?: boolean;
-  /**
-   * Instructions for writing posts, not a post: never listed on /blog (on
-   * local builds it can still be opened at its address).
-   */
+  /** "Bellops" credits the studio; a name credits that person. */
+  author: string;
+  tags: string[];
+  draft: boolean;
+  /** Instructions for writing posts: never listed, never live. */
   template?: boolean;
+  /** A service page the post supports, linked under it. */
+  hub?: string;
+  /** The share picture, a file in public/, and a hash of it. */
+  ogImage?: string;
+  ogImageVersion?: string;
+  readingMinutes: number;
+  /** The H2s and H3s, for the contents list. */
+  toc: TocEntry[];
+  /** The questions under its FAQ heading (FAQPage schema). */
+  faq: FaqEntry[];
+  dataset?: PostDataset;
 };
 
-export const defaultAuthor = "Jashan Singh";
+/** Every post, drafts and the template included, newest first. */
+const posts = index.posts as Post[];
 
-export const posts: readonly Post[] = [
-  {
-    slug: "how-to-add-a-post",
-    title: "How to add a blog post",
-    description:
-      "The template for a weekly post: where the file goes, what its entry needs, and what the text can use.",
-    published: "2026-10-26",
-    hub: "/premium-website-design",
-    draft: true,
-    template: true,
-  },
-];
+/**
+ * The posts a list shows, newest first: published ones, plus drafts
+ * wherever drafts are visible (not on the live site). Never the template.
+ */
+export function getAllPosts({ includeDrafts = !liveSite } = {}) {
+  return posts.filter(
+    (post) => !post.template && (includeDrafts || !post.draft),
+  );
+}
 
-/** Posts the live site shows; local and preview builds show drafts too. */
-export const visiblePosts: readonly Post[] = posts
-  .filter((post) => !post.template && (!post.draft || !liveSite))
-  .sort((a, b) => b.published.localeCompare(a.published));
+/** Published posts only: the sitemap, RSS and the Blog schema go by these. */
+export const getPublishedPosts = () => getAllPosts({ includeDrafts: false });
 
-/** Published posts only: what the sitemap, header and footer go by. */
-export const publishedPosts = visiblePosts.filter((post) => !post.draft);
+/** Any post by its slug, drafts and the template included. */
+export const getPostBySlug = (slug: string) =>
+  posts.find((post) => post.slug === slug);
+
+/** Every slug, for prerendering: proxy.ts keeps drafts off the live site. */
+export const allSlugs = () => posts.map((post) => post.slug);
 
 export const postPath = (post: Pick<Post, "slug">) => `/blog/${post.slug}`;
 
-export const postBySlug = (slug: string) =>
-  posts.find((post) => post.slug === slug);
+/**
+ * The share picture's address, with its hash as ?v= so a replaced picture
+ * isn't served from social networks' caches.
+ */
+export const postImage = (post: Post) =>
+  post.ogImage ? `${post.ogImage}?v=${post.ogImageVersion}` : undefined;
 
-export const blogPage = {
-  path: "/blog",
-  title: "Blog: Web Design, 3D Websites, Ads and SEO | Bellops",
-  description:
-    "Articles from Bellops on web design, 3D websites, landing pages, Google and Meta ads, and SEO.",
-  heading: "Blog",
-};
+/** Whether the studio, not a person, wrote it. */
+export const byStudio = (post: Post) => post.author === site.name;
+
+/** Midnight at the start of the post's date, India time. */
+export const postDate = (date: string) => new Date(`${date}T00:00:00+05:30`);
+
+/** "27 Oct 2026", India time. */
+export function formatPostDate(date: string) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Kolkata",
+  }).formatToParts(postDate(date));
+  const part = (type: string) =>
+    parts.find((item) => item.type === type)?.value;
+  return `${part("day")} ${part("month")} ${part("year")}`;
+}

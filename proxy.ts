@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { DOCK_COOKIE } from "@/lib/ab";
-import { postBySlug } from "@/lib/blog";
+import { getPostBySlug } from "@/lib/blog";
 import { draftPages, hiddenDraftPaths, liveSite as live } from "@/lib/drafts";
 import { projects } from "@/lib/work";
 
@@ -32,8 +32,8 @@ export function proxy(request: NextRequest) {
   const missing =
     (section === "work" && slug && !caseStudies.has(slug)) ||
     (section === "industries" && !industries.has(path)) ||
-    (section === "blog" && slug && !postBySlug(slug)) ||
-    (live && section === "blog" && slug && postBySlug(slug)?.draft) ||
+    (section === "blog" && slug && !getPostBySlug(slug)) ||
+    (live && section === "blog" && slug && getPostBySlug(slug)?.draft) ||
     (live && hiddenDraftPaths.has(path));
   // No route matches /404, so it renders the not-found page. The status is
   // set here too: Vercel serves that prerendered page with a 200 otherwise.

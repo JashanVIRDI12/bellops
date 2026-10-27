@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ContactCta } from "@/components/site/ContactCta";
 import { Crumbs, RevealTitle } from "@/components/site/RevealTitle";
-import { blogPage, postPath, visiblePosts } from "@/lib/blog";
-import { servicesPage, workPage } from "@/lib/content";
+import {
+  formatPostDate,
+  getAllPosts,
+  getPublishedPosts,
+  postPath,
+} from "@/lib/blog";
+import { blogPage, servicesPage, workPage } from "@/lib/content";
 import {
   breadcrumbList,
   jsonLd,
@@ -15,7 +21,10 @@ import { shareMetadata, siteUrl } from "@/lib/seo";
 export const metadata: Metadata = {
   title: { absolute: blogPage.title },
   description: blogPage.description,
-  alternates: { canonical: blogPage.path },
+  alternates: {
+    canonical: blogPage.path,
+    types: { "application/rss+xml": blogPage.rss },
+  },
   ...shareMetadata({
     title: blogPage.title,
     description: blogPage.description,
@@ -34,24 +43,19 @@ const structuredData = {
       url: `${siteUrl}${blogPage.path}`,
       name: blogPage.title,
       description: blogPage.description,
+      inLanguage: "en-IN",
       publisher: { "@id": organizationId },
-      blogPost: visiblePosts
-        .filter((post) => !post.draft)
-        .map((post) => ({ "@id": `${siteUrl}${postPath(post)}#article` })),
+      blogPost: getPublishedPosts().map((post) => ({
+        "@id": `${siteUrl}${postPath(post)}#article`,
+      })),
     },
     breadcrumbList(trail, blogPage.path),
   ],
 };
 
-const dateFormat = new Intl.DateTimeFormat("en-IN", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-/** Every published post, newest first (drafts too on local and preview builds). */
+/** Published posts, newest first (drafts too, except on the live site). */
 export default function Blog() {
+  const posts = getAllPosts();
   return (
     <>
       <script
@@ -63,7 +67,7 @@ export default function Blog() {
         <RevealTitle text={blogPage.heading} className="case-title" />
       </section>
       <section aria-label="Posts" className="wrap block">
-        {visiblePosts.length === 0 && (
+        {posts.length === 0 ? (
           <p className="page-copy">
             Nothing is published yet: the first articles are in review. In the
             meantime, see{" "}
@@ -76,23 +80,48 @@ export default function Blog() {
             </Link>
             .
           </p>
+        ) : (
+          <ul className="post-list">
+            {posts.map((post, index) => (
+              <li key={post.slug}>
+                <Link href={postPath(post)} className="post-card">
+                  {post.ogImage && (
+                    <span className="post-card-cover">
+                      <Image
+                        src={post.ogImage}
+                        alt=""
+                        fill
+                        sizes="(min-width: 48rem) 22rem, calc(100vw - 2.5rem)"
+                        // The first cover is usually the page's largest paint.
+                        loading={index === 0 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : undefined}
+                      />
+                    </span>
+                  )}
+                  <span className="post-card-text">
+                    <h2>{post.title}</h2>
+                    <p>{post.description}</p>
+                    <span className="post-meta">
+                      <time dateTime={post.date}>
+                        {formatPostDate(post.date)}
+                      </time>
+                      <span aria-hidden="true">·</span>
+                      <span>{post.readingMinutes} min read</span>
+                      {post.draft && <span className="post-draft">Draft</span>}
+                    </span>
+                    {post.tags.length > 0 && (
+                      <span className="post-tags">
+                        {post.tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
-        <ul className="post-list">
-          {visiblePosts.map((post) => (
-            <li key={post.slug}>
-              <Link href={postPath(post)}>
-                <h2>{post.title}</h2>
-                <p>{post.description}</p>
-                <p className="post-meta">
-                  <time dateTime={post.published}>
-                    {dateFormat.format(new Date(post.published))}
-                  </time>
-                  {post.draft && <span className="post-draft">Draft</span>}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
       <ContactCta />
     </>

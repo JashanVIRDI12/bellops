@@ -1357,9 +1357,40 @@ html:has(.site-page) {
   border-bottom: 1px solid var(--line);
 }
 
-.post-list a {
-  display: block;
+.post-card {
+  display: grid;
+  gap: 1.25rem;
   padding-block: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  .post-card {
+    grid-template-columns: 22rem minmax(0, 1fr);
+    align-items: center;
+    gap: 2.5rem;
+  }
+}
+
+.post-card-cover {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 1200 / 630;
+  border-radius: 0.75rem;
+  background: var(--midnight-raised);
+}
+
+.post-card-cover img {
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.post-card:hover .post-card-cover img {
+  transform: scale(1.02);
+}
+
+.post-card-text {
+  display: block;
 }
 
 .post-list h2 {
@@ -1369,10 +1400,11 @@ html:has(.site-page) {
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.15;
+  text-wrap: balance;
   transition: color 150ms ease;
 }
 
-.post-list a:hover h2 {
+.post-card:hover h2 {
   color: var(--color-violet-soft);
 }
 
@@ -1380,6 +1412,21 @@ html:has(.site-page) {
   max-width: 60ch;
   margin-top: 0.6rem;
   color: var(--mist);
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.post-tags > * {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  color: var(--mist);
+  font-size: 0.8125rem;
 }
 
 .post {
@@ -1390,6 +1437,97 @@ html:has(.site-page) {
 .post-head,
 .post-body {
   max-width: 44rem;
+}
+
+.post-head {
+  max-width: 52rem;
+}
+
+.post-updated {
+  margin-top: 0.35rem;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+/* The text, with its contents beside it on wide screens. */
+.post-layout {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+@media (min-width: 64rem) {
+  .post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 44rem) 15rem;
+    justify-content: space-between;
+    align-items: start;
+    gap: 4rem;
+  }
+}
+
+.post-toc a {
+  display: block;
+  padding-block: 0.3rem;
+  color: var(--mist);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  transition: color 150ms ease;
+}
+
+.post-toc a:hover,
+.post-toc a:focus-visible {
+  color: #fff;
+}
+
+.post-toc-list ol {
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--line);
+}
+
+.post-toc-narrow {
+  margin-bottom: 2rem;
+  border-block: 1px solid var(--line);
+}
+
+.post-toc-narrow summary {
+  cursor: pointer;
+  padding-block: 0.9rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.post-toc-narrow nav {
+  padding-bottom: 1rem;
+}
+
+.post-toc-wide {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .post-toc-narrow {
+    display: none;
+  }
+
+  /* Before the text in the source (keyboard order), beside it on screen. */
+  .post-toc-wide {
+    display: block;
+    position: sticky;
+    top: 7rem;
+    grid-column: 2;
+    grid-row: 1;
+    max-height: calc(100svh - 9rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.post-toc-title {
+  margin-bottom: 0.5rem;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .post-title {
@@ -1423,7 +1561,8 @@ html:has(.site-page) {
 }
 
 .post-body {
-  margin-top: clamp(2.5rem, 6vw, 4rem);
+  grid-column: 1;
+  grid-row: 1;
   color: rgb(242 238 248 / 0.88);
   font-size: 1.0625rem;
   line-height: 1.75;
@@ -1449,6 +1588,48 @@ html:has(.site-page) {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 500;
+}
+
+.post-body h4 {
+  margin-top: 1.5rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* A heading reached from the contents clears the fixed header. */
+.post-body :is(h2, h3, h4) {
+  scroll-margin-top: 6.5rem;
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
+.post-callout {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--color-violet-soft);
+  border-radius: 0.5rem;
+  background: var(--midnight-raised);
+  padding: 1rem 1.25rem;
+}
+
+.post-callout > * + * {
+  margin-top: 0.75rem;
+}
+
+.post-callout[data-tone="draft"] {
+  border-style: dashed;
+  border-left-style: solid;
+}
+
+.post-callout-title {
+  color: var(--color-violet-soft);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .post-body ul,
@@ -1509,6 +1690,54 @@ html:has(.site-page) {
 
 .post-table th {
   color: #fff;
+}
+
+.post-table tbody th {
+  font-weight: 500;
+}
+
+/* The sortable ranking: headings are buttons. */
+.post-ranking table {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-ranking :is(td, tbody th) {
+  padding-right: 0.6rem;
+}
+
+.post-ranking-caption {
+  caption-side: bottom;
+  padding-top: 0.6rem;
+  color: var(--mist);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.post-ranking thead th {
+  padding: 0;
+  white-space: nowrap;
+}
+
+.post-ranking thead button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.65rem 0.6rem 0.65rem 0;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-ranking thead button:hover,
+.post-ranking [aria-sort="ascending"] button,
+.post-ranking [aria-sort="descending"] button {
+  color: var(--color-violet-soft);
+}
+
+.post-ranking-arrow {
+  opacity: 0.6;
+  font-size: 0.8em;
 }
 
 /* The 404: the main pages, under the way back. */
