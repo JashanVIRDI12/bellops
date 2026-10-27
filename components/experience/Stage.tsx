@@ -147,25 +147,18 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
   // Reduced motion gets the stills: same story, no camera flight.
   const live = liveTier !== null && !reducedMotion && retired !== "off";
 
-  // The page comes first: the 3D (code and models) waits for the visitor's
-  // first scroll, pointer, touch or key, then the first still and a quiet
-  // moment, so it never competes with the opening paint or the page becoming
-  // interactive. Until then the still of the same shot is on screen.
-  // (?render= skips the wait, for testing and capturing the stills.)
-  const interacted = useFirstInteraction(launchOptions().forced !== null);
+  // The page comes first: the 3D (code and models) waits for the first still
+  // and a quiet moment, so it never competes with the opening paint.
   useEffect(() => {
     if (!live || stillShown) return;
     const timer = window.setTimeout(() => setStillWaitOver(true), STILL_WAIT);
     return () => window.clearTimeout(timer);
   }, [live, stillShown]);
   useEffect(() => {
-    if (!live || idle || !interacted || !(stillShown || stillWaitOver)) return;
+    if (!live || idle || !(stillShown || stillWaitOver)) return;
     return whenIdle(() => setIdle(true), IDLE_WAIT);
-  }, [live, idle, interacted, stillShown, stillWaitOver]);
+  }, [live, idle, stillShown, stillWaitOver]);
   const started = live && idle;
-  // Render only while the stage is on screen and the tab is visible.
-  const [stage, setStage] = useState<HTMLDivElement | null>(null);
-  const onScreen = useOnScreen(stage);
   const showing = live && ready && retired === "no";
   // The still for the current shot paints first everywhere; the live scene
   // fades in over it once it's ready.
@@ -192,7 +185,6 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       <script dangerouslySetInnerHTML={{ __html: preloadFirstStill }} />
       <div
         aria-hidden
-        ref={setStage}
         className="fixed inset-x-0 top-0 z-0 h-lvh bg-(--midnight-raised)"
         data-backdrop={stillShown || showing ? "ready" : "pending"}
         data-scene-mood={atmosphere.still}
@@ -223,7 +215,7 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
                 tier={liveTier}
                 projects={projects}
                 atmosphere={atmosphere}
-                active={onScreen}
+                active
                 onReady={markReady}
                 onProgress={setLoaded}
                 onWarmup={setWarmup}
@@ -248,50 +240,4 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
       )}
     </>
   );
-}
-
-/** Events that show a person is here and engaging with the page. */
-const INTERACTIONS = [
-  "pointermove",
-  "pointerdown",
-  "touchstart",
-  "wheel",
-  "keydown",
-  "scroll",
-] as const;
-
-/** True from the visitor's first scroll, pointer, touch or key press (or at once with `skip`). */
-function useFirstInteraction(skip: boolean) {
-  const [interacted, setInteracted] = useState(skip);
-  useEffect(() => {
-    if (interacted) return;
-    const done = () => setInteracted(true);
-    for (const type of INTERACTIONS)
-      window.addEventListener(type, done, { once: true, passive: true });
-    return () => {
-      for (const type of INTERACTIONS) window.removeEventListener(type, done);
-    };
-  }, [interacted]);
-  return interacted;
-}
-
-/** Whether `element` is in the viewport and the tab is visible. */
-function useOnScreen(element: Element | null) {
-  const [inView, setInView] = useState(true);
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    if (!element) return;
-    const observer = new IntersectionObserver(([entry]) =>
-      setInView(entry?.isIntersecting ?? true),
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [element]);
-  useEffect(() => {
-    const update = () => setVisible(document.visibilityState === "visible");
-    update();
-    document.addEventListener("visibilitychange", update);
-    return () => document.removeEventListener("visibilitychange", update);
-  }, []);
-  return inView && visible;
 }
