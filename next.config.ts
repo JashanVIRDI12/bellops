@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
+import { MACBOOK_URL, OFFICE_URL } from "./components/experience/scene/models";
+import { projects } from "./lib/work";
 
 /*
  * The Content Security Policy, sent as Report-Only for now: browsers report
@@ -92,20 +94,43 @@ const nextConfig: NextConfig = {
       // /index served a second copy of the home page; send it home for good
       // (301, as search engines expect for a moved page).
       { source: "/index", destination: "/", statusCode: 301 },
+      // Asset addresses from before the files were named by their hash
+      // (they may still be in caches or links): on to today's files.
+      {
+        source: "/models/office.glb",
+        destination: OFFICE_URL,
+        statusCode: 301,
+      },
+      {
+        source: "/models/macbook.glb",
+        destination: MACBOOK_URL,
+        statusCode: 301,
+      },
+      {
+        source: "/work/chw-desktop.webp",
+        destination: projects.find(
+          (project) => project.slug === "chase-healthcare-wellness",
+        )!.image,
+        statusCode: 301,
+      },
     ];
   },
   async headers() {
     // 3D models and project screenshots are named with a hash of their
-    // contents, so a file never changes under its name: cache it for a year.
-    // (Screenshots live in /projects, not /work, which holds the case-study
-    // pages: those must not be cached like files.)
+    // contents (office.8c29f4a7.glb), so a file never changes under its
+    // name: cache it for a year. Only names with that 8-character hash get
+    // it, so a file added without one is never stuck in caches. (Screenshots
+    // live in /projects, not /work, which holds the case-study pages: those
+    // must not be cached like files.)
     const immutable = [
       { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
     ];
+    const hashed = (folder: string, extension: string) =>
+      `/${folder}/:file([\\w-]+\\.[0-9a-f]{8}\\.${extension})`;
     return [
       { source: "/(.*)", headers: securityHeaders },
-      { source: "/models/:path*", headers: immutable },
-      { source: "/projects/:path*", headers: immutable },
+      { source: hashed("models", "glb"), headers: immutable },
+      { source: hashed("projects", "webp"), headers: immutable },
     ];
   },
   turbopack: {
