@@ -16,8 +16,9 @@ import { allServices } from "@/lib/services";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  // Replaces the site-wide "index, follow", so the page's robots tags agree.
-  robots: { index: false, follow: true },
+  // Next adds <meta name="robots" content="noindex"> to every 404 itself;
+  // null drops the site-wide robots and googlebot tags, so that's the only one.
+  robots: null,
 };
 
 /**

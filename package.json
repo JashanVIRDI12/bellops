@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/sitemap-dates.mjs",
     "build": "next build",
+    "sitemap:dates": "node scripts/sitemap-dates.mjs",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",

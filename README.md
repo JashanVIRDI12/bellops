@@ -76,8 +76,12 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the final
 public origin before building. It defaults to `https://www.bellops.in` (the
 bare domain redirects there, so www is the canonical host). The same
 origin drives canonical URLs, Open Graph and Twitter cards, structured data,
-`/robots.txt` and `/sitemap.xml`. The sitemap includes only the public home page;
-`/playground` and `/logo-preview` carry `noindex` metadata.
+`/robots.txt` and `/sitemap.xml`. The sitemap lists every public page (not
+drafts, `/playground` or `/logo-preview`, which carry `noindex` metadata). Each
+page's `lastmod` is the date of the last commit to its sources, from
+`lib/sitemap-dates.json`; `scripts/sitemap-dates.mjs` refreshes it before every
+`pnpm build` (or run `pnpm sitemap:dates`), and keeps it as is where there's no
+git history, as on Vercel.
 
 Set `GOOGLE_SITE_VERIFICATION` and/or `BING_SITE_VERIFICATION` to the verification
 token content values from your own Search Console or Webmaster Tools account.

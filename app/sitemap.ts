@@ -11,14 +11,24 @@ import { draftPages } from "@/lib/drafts";
 import { threeDPage } from "@/lib/three-d";
 import { homeUrl, siteUrl } from "@/lib/seo";
 import { caseStudyPath, projects } from "@/lib/work";
+import pageDates from "@/lib/sitemap-dates.json";
+
+/**
+ * When a page last changed: the date of the last commit to its sources
+ * (lib/sitemap-dates.json, written by scripts/sitemap-dates.mjs before each
+ * build), or the build's date for a page that isn't in it yet.
+ */
+function changed(path: string, buildDate: Date) {
+  const date = (pageDates as Record<string, string>)[path];
+  return date ? new Date(date) : buildDate;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Cached, so it's built once per deploy and lastModified is the build's
-  // date, not "now" on every request.
+  // Cached, so it's built once per deploy, not on every request.
   "use cache";
   // Hash sections and internal demos aren't URLs to index separately. Add an
   // entry here for each public page.
-  const lastModified = new Date();
+  const built = new Date();
   const paths = [
     servicesPage.path,
     ...services.items.map((service) => service.href),
@@ -32,15 +42,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
   // The blog index always; posts once published (drafts never), each dated.
   const blog = [
-    { url: `${siteUrl}${blogPage.path}`, lastModified },
+    {
+      url: `${siteUrl}${blogPage.path}`,
+      lastModified: changed(blogPage.path, built),
+    },
     ...publishedPosts.map((post) => ({
       url: `${siteUrl}${postPath(post)}`,
       lastModified: new Date(post.updated ?? post.published),
     })),
   ];
   return [
-    { url: homeUrl, lastModified },
-    ...paths.map((path) => ({ url: `${siteUrl}${path}`, lastModified })),
+    { url: homeUrl, lastModified: changed("/", built) },
+    ...paths.map((path) => ({
+      url: `${siteUrl}${path}`,
+      lastModified: changed(path, built),
+    })),
     ...blog,
   ];
 }
