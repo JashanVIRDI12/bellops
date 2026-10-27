@@ -72,6 +72,24 @@ export const projects: readonly WorkProject[] = [
     mobileImage: "/projects/chw-mobile.c1105ef9.webp",
     url: "https://www.chw.co.in",
   },
+  {
+    slug: "mng-spirits",
+    title: "A showcase for a premium whiskey and rum portfolio",
+    client: "MNG Spirits",
+    headline: "a showcase website for a premium whiskey and rum portfolio",
+    image: "/projects/mngspirits-desktop.199a5477.webp",
+    mobileImage: "/projects/mngspirits-mobile.5edf1cdf.webp",
+    url: "https://www.mngspirits.com",
+  },
+  {
+    slug: "om-sai-pharma-surgicals",
+    title: "A B2B site for a pan-India medical and surgical supplier",
+    client: "Om Sai Pharma & Surgicals",
+    headline: "a B2B website for a pan-India medical and surgical supplier",
+    image: "/projects/ospsmed-desktop.0beecb0e.webp",
+    mobileImage: "/projects/ospsmed-mobile.127ad40b.webp",
+    url: "https://www.ospsmed.com",
+  },
 ];
 
 /** A project's case-study page. */

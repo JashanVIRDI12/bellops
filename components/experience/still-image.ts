@@ -20,7 +20,7 @@ export const stillSrc = (
   beat: number,
   orientation: StillOrientation,
   mood: StillMood,
-) => `/experience/atmosphere-v6/${mood}/shot-${beat}-${orientation}.webp`;
+) => `/experience/atmosphere-v7/${mood}/shot-${beat}-${orientation}.webp`;
 
 /**
  * The image props for one still. The home page's start-of-page preload asks

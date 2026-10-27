@@ -35,7 +35,8 @@ export const chapters = [
   { id: "studio", label: "Studio", beats: 1 },
   { id: "approach", label: "Approach", beats: 1 },
   { id: "three-d", label: "3D websites", beats: 1 },
-  { id: "work", label: "Work", beats: 3 },
+  // One shot per project in lib/work.ts (add one to scene/shots.ts with each).
+  { id: "work", label: "Work", beats: 5 },
   { id: "clients", label: "Clients", beats: 1 },
   { id: "services", label: "Services", beats: 1 },
   { id: "about", label: "About", beats: 1 },
@@ -429,14 +430,14 @@ export const workPage = {
   path: "/work",
   title: "Our Work: Website Case Studies",
   description:
-    "Websites Bellops has designed and built: a showroom for luxury cars in Delhi, a home for a creative agency and an export site for a healthcare manufacturer.",
+    "Websites Bellops designed and built: a Delhi luxury car showroom, a creative agency, a WHO-GMP healthcare exporter, a spirits brand and a medical supplier.",
   heading: "Selected work",
   // The rest of the <h1>: "Selected work: websites designed and built by Bellops".
   headingSubline: "websites designed and built by Bellops",
   lead: "Websites we've designed and built, from first sketch to launch.",
   // Under the hero. Facts only: what's in each case study is in lib/work.ts.
   intro: [
-    "Three websites, each planned, designed and coded in-house by the same small team: a showroom for hand-picked luxury cars in Delhi, a home for a content, creative and performance agency, and an export site for a WHO-GMP healthcare manufacturer.",
+    "Five websites, each planned, designed and coded in-house by the same small team: a showroom for hand-picked luxury cars in Delhi, a home for a content, creative and performance agency, an export site for a WHO-GMP healthcare manufacturer, a showcase for a premium whiskey and rum portfolio, and a B2B site for a pan-India medical and surgical supplier.",
     "Each case study shows the site on a laptop and on a phone, links to the live site, and leads to the service behind it.",
   ],
   // A case study's WhatsApp links type this in; {name} is the client.

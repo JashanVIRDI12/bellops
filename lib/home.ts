@@ -25,7 +25,7 @@ export const aboutBellops = {
 };
 
 export const workIntro =
-  "Selected work: a Delhi luxury car showroom, a creative agency and a WHO-GMP healthcare exporter.";
+  "Selected work: a Delhi luxury car showroom, a creative agency, a WHO-GMP healthcare exporter, a premium spirits brand and a pan-India medical supplier.";
 
 export const homeFaqs = [
   {

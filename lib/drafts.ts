@@ -62,14 +62,14 @@ export const draftPages: readonly DraftPage[] = [
     path: "/industries/healthcare",
     name: "Websites for healthcare",
     description: placeholder,
-    caseStudies: ["chase-healthcare-wellness"],
+    caseStudies: ["chase-healthcare-wellness", "om-sai-pharma-surgicals"],
     ready: false,
   },
   {
     path: "/industries/luxury-brands",
     name: "Websites for luxury brands",
     description: placeholder,
-    caseStudies: ["baba-luxury-cars"],
+    caseStudies: ["baba-luxury-cars", "mng-spirits"],
     ready: false,
   },
 ];

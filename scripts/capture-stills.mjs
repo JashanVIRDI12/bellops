@@ -17,7 +17,7 @@ const BASE = process.env.STILLS_URL ?? "http://localhost:3000";
 const CHROME =
   process.env.CHROME_PATH ??
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const OUT = path.resolve("public/experience/atmosphere-v6");
+const OUT = path.resolve("public/experience/atmosphere-v7");
 const selectedShots = process.env.STILLS_SHOTS?.split(",").map(Number);
 const moods = (
   process.env.STILLS_MOODS ?? "day,dusk,night,overcast,rain"

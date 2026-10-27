@@ -260,10 +260,10 @@
   padding: 5% 12% 6% 7%;
   background: var(--midnight-raised);
 }
-.site-page .showcase > li:nth-child(2) .showcase-frame {
+.site-page .showcase > li:nth-child(3n + 2) .showcase-frame {
   background: var(--color-violet-soft);
 }
-.site-page .showcase > li:nth-child(3) .showcase-frame {
+.site-page .showcase > li:nth-child(3n + 3) .showcase-frame {
   background: var(--color-violet);
 }
 .site-page .showcase-frame > img {
@@ -294,10 +294,10 @@
 .site-page .showcase-phone img {
   transform: none;
 }
-.site-page .showcase[data-count="3"] > li:first-child .showcase-frame > img {
+.site-page .showcase[data-odd] > li:first-child .showcase-frame > img {
   aspect-ratio: 21 / 10;
 }
-.site-page .showcase[data-count="3"] > li:first-child .showcase-phone img {
+.site-page .showcase[data-odd] > li:first-child .showcase-phone img {
   aspect-ratio: 390 / 845;
 }
 /* The second line of a long <h1> (RevealTitle's subline). */

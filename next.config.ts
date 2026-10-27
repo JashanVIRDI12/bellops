@@ -88,7 +88,7 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 828, 1080, 1280, 1920],
     // Optimized images are kept for 31 days (2,678,400 s). Images are never
     // replaced under the same name: the stills live in versioned folders
-    // (atmosphere-v6), the rest get a new file name.
+    // (atmosphere-v7), the rest get a new file name.
     minimumCacheTTL: 2678400,
   },
   // The SEO service moved from /seo to /seo-services.

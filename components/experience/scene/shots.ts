@@ -95,6 +95,27 @@ export const SHOTS: Shot[] = [
     screen: 1,
     portrait: { position: [3.12, -0.24, 0.06], target: [4.0, -0.42, 0] },
   },
+  // Work 4: low along the desk from the side, the screen in profile against
+  // the window light. Phones: the laptop in the top third.
+  {
+    position: [3.35, -0.5, 0.75],
+    target: [3.9, -0.55, -0.05],
+    fov: 34,
+    exposure: 0.9,
+    screen: 1,
+    portrait: { position: [3.3, -0.3, 0.8], target: [3.92, -0.95, -0.05] },
+  },
+  // Work 5: from above, looking down over the keyboard to the screen; the
+  // laptop on the right, the dark desk left for the copy. Phones: the
+  // laptop on top, the chair below.
+  {
+    position: [3.5, 0.2, 0.05],
+    target: [3.88, -0.6, -0.2],
+    fov: 38,
+    exposure: 0.9,
+    screen: 1,
+    portrait: { position: [3.4, 0.35, 0.05], target: [3.62, -0.62, 0] },
+  },
   // Clients: the camera cranes up into the far corner and looks down across
   // the desk to the glass, on its way up to the services shot.
   {

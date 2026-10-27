@@ -42,7 +42,12 @@ export function WorkShowcase({
           )}
         </div>
       )}
-      <ul className="showcase" data-count={projects.length}>
+      <ul
+        className="showcase"
+        data-count={projects.length}
+        // An odd number of projects: the first spans the row, the rest pair up.
+        data-odd={projects.length % 2 === 1 || undefined}
+      >
         {projects.map((project, index) => (
           <li key={project.slug}>
             <Link href={caseStudyPath(project)} className="showcase-item">

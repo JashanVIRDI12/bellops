@@ -1,7 +1,7 @@
 # Bellops
 
 The Bellops site. The home page is a scroll-driven walk through a live 3D
-studio (the USP): twelve camera shots, with daylight and weather that follow
+studio (the USP): fourteen camera shots, with daylight and weather that follow
 the visitor. The inner pages use an editorial design over stills of the same
 studio.
 
@@ -242,7 +242,7 @@ The page scrolls normally. A fixed stage behind it plays the camera shot that ma
 
 The sections, in order (one shot each, three for the work): the opening view
 out of the window; the studio; the approach along the glass; 3D websites (low
-across the desk toward the sun); three projects on the laptop; clients (a
+across the desk toward the sun); five projects on the laptop (the last two from the side and from above); clients (a
 crane up into the far corner); services (straight down); about (the BellOps
 sign); questions (high in the window corner); and contact. The questions are
 word for word the page's FAQPage data (`lib/home.ts`).
@@ -325,7 +325,7 @@ The forecast changes the scene's appearance; it is not an observed weather stati
 The automatic IP response is private; coordinate-based responses can be cached.
 
 To preview a mood directly, open `/?scene=night` (also `day`, `dusk`, `overcast`
-or `rain`). Slow devices use matching images from `public/experience/atmosphere-v6/`;
+or `rain`). Slow devices use matching images from `public/experience/atmosphere-v7/`;
 re-capture them with `STILLS_URL=http://localhost:3000 node scripts/capture-stills.mjs`
 after changing the scene, and bump the folder version so no stale images are served.
 
@@ -364,7 +364,7 @@ pnpm build && pnpm start   # in one terminal
 pnpm stills                # in another (needs Google Chrome)
 ```
 
-The capture includes all twelve shots in landscape and portrait for five moods.
+The capture includes all fourteen shots in landscape and portrait for five moods.
 Use `STILLS_MOODS=night`, `STILLS_SHOTS=0` or `STILLS_SIZES=portrait` to limit a refresh. If the server is
 on another port, set `STILLS_URL=http://localhost:3002`.
 

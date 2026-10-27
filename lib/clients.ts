@@ -7,8 +7,9 @@
  * A logo links to the client's case study when there is one (`caseStudy`,
  * a slug in lib/work.ts); the strip never sends visitors off the site.
  *
- * GrowGuides is set as text: growguides.me expired on 14 September 2026 (in
- * its redemption period, October 2026), so there is no logo to take.
+ * GrowGuides is set as text, with no case study yet: growguides.me expired
+ * on 14 September 2026 (in its redemption period, October 2026), so there's
+ * no site to take a logo or screenshots from.
  */
 export type Client = {
   name: string;
@@ -44,6 +45,7 @@ export const clients: readonly Client[] = [
   },
   {
     name: "MNG Spirits",
+    caseStudy: "mng-spirits",
     logo: {
       src: "/clients/mng-spirits.webp",
       width: 338,
@@ -53,6 +55,7 @@ export const clients: readonly Client[] = [
   },
   {
     name: "Om Sai Pharma & Surgicals",
+    caseStudy: "om-sai-pharma-surgicals",
     logo: {
       src: "/clients/om-sai-pharma-surgicals.webp",
       width: 134,

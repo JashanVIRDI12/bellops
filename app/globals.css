@@ -1690,7 +1690,7 @@ html:has(.site-page) {
   }
 
   /* With three, the first runs the full width, cropped to its opening view. */
-  .showcase[data-count="3"] > li:first-child {
+  .showcase[data-odd] > li:first-child {
     grid-column: 1 / -1;
   }
 }
@@ -1719,7 +1719,7 @@ html:has(.site-page) {
 }
 
 @media (width >= 48rem) {
-  .showcase[data-count="3"] > li:first-child .showcase-frame img {
+  .showcase[data-odd] > li:first-child .showcase-frame img {
     aspect-ratio: 21 / 9;
     object-position: top;
   }
