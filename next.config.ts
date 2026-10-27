@@ -135,10 +135,33 @@ const nextConfig: NextConfig = {
     ];
     const hashed = (folder: string, extension: string) =>
       `/${folder}/:file([\\w-]+\\.[0-9a-f]{8}\\.${extension})`;
+    // Blog files (/blog/<post>/…: share pictures, infographics, data) keep
+    // their names when design replaces them. Pictures inside posts are
+    // served from hashed /_next/static addresses (lib/mdx/remark-post.mjs);
+    // the share picture's address carries its hash as ?v= (lib/blog.ts), so
+    // that address is cached for a year. A bare address is cached for a day
+    // (then refreshed in the background for a week), so a replaced file
+    // shows within a day.
+    const blogFile =
+      "/blog/:folder/:file([\\w.-]+\\.(?:png|jpe?g|webp|avif|gif|csv|pdf))";
     return [
       { source: "/(.*)", headers: securityHeaders },
       { source: hashed("models", "glb"), headers: immutable },
       { source: hashed("projects", "webp"), headers: immutable },
+      {
+        source: blogFile,
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: blogFile,
+        has: [{ type: "query", key: "v" }],
+        headers: immutable,
+      },
     ];
   },
   turbopack: {
