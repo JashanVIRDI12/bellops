@@ -1348,6 +1348,20 @@ html:has(.site-page) {
   padding-left: 1rem;
 }
 
+/* /blog before the first post is published. */
+.blog-soon {
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.blog-soon + .page-copy {
+  margin-top: 1rem;
+}
+
 /* Blog: the post list, and a post set for reading. */
 .post-list li {
   border-top: 1px solid var(--line);

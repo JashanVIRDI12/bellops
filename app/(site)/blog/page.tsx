@@ -68,18 +68,20 @@ export default function Blog() {
       </section>
       <section aria-label="Posts" className="wrap block">
         {posts.length === 0 ? (
-          <p className="page-copy">
-            Nothing is published yet: the first articles are in review. In the
-            meantime, see{" "}
-            <Link href={workPage.path} className="text-link">
-              our work
-            </Link>{" "}
-            or{" "}
-            <Link href={servicesPage.path} className="text-link">
-              what we do
-            </Link>
-            .
-          </p>
+          <>
+            <p className="blog-soon">Coming soon</p>
+            <p className="page-copy">
+              In the meantime, see{" "}
+              <Link href={workPage.path} className="text-link">
+                our work
+              </Link>{" "}
+              or{" "}
+              <Link href={servicesPage.path} className="text-link">
+                what we do
+              </Link>
+              .
+            </p>
+          </>
         ) : (
           <ul className="post-list">
             {posts.map((post, index) => (
