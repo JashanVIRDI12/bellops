@@ -33,6 +33,8 @@ const csp = [
   [
     "img-src 'self' data: blob:",
     "https://*.google-analytics.com https://*.googletagmanager.com",
+    // GA4 with Google signals also reports to Google's own domains.
+    "https://*.g.doubleclick.net https://*.google.com https://*.google.co.in",
     "https://*.clarity.ms https://c.bing.com",
     "https://www.facebook.com",
     "https://vercel.live https://vercel.com",
@@ -41,6 +43,8 @@ const csp = [
   [
     "connect-src 'self' blob: data:",
     "https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+    // GA4 sends some hits to www.google.com/g/collect (Google signals).
+    "https://*.g.doubleclick.net https://*.google.com https://*.google.co.in",
     "https://*.clarity.ms",
     "https://www.facebook.com https://connect.facebook.net",
     "https://vercel.live wss://ws-us3.pusher.com",
