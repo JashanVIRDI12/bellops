@@ -82,10 +82,10 @@ const nextConfig: NextConfig = {
     // Widths offered for full-screen images. The stills are at most 1920 px
     // wide, so larger versions would only cost bytes.
     deviceSizes: [640, 828, 1080, 1280, 1920],
-    // Optimized images are kept for a year. Images are never replaced under
-    // the same name: the stills live in versioned folders (atmosphere-v6), the
-    // rest get a new file name.
-    minimumCacheTTL: 31536000,
+    // Optimized images are kept for 31 days (2,678,400 s). Images are never
+    // replaced under the same name: the stills live in versioned folders
+    // (atmosphere-v6), the rest get a new file name.
+    minimumCacheTTL: 2678400,
   },
   // The SEO service moved from /seo to /seo-services.
   async redirects() {
