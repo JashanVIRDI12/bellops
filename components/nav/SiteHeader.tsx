@@ -16,7 +16,7 @@ import { WhatsAppIcon } from "@/components/contact/icons";
 import {
   scrollToSection,
   setScrollLocked,
-} from "@/components/experience/SmoothScroll";
+} from "@/components/experience/scroll-control";
 import { stillSrc } from "@/components/experience/still-image";
 import { useBeat } from "@/components/experience/store";
 import {

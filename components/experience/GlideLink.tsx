@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { scrollToSection } from "./SmoothScroll";
+import { scrollToSection } from "./scroll-control";
 
 /** An in-page link that glides with the smooth scroll; without JS it still jumps. */
 export function GlideLink({
