@@ -236,6 +236,34 @@ set the cookie by hand (`document.cookie = "ab_dock=pill; path=/"`) or clear
 it and reload. Run the test for at least 14 days; the winner rule is in
 AB_TEST_DOCK.md.
 
+## Blog
+
+Specified in CLAUDE_TASKS_BLOG.md. Each post is one file,
+`content/blog/<slug>.mdx`: frontmatter (`title`, `description`, `slug`,
+`date`, `author`, `ogImage`, `tags`, `draft`) and the text. Start from
+`content/blog/how-to-add-a-post.mdx`, which lists what a post can use
+(callouts, pictures, a sortable table, a CSV download link, an FAQ).
+
+- **The index.** `scripts/blog-index.mjs` reads every post into
+  `lib/blog-index.json` (frontmatter, contents list, FAQ, reading time).
+  `next.config.ts` runs it whenever Next starts, and again on every change
+  in dev; a post with broken frontmatter stops the build. The pages,
+  sitemap, RSS and `proxy.ts` all read that file.
+- **Rendering.** `@next/mdx` with remark-frontmatter, remark-gfm and
+  `lib/mdx/remark-post.mjs` (heading levels and ids, pictures imported so
+  next/image sizes them and serves them from hashed addresses, sortable
+  tables). `mdx-components.tsx` maps the components.
+- **Pages.** `/blog` (newest first), `/blog/<slug>` (contents list, FAQ,
+  BlogPosting + BreadcrumbList + FAQPage structured data, plus a Dataset
+  when the frontmatter has `dataset`), `/blog/rss.xml` (published posts).
+  The sitemap lists `/blog` and published posts.
+- **Drafts** (`draft: true`): shown in development and on Vercel preview
+  deployments, never indexed. On the live site they're 404 and left out of
+  `/blog`, the sitemap and RSS, unless the request carries
+  `DRAFT_PREVIEW_SECRET` (set it in Vercel's Production environment, then
+  open `/blog/<slug>?preview=<secret>` once; a cookie keeps it for a week).
+- **Analytics.** `<CsvDownloadLink>` sends `blog_csv_download {post, file}`.
+
 ## Home page: the studio tour
 
 The page scrolls normally. A fixed stage behind it plays the camera shot that matches each section.
