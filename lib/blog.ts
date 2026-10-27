@@ -25,6 +25,11 @@ export type Post = {
   /** Defaults to Jashan Singh. */
   author?: string;
   draft?: boolean;
+  /**
+   * Instructions for writing posts, not a post: never listed on /blog (on
+   * local builds it can still be opened at its address).
+   */
+  template?: boolean;
 };
 
 export const defaultAuthor = "Jashan Singh";
@@ -38,12 +43,13 @@ export const posts: readonly Post[] = [
     published: "2026-10-26",
     hub: "/premium-website-design",
     draft: true,
+    template: true,
   },
 ];
 
 /** Posts the live site shows; local and preview builds show drafts too. */
 export const visiblePosts: readonly Post[] = posts
-  .filter((post) => !post.draft || !liveSite)
+  .filter((post) => !post.template && (!post.draft || !liveSite))
   .sort((a, b) => b.published.localeCompare(a.published));
 
 /** Published posts only: what the sitemap, header and footer go by. */

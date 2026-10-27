@@ -124,6 +124,8 @@ export function SiteHeader({ variant }: { variant: Variant }) {
             width={112}
             height={35}
             sizes="(min-width: 768px) 112px, (min-width: 360px) 96px, 80px"
+            // Always on screen first; tiny, so loading it at once costs nothing.
+            loading="eager"
             className="h-auto w-20 min-[360px]:w-24 md:w-28"
           />
         </Link>

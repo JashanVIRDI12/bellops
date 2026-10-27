@@ -14,6 +14,14 @@ import { blogPosting, breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
 import { shareMetadata, siteUrl } from "@/lib/seo";
 import { serviceByHref } from "@/lib/services";
 
+/*
+ * Allowed to block on navigation: every page here is prerendered from
+ * generateStaticParams, so the wait is a cached fetch, and blocking keeps
+ * the whole page in one piece (no placeholder while its content streams).
+ * Without this, Next 16's instant-navigation check flags the params read.
+ */
+export const instant = false;
+
 // Every post, drafts included: proxy.ts keeps drafts and unknown slugs off
 // the live site with a real 404.
 export function generateStaticParams() {

@@ -26,6 +26,14 @@ const websiteDesign = serviceByHref("/premium-website-design");
 const projectFor = (slug: string) =>
   projects.find((project) => project.slug === slug);
 
+/*
+ * Allowed to block on navigation: every page here is prerendered from
+ * generateStaticParams, so the wait is a cached fetch, and blocking keeps
+ * the whole page in one piece (no placeholder while its content streams).
+ * Without this, Next 16's instant-navigation check flags the params read.
+ */
+export const instant = false;
+
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
@@ -231,6 +239,8 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
           <Image
             src={project.mobileImage}
             alt={`The ${project.client} website on a phone`}
+            // Above the fold, and on some screens the largest image: no lazy load.
+            loading="eager"
             width={780}
             height={1690}
             sizes="(min-width: 1024px) 22vw, 70vw"

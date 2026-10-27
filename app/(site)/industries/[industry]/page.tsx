@@ -11,6 +11,14 @@ const industries = draftPages.filter((page) =>
 const industryFor = (slug: string) =>
   industries.find((page) => page.path === `/industries/${slug}`);
 
+/*
+ * Allowed to block on navigation: every page here is prerendered from
+ * generateStaticParams, so the wait is a cached fetch, and blocking keeps
+ * the whole page in one piece (no placeholder while its content streams).
+ * Without this, Next 16's instant-navigation check flags the params read.
+ */
+export const instant = false;
+
 export function generateStaticParams() {
   return industries.map((page) => ({
     industry: page.path.slice("/industries/".length),
