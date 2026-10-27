@@ -148,24 +148,17 @@
     visibility 0s linear 250ms;
 }
 
-.contact-dock-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 999px;
-  background-color: #fff;
-  color: var(--color-whatsapp);
-  box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.6);
+/* The dock's link, in either A/B variant (their look is set in
+   ContactDock.tsx; nothing here sets a colour or a size). */
+.contact-dock-link {
   transition:
-    background-color 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    filter 180ms ease;
 }
 
-.contact-dock-whatsapp:hover {
+.contact-dock-link:hover {
   transform: translateY(-1px);
-  background-color: #efebff;
+  filter: brightness(1.05);
 }
 
 @media (width >= 48rem) {

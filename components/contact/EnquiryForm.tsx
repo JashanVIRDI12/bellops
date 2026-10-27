@@ -9,6 +9,7 @@ import {
 } from "react";
 import { currentVisit, track } from "@/lib/analytics/client";
 import { trackMeta } from "@/lib/analytics/meta";
+import { readDockVariant } from "@/lib/ab";
 import { track as trackGA } from "@/lib/track";
 import { enquiryForm, services } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
@@ -62,7 +63,10 @@ function EnquiryFormRound({ onRestart }: { onRestart: () => void }) {
       if (!reported.current) {
         reported.current = true;
         track("action", "enquiry-sent");
-        trackGA("generate_lead", { form: "contact" });
+        trackGA("generate_lead", {
+          form: "contact",
+          variant: readDockVariant(),
+        });
         trackMeta("Lead", {
           content_name: "Start a project enquiry",
           content_category: "enquiry-form",

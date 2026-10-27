@@ -213,6 +213,29 @@ to `/api/collect` when the page is hidden or a contact button is pressed;
 `analytics_summary` in `supabase/schema.sql` builds the whole report in one
 query.
 
+## A/B test: the phones' WhatsApp dock (dock_pill_v1)
+
+Specified in AB_TEST_DOCK.md. `proxy.ts` puts every new visitor in "icon"
+(the 52px round button) or "pill" (the button with "Get a quote") at random,
+50/50, in an `ab_dock` cookie that lasts 90 days. `components/experience/ContactDock.tsx`
+renders the matching dock (phones only; it still steps aside on the home
+page's opening scene and contact section) and sends GA4 events with
+`experiment_id: "dock_pill_v1"` by beacon:
+
+- `experiment_impression {variant}` on each page view, plus the user
+  property `ab_dock`;
+- `dock_click {variant, location: "whatsapp-dock"}` on a tap (the site-wide
+  listener skips elements with `data-variant`, so it's not also a
+  `whatsapp_click`).
+
+`whatsapp_click`, `contact_click` and `generate_lead` carry `variant` too
+(`lib/ab.ts` reads the cookie). In GA4, register `variant` and
+`experiment_id` as event-scoped custom dimensions and `ab_dock` as a
+user-scoped one, and mark `dock_click` as a key event. To see a variant,
+set the cookie by hand (`document.cookie = "ab_dock=pill; path=/"`) or clear
+it and reload. Run the test for at least 14 days; the winner rule is in
+AB_TEST_DOCK.md.
+
 ## Home page: the studio tour
 
 The page scrolls normally. A fixed stage behind it plays the camera shot that matches each section.

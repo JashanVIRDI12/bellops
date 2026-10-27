@@ -10,6 +10,8 @@
  * that package's own GA component (it would skip the opt-outs above).
  */
 
+import { readDockVariant } from "./ab";
+
 type Gtag = (...args: unknown[]) => void;
 
 export const track = (name: string, params: Record<string, string> = {}) => {
@@ -34,21 +36,28 @@ function locationOf(element: Element) {
 
 /**
  * The events a click can send, from what was clicked:
- * - a WhatsApp link: whatsapp_click {location, button}
- * - a tel: or mailto: link: contact_click {method: phone | email}
+ * - a WhatsApp link (not the A/B dock): whatsapp_click {location, button, variant}
+ * - a tel: or mailto: link: contact_click {method: phone | email, variant}
  * - anything with data-cta: cta_click {cta, location}
  */
 export function trackClick(element: Element) {
   const href = element.getAttribute("href") ?? "";
-  if (href.startsWith("https://wa.me/"))
+  // The A/B dock (data-variant) sends its own dock_click (ContactDock.tsx),
+  // so its taps aren't counted twice.
+  if (
+    href.startsWith("https://wa.me/") &&
+    !element.hasAttribute("data-variant")
+  )
     track("whatsapp_click", {
       location: locationOf(element),
-      // Which button: whatsapp-dock, whatsapp-service-landing-pages, …
+      // Which button: whatsapp-service-landing-pages, whatsapp-footer, …
       button: element.getAttribute("data-track") ?? "whatsapp",
+      variant: readDockVariant(),
     });
-  else if (href.startsWith("tel:")) track("contact_click", { method: "phone" });
+  else if (href.startsWith("tel:"))
+    track("contact_click", { method: "phone", variant: readDockVariant() });
   else if (href.startsWith("mailto:"))
-    track("contact_click", { method: "email" });
+    track("contact_click", { method: "email", variant: readDockVariant() });
   const cta = element.getAttribute("data-cta");
   if (cta) track("cta_click", { cta, location: locationOf(element) });
 }
