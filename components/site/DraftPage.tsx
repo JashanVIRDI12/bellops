@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { DraftPage as Draft } from "@/lib/drafts";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 import { projects } from "@/lib/work";
 import { ContactCta } from "./ContactCta";
 import { WorkShowcase } from "./WorkShowcase";
@@ -13,7 +13,7 @@ export function draftMetadata(page: Draft): Metadata {
   return {
     title: { absolute: title },
     description: page.description,
-    alternates: { canonical: page.path },
+    alternates: { canonical: page.path, types: feedTypes },
     ...(page.ready ? {} : { robots: { index: false, follow: true } }),
     ...shareMetadata({ title, description: page.description, path: page.path }),
   };

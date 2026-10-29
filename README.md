@@ -258,16 +258,23 @@ Specified in CLAUDE_TASKS_BLOG.md. Each post is one file,
   `lib/mdx/remark-post.mjs` (heading levels and ids, pictures imported so
   next/image sizes them and serves them from hashed addresses, sortable
   tables). `mdx-components.tsx` maps the components.
-- **Pages.** `/blog` (newest first), `/blog/<slug>` (contents list, FAQ,
-  BlogPosting + BreadcrumbList + FAQPage structured data, plus a Dataset
-  when the frontmatter has `dataset`), `/blog/rss.xml` (published posts).
-  The sitemap lists `/blog` and published posts.
+- **Pages.** `/blog` (newest first; each card's cover is the post's
+  `ogImage`), `/blog/<slug>` (contents list, FAQ, BlogPosting +
+  BreadcrumbList + FAQPage structured data, plus a Dataset when the
+  frontmatter has `dataset` or `lib/mdx/post-datasets.mjs` has an entry for
+  the slug), `/rss.xml` (published posts; every page links it, and
+  `/blog/rss.xml` redirects there). The sitemap lists `/blog` and published
+  posts.
+- **FAQ.** Under a heading that starts with "FAQ": each question in bold,
+  ending in "?", with its answer after it in the same paragraph or as the
+  next one. The FAQPage data is that text, word for word.
 - **Drafts** (`draft: true`): shown in development and on Vercel preview
   deployments, never indexed. On the live site they're 404 and left out of
   `/blog`, the sitemap and RSS, unless the request carries
   `DRAFT_PREVIEW_SECRET` (set it in Vercel's Production environment, then
   open `/blog/<slug>?preview=<secret>` once; a cookie keeps it for a week).
-- **Analytics.** `<CsvDownloadLink>` sends `blog_csv_download {post, file}`.
+- **Analytics.** `<CsvDownloadLink>`, and any Markdown link to a `.csv`,
+  sends `blog_csv_download {post, file}`.
 
 ## Home page: the studio tour
 

@@ -9,8 +9,10 @@ import { SortableRankingTable } from "@/components/blog/SortableRankingTable";
 /**
  * How blog posts (content/blog/*.mdx) render. Styles come from .post-body.
  * Links to the site's pages use next/link; links to files (a .csv, a .pdf)
- * are plain links; links out open in a new tab, with rel="noopener
- * noreferrer". Heading levels and ids come from lib/mdx/remark-post.mjs.
+ * are plain links (a .csv also reports blog_csv_download to Google
+ * Analytics, through CsvDownloadLink); links out open in a new tab, with
+ * rel="noopener noreferrer". Heading levels and ids come from
+ * lib/mdx/remark-post.mjs.
  */
 function PostLink({
   href = "",
@@ -24,6 +26,8 @@ function PostLink({
         {children}
       </Link>
     );
+  if (href.startsWith("/") && /\.csv$/i.test(href.split(/[?#]/)[0] ?? ""))
+    return <CsvDownloadLink href={href}>{children}</CsvDownloadLink>;
   if (href.startsWith("/"))
     return (
       <a href={href} {...props}>

@@ -7,13 +7,13 @@ import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { aboutPage, approach, studio } from "@/lib/content";
 import { aboutBellops } from "@/lib/home";
 import { breadcrumbList, jsonLd, webPage, type Crumb } from "@/lib/schema";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
   title: { absolute: aboutPage.title },
   description: aboutPage.description,
-  alternates: { canonical: aboutPage.path },
+  alternates: { canonical: aboutPage.path, types: feedTypes },
   ...shareMetadata({
     title: aboutPage.title,
     description: aboutPage.description,

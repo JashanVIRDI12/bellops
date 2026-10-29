@@ -105,6 +105,9 @@ const nextConfig: NextConfig = {
       // /index served a second copy of the home page; send it home for good
       // (301, as search engines expect for a moved page).
       { source: "/index", destination: "/", statusCode: 301 },
+      // The blog's feed moved to the site's root (308: feed readers keep
+      // the method and update the address).
+      { source: "/blog/rss.xml", destination: "/rss.xml", permanent: true },
       // Asset addresses from before the files were named by their hash
       // (they may still be in caches or links): on to today's files.
       {

@@ -48,3 +48,6 @@ next-env.d.ts
 # Lighthouse CI output (lighthouserc.json)
 /lighthouse-reports/
 /.lighthouseci/
+
+# Release packages: copied into place, not kept in the repo.
+/release-2026-10-29/

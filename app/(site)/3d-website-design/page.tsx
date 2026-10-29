@@ -14,7 +14,7 @@ import {
   service,
   type Crumb,
 } from "@/lib/schema";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 import {
   customModelPrice,
   threeDPage as page,
@@ -25,7 +25,7 @@ import { projects } from "@/lib/work";
 export const metadata: Metadata = {
   title: { absolute: page.title },
   description: page.description,
-  alternates: { canonical: page.path },
+  alternates: { canonical: page.path, types: feedTypes },
   ...shareMetadata({
     title: page.shareTitle,
     description: page.shareDescription,

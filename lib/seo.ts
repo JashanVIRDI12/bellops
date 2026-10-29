@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { services, site } from "./content";
+import { blogPage, services, site } from "./content";
 
 // The public production origin for share cards, canonicals and crawlers. The
 // live site is www (the bare domain redirects there), so every absolute URL
@@ -13,6 +13,16 @@ export const homeUrl = `${siteUrl}/`;
 
 // The home page's title in search results and tabs. Keep it under ~60 characters.
 export const siteTitle = `3D & Premium Website Design Agency in India | ${site.name}`;
+
+/**
+ * The blog's RSS feed, for alternates.types in a page's metadata: a
+ * <link rel="alternate" type="application/rss+xml"> on every page. A page's
+ * own `alternates` replaces the layout's, so each page that sets a canonical
+ * includes this too.
+ */
+export const feedTypes = {
+  "application/rss+xml": [{ url: blogPage.rss, title: `${site.name} Blog` }],
+};
 
 export const socialImage = {
   url: "/brand/share-banner.jpg",

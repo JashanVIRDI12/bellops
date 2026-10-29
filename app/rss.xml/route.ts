@@ -3,8 +3,10 @@ import { blogPage, site } from "@/lib/content";
 import { siteUrl } from "@/lib/seo";
 
 /**
- * /blog/rss.xml: an RSS 2.0 feed of the published posts, newest first
- * (never drafts). Prerendered with each build, like the pages.
+ * /rss.xml: an RSS 2.0 feed of the published posts, newest first (never
+ * drafts). Prerendered with each build, like the pages. Every page points to
+ * it (lib/seo.ts, feedTypes); the old /blog/rss.xml redirects here
+ * (next.config.ts).
  */
 const escape = (text: string) =>
   text

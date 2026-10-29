@@ -16,14 +16,14 @@ import {
   organizationId,
   type Crumb,
 } from "@/lib/schema";
-import { shareMetadata, siteUrl } from "@/lib/seo";
+import { feedTypes, shareMetadata, siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: { absolute: blogPage.title },
   description: blogPage.description,
   alternates: {
     canonical: blogPage.path,
-    types: { "application/rss+xml": blogPage.rss },
+    types: feedTypes,
   },
   ...shareMetadata({
     title: blogPage.title,

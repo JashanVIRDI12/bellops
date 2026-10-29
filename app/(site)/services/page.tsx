@@ -8,14 +8,14 @@ import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { servicesPage } from "@/lib/content";
 import { breadcrumbList, jsonLd, type Crumb } from "@/lib/schema";
-import { shareMetadata, siteUrl } from "@/lib/seo";
+import { feedTypes, shareMetadata, siteUrl } from "@/lib/seo";
 import { allServices, servicesFaqs } from "@/lib/services";
 import { projects } from "@/lib/work";
 
 export const metadata: Metadata = {
   title: { absolute: servicesPage.title },
   description: servicesPage.description,
-  alternates: { canonical: servicesPage.path },
+  alternates: { canonical: servicesPage.path, types: feedTypes },
   ...shareMetadata({
     title: servicesPage.title,
     description: servicesPage.description,

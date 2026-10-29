@@ -11,7 +11,7 @@ import { draftPagesFor } from "@/lib/drafts";
 import { caseStudyWhatsappHref } from "@/lib/contact-links";
 import { breadcrumbList, creativeWork, jsonLd, type Crumb } from "@/lib/schema";
 import { serviceByHref } from "@/lib/services";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 import {
   caseStudyPath,
   projectHost,
@@ -49,7 +49,7 @@ export async function generateMetadata({
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, types: feedTypes },
     ...shareMetadata({ title, description, path }),
   };
 }

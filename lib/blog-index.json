@@ -1,6 +1,527 @@
 {
   "posts": [
     {
+      "slug": "core-web-vitals-soft-navigations-2026",
+      "title": "Core Web Vitals Now Count Soft Navigations: What It Means for Next.js and React Websites in India",
+      "description": "Chrome's October 2026 CrUX release added experimental LCP, INP and CLS that include soft navigations. What changed, why INP is the metric to watch, and what Indian brands on React or Next.js should do.",
+      "date": "2026-10-29",
+      "author": "Bellops",
+      "tags": [
+        "Core Web Vitals",
+        "INP",
+        "Next.js",
+        "Performance",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/core-web-vitals-soft-navigations-2026/og.png",
+      "ogImageVersion": "09b692ef",
+      "readingMinutes": 7,
+      "toc": [
+        {
+          "id": "what-actually-changed",
+          "text": "What actually changed",
+          "depth": 2
+        },
+        {
+          "id": "the-numbers-chrome-published",
+          "text": "The numbers Chrome published",
+          "depth": 2
+        },
+        {
+          "id": "why-inp-is-the-metric-to-watch",
+          "text": "Why INP is the metric to watch",
+          "depth": 2
+        },
+        {
+          "id": "what-our-d2c-speed-study-suggests",
+          "text": "What our D2C speed study suggests",
+          "depth": 2
+        },
+        {
+          "id": "what-to-do-if-your-site-is-built-on-nextjs-or-react",
+          "text": "What to do if your site is built on Next.js or React",
+          "depth": 2
+        },
+        {
+          "id": "should-you-avoid-single-page-apps",
+          "text": "Should you avoid single-page apps?",
+          "depth": 2
+        },
+        {
+          "id": "how-bellops-can-help",
+          "text": "How Bellops can help",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "What is a soft navigation?",
+          "answer": "A page change inside a single-page app where the URL and visible content change without the browser loading a new document. Chrome counts one when a user action causes both a URL change and a visible paint (SEJ)."
+        },
+        {
+          "question": "Has Google changed how Core Web Vitals affect rankings?",
+          "answer": "No announcement says so. The soft-navigation metrics are experimental, stable CrUX scores are unchanged, and Search Console will adopt the new data only after the experimental stage ends, targeted for May 2027."
+        },
+        {
+          "question": "Will my Next.js site's scores go up or down?",
+          "answer": "It depends on your in-app pages. Across all origins, Chrome's September 2026 data shows higher pass rates with soft navigations included, but individual sites can move either way (CrUX release notes)."
+        },
+        {
+          "question": "What is a good INP?",
+          "answer": "200 milliseconds or less, measured at the 75th percentile of visits (web.dev)."
+        },
+        {
+          "question": "My site isn't in CrUX. What should I do?",
+          "answer": "Low-traffic sites may not have CrUX data. Add the web-vitals library and send metrics to GA4 so you have your own field data."
+        },
+        {
+          "question": "Does a 3D website hurt INP?",
+          "answer": "It can if the 3D scene blocks the main thread or re-mounts on every route. Built carefully, with lazy loading and off-screen pausing, it doesn't have to."
+        }
+      ]
+    },
+    {
+      "slug": "google-ai-content-fact-check-rules-2026",
+      "title": "Google Now Says AI-Written Website Content Must Be Fact-Checked by Hand. What That Means for Your Business Website",
+      "description": "In October 2026 Google updated its generative AI content guidance and its helpful-content page. What changed, what 'main content' now means, and a practical checklist for Indian businesses using AI to write web copy.",
+      "date": "2026-10-29",
+      "author": "Bellops",
+      "tags": [
+        "SEO",
+        "AI Content",
+        "Google Updates",
+        "Content Strategy"
+      ],
+      "draft": true,
+      "ogImage": "/blog/google-ai-content-fact-check-rules-2026/og.png",
+      "ogImageVersion": "3c4def23",
+      "readingMinutes": 6,
+      "toc": [
+        {
+          "id": "what-changed-in-googles-ai-content-guidance",
+          "text": "What changed in Google's AI content guidance",
+          "depth": 2
+        },
+        {
+          "id": "what-changed-in-the-helpful-content-page",
+          "text": "What changed in the helpful-content page",
+          "depth": 2
+        },
+        {
+          "id": "the-context-a-long-spam-update",
+          "text": "The context: a long spam update",
+          "depth": 2
+        },
+        {
+          "id": "why-indian-business-websites-are-exposed",
+          "text": "Why Indian business websites are exposed",
+          "depth": 2
+        },
+        {
+          "id": "a-practical-checklist-for-ai-assisted-website-content",
+          "text": "A practical checklist for AI-assisted website content",
+          "depth": 2
+        },
+        {
+          "id": "how-we-apply-this-at-bellops",
+          "text": "How we apply this at Bellops",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "Does Google penalise AI-generated content?",
+          "answer": "Not for being AI-generated. Google's guidance says AI can be useful, but content made at scale without adding value may violate the scaled content abuse policy, and all AI output should be fact-checked by hand before publishing (source)."
+        },
+        {
+          "question": "When did Google change the guidance?",
+          "answer": "The generative AI content page was updated on 1 October 2026 (SEJ). The helpful-content page addition was reported on 2 October 2026 (Search Engine Land)."
+        },
+        {
+          "question": "Was there a Google core update in October 2026?",
+          "answer": "Not as of late October. The latest entry on Google's Search Status Dashboard is the September 2026 spam update, completed on 8 October (dashboard)."
+        },
+        {
+          "question": "Do I need to rewrite my whole website?",
+          "answer": "Usually not. Start with the pages that make claims (about, services, pricing) and any set of near-identical location pages. Fix facts first, then metadata."
+        },
+        {
+          "question": "Does this apply to product descriptions?",
+          "answer": "Yes. Product pages are main content too, and Merchant Center has its own labelling rules for AI-generated product data."
+        },
+        {
+          "question": "Can I use AI to write meta descriptions?",
+          "answer": "Yes, but Google now explicitly says the manual review covers metadata, so read and correct each one."
+        }
+      ]
+    },
+    {
+      "slug": "google-ai-mode-links-official-websites-india",
+      "title": "Google's AI Mode Now Shows More Links and an 'Official Websites' Section. What Indian Businesses Should Change",
+      "description": "On 15 Oct 2026 Google added more inline links to AI Mode and AI Overviews and began testing a top section for official websites. Here is what it means for Indian SMB websites, and how to measure it in Search Console.",
+      "date": "2026-10-29",
+      "author": "Bellops",
+      "tags": [
+        "AI Search",
+        "SEO",
+        "Google Updates",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/google-ai-mode-links-official-websites-india/og.png",
+      "ogImageVersion": "0ee927e8",
+      "readingMinutes": 8,
+      "toc": [
+        {
+          "id": "what-google-announced-on-15-october-2026",
+          "text": "What Google announced on 15 October 2026",
+          "depth": 2
+        },
+        {
+          "id": "why-this-matters-for-indian-businesses-buying-a-website",
+          "text": "Why this matters for Indian businesses buying a website",
+          "depth": 2
+        },
+        {
+          "id": "how-to-see-whether-googles-ai-features-show-your-site",
+          "text": "How to see whether Google's AI features show your site",
+          "depth": 2
+        },
+        {
+          "id": "seven-fixes-that-help-google-treat-you-as-the-official-source",
+          "text": "Seven fixes that help Google treat you as the official source",
+          "depth": 2
+        },
+        {
+          "id": "what-not-to-do",
+          "text": "What not to do",
+          "depth": 2
+        },
+        {
+          "id": "where-bellops-fits",
+          "text": "Where Bellops fits",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "What did Google change in AI Mode on 15 October 2026?",
+          "answer": "Google said it is adding more inline links to AI Mode and AI Overviews and showing them higher in answers, testing a section at the top of some answers for official websites, expanding timely-article carousels, making related-article links more prominent, and testing clickable creator names on video results (source)."
+        },
+        {
+          "question": "Is the official-websites section live in India?",
+          "answer": "Google described it as a test and did not list countries in its announcement. Treat it as something that may appear, not a guaranteed feature."
+        },
+        {
+          "question": "Can I see clicks from AI Overviews in Search Console?",
+          "answer": "Not separately. The Generative AI report shows impressions only. Clicks from AI features are counted inside the normal Performance report (Search Console Help)."
+        },
+        {
+          "question": "Do I need a new website to benefit?",
+          "answer": "Not always. Many sites can be fixed by moving key facts into text, adding a clear page per service, and correcting structured data. A rebuild makes sense when the site is slow on mobile or impossible to edit."
+        },
+        {
+          "question": "Will this increase my traffic?",
+          "answer": "Nobody can promise that, including Google. It makes it more likely that, when Google's AI does link out for a task about your brand, the link goes to you."
+        },
+        {
+          "question": "Should I opt out of AI features to protect clicks?",
+          "answer": "Opting out also removes the chance of being linked. For most businesses that sell services or products, staying visible is the better trade, but it is a business decision. Check Google's control documentation first (source)."
+        }
+      ]
+    },
+    {
+      "slug": "3d-website-cost-india",
+      "title": "3D Website Cost in India: Real Prices and What Actually Drives Them",
+      "description": "What does a 3D website cost in India? Real Bellops prices, from ₹30,000 to add 3D to a site to ₹1.5 lakh for a full build, and what moves the number.",
+      "date": "2026-10-27",
+      "author": "Bellops",
+      "tags": [
+        "3D Websites",
+        "Pricing",
+        "Three.js",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/3d-website-cost-india/og.png",
+      "ogImageVersion": "f9e0b68f",
+      "readingMinutes": 9,
+      "toc": [
+        {
+          "id": "why-this-guide-uses-our-own-prices",
+          "text": "Why this guide uses our own prices",
+          "depth": 2
+        },
+        {
+          "id": "3d-website-price-in-india-cost-by-type-of-site",
+          "text": "3D website price in India: cost by type of site",
+          "depth": 2
+        },
+        {
+          "id": "what-affects-the-price-of-a-3d-website",
+          "text": "What affects the price of a 3D website",
+          "depth": 2
+        },
+        {
+          "id": "1-scope-how-many-pages-and-how-many-of-them-are-3d",
+          "text": "1. Scope: how many pages, and how many of them are 3D",
+          "depth": 3
+        },
+        {
+          "id": "2-the-number-and-complexity-of-3d-models",
+          "text": "2. The number and complexity of 3D models",
+          "depth": 3
+        },
+        {
+          "id": "3-interactions-and-animation",
+          "text": "3. Interactions and animation",
+          "depth": 3
+        },
+        {
+          "id": "4-a-3d-product-configurator",
+          "text": "4. A 3D product configurator",
+          "depth": 3
+        },
+        {
+          "id": "5-mobile-performance-work",
+          "text": "5. Mobile performance work",
+          "depth": 3
+        },
+        {
+          "id": "6-cms-integrations-and-languages",
+          "text": "6. CMS, integrations and languages",
+          "depth": 3
+        },
+        {
+          "id": "7-content-and-copywriting",
+          "text": "7. Content and copywriting",
+          "depth": 3
+        },
+        {
+          "id": "8-ongoing-care",
+          "text": "8. Ongoing care",
+          "depth": 3
+        },
+        {
+          "id": "how-to-save-on-a-3d-website-without-making-it-worse",
+          "text": "How to save on a 3D website without making it worse",
+          "depth": 2
+        },
+        {
+          "id": "bellops-vs-diy-or-a-template-an-honest-comparison",
+          "text": "Bellops vs DIY or a template: an honest comparison",
+          "depth": 2
+        },
+        {
+          "id": "how-we-quote-a-3d-project",
+          "text": "How we quote a 3D project",
+          "depth": 2
+        },
+        {
+          "id": "faq-3d-website-cost-in-india",
+          "text": "FAQ: 3D website cost in India",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "How much does a 3D website cost in India?",
+          "answer": "At Bellops, a one-page 3D landing page starts from ₹50,000 and a full 3D website costs ₹1 lakh to ₹1.5 lakh. The final price depends on the number of 3D scenes, the models and how interactive the site is. You get a fixed, itemised quote after discovery."
+        },
+        {
+          "question": "What is the cheapest way to get 3D on my website?",
+          "answer": "Add 3D to your existing site, such as a 3D hero or product viewer, from ₹30,000. Or build one 3D page with standard pages for the rest, from ₹75,000."
+        },
+        {
+          "question": "How much does a 3D product configurator cost?",
+          "answer": "A 3D product configurator starts from ₹1 lakh. The number of options, the custom models needed and any integrations such as pricing or a CRM decide where your project lands."
+        },
+        {
+          "question": "Do I need to provide 3D models, and what do custom models cost?",
+          "answer": "No. Licensed models from trusted marketplaces are included. We can also work from your CAD files. Custom models made just for you start from ₹5,000 per model."
+        },
+        {
+          "question": "Why does a Three.js website cost more than a normal website?",
+          "answer": "Each 3D scene needs models, lighting, animation, a lighter version for slower phones and extra device testing. Our premium websites start from ₹50,000, and 3D adds work on top of that, depending on how much 3D there is."
+        },
+        {
+          "question": "Will a 3D website be slow on mobile?",
+          "answer": "It doesn't have to be. We compress models and textures, load scenes only when needed and ship a lighter version of every 3D scene for slower phones, while keeping Core Web Vitals in check."
+        },
+        {
+          "question": "How long does a 3D website take?",
+          "answer": "A 3D landing page takes about 2 weeks and a full 3D website about a month. A configurator takes about a month, or longer with custom models."
+        },
+        {
+          "question": "Are there ongoing costs after launch?",
+          "answer": "Yes, if you want hosting, security updates, backups and small edits handled for you. Our website care plans start from ₹3,000/month."
+        }
+      ]
+    },
+    {
+      "slug": "indian-d2c-website-speed-study",
+      "title": "How Fast Do India's Top D2C Brand Websites Load on a ₹10,000 Phone?",
+      "description": "Bellops lab-tested 49 ranked Indian D2C homepages (50 brands attempted) on a budget-phone Slow 4G profile. Median LCP 12.7s; 0% hit Google's 2.5s lab target. Rankings, methodology, and fixes.",
+      "date": "2026-10-27",
+      "author": "Bellops",
+      "tags": [
+        "Technical SEO",
+        "Core Web Vitals",
+        "D2C",
+        "Performance",
+        "India"
+      ],
+      "draft": true,
+      "ogImage": "/blog/d2c-speed-study/og.png",
+      "ogImageVersion": "284d40e2",
+      "readingMinutes": 10,
+      "toc": [
+        {
+          "id": "why-speed-on-budget-phones-matters-in-india",
+          "text": "Why speed on budget phones matters in India",
+          "depth": 2
+        },
+        {
+          "id": "what-we-tested-methodology-summary",
+          "text": "What we tested (methodology summary)",
+          "depth": 2
+        },
+        {
+          "id": "headline-numbers",
+          "text": "Headline numbers",
+          "depth": 2
+        },
+        {
+          "id": "overall-ranking-homepage-lab-medians",
+          "text": "Overall ranking (homepage lab medians)",
+          "depth": 2
+        },
+        {
+          "id": "results-by-category",
+          "text": "Results by category",
+          "depth": 2
+        },
+        {
+          "id": "fastest-10-homepage-lab",
+          "text": "Fastest 10 (homepage lab)",
+          "depth": 2
+        },
+        {
+          "id": "slowest-10-homepage-lab--largest-opportunity",
+          "text": "Slowest 10 (homepage lab) — largest opportunity",
+          "depth": 2
+        },
+        {
+          "id": "homepage-vs-product-page",
+          "text": "Homepage vs product page",
+          "depth": 2
+        },
+        {
+          "id": "patterns-visible-in-the-medians-not-a-full-opportunity-audit",
+          "text": "Patterns visible in the medians (not a full opportunity audit)",
+          "depth": 2
+        },
+        {
+          "id": "what-the-faster-sites-tend-to-do-differently",
+          "text": "What the faster sites tend to do differently",
+          "depth": 2
+        },
+        {
+          "id": "actionable-fixes-prioritised",
+          "text": "Actionable fixes (prioritised)",
+          "depth": 2
+        },
+        {
+          "id": "how-to-read-this-study-fairly",
+          "text": "How to read this study fairly",
+          "depth": 2
+        },
+        {
+          "id": "soft-cta--bellops",
+          "text": "Soft CTA — Bellops",
+          "depth": 2
+        },
+        {
+          "id": "faq",
+          "text": "FAQ",
+          "depth": 2
+        },
+        {
+          "id": "dataset--json-ld-notes-for-implementers",
+          "text": "Dataset & JSON-LD notes for implementers",
+          "depth": 2
+        }
+      ],
+      "faq": [
+        {
+          "question": "What did this Bellops study measure?",
+          "answer": "Lab mobile performance (LCP, TBT, CLS, Performance score, transfer size, request count) for 50 Indian D2C homepages. 49 brands ranked by median LCP; Yoga Bar excluded for NO_LCP. CrUX field metrics were not available this pass and will be added later."
+        },
+        {
+          "question": "Does a ₹10,000 phone really change the results?",
+          "answer": "Low-end CPU and Slow 4G network profiles expose main-thread and weight issues that flagship devices hide. This pass used Lighthouse mobile simulation (not a named physical handset). Absolute times are further affected by the Toronto lab vantage."
+        },
+        {
+          "question": "Is lab data the same as what Google uses for ranking?",
+          "answer": "No. Google uses real-user (field) experience among many factors. Lab data is for diagnosis; CrUX is closer to field reality when available. We do not yet have CrUX for this cohort."
+        },
+        {
+          "question": "Why are some famous brands missing or footnoted?",
+          "answer": "Dead domains, non-D2C primary models, or unresolved storefronts were replaced during list building. Lenskart is included but measured on /en-us. Yoga Bar is listed but unranked (NO_LCP). Bewakoof and Wakefit returned curl 403 from datacenter IPs but succeeded under Chrome/Lighthouse and are ranked."
+        },
+        {
+          "question": "Will you name the slowest brands to shame them?",
+          "answer": "No. We publish numbers constructively and welcome right-of-reply / addenda after meaningful fixes."
+        },
+        {
+          "question": "How can a D2C team improve LCP quickly?",
+          "answer": "Optimise the true LCP element (usually the hero image), reduce competing above-the-fold requests, and defer non-critical scripts."
+        },
+        {
+          "question": "Do 3D or premium visuals always hurt speed?",
+          "answer": "Not if they are progressively enhanced, lazy-loaded, and kept off the critical path. Fast base experience first."
+        },
+        {
+          "question": "How do we get our site retested?",
+          "answer": "Contact Bellops via /contact after meaningful performance changes for a possible addendum."
+        }
+      ],
+      "dataset": {
+        "name": "Bellops Indian D2C mobile speed study: homepage lab medians",
+        "description": "Median of 3 Lighthouse 12.8.2 lab runs (mobile emulation, simulated Slow 4G) on the homepages of 50 Indian D2C brands, tested 27 Oct 2026 from a Toronto server, so absolute times are pessimistic for users in India. Per brand: LCP, TBT, CLS, Performance score, transfer size, request count, FCP, TTFB and Speed Index. 49 brands are ranked by median LCP; Yoga Bar is listed but unranked (NO_LCP). Lab data, not CrUX field data.",
+        "file": "/blog/d2c-speed-study/bellops-d2c-mobile-speed-50.csv",
+        "measurementTechnique": "Lighthouse 12.8.2 lab test, mobile emulation, simulated Slow 4G; median of 3 runs; run from Toronto",
+        "variableMeasured": [
+          "Largest Contentful Paint (LCP, ms)",
+          "Total Blocking Time (TBT, ms)",
+          "Cumulative Layout Shift (CLS)",
+          "Lighthouse Performance score",
+          "Transfer size (KB)",
+          "Request count",
+          "First Contentful Paint (FCP, ms)",
+          "Time to First Byte (TTFB, ms)",
+          "Speed Index (ms)"
+        ],
+        "temporalCoverage": "2026-10-27"
+      }
+    },
+    {
       "slug": "how-to-add-a-post",
       "title": "How to add a blog post",
       "description": "The template for a post: where the file goes, what its frontmatter needs, and what the text can use.",

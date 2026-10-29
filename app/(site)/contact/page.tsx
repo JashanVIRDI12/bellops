@@ -10,12 +10,12 @@ import {
 } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
 import { breadcrumbList, jsonLd, webPage, type Crumb } from "@/lib/schema";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: { absolute: contactPage.title },
   description: contactPage.description,
-  alternates: { canonical: contactPage.path },
+  alternates: { canonical: contactPage.path, types: feedTypes },
   ...shareMetadata({
     title: contactPage.title,
     description: contactPage.description,

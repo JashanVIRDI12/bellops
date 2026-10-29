@@ -5,13 +5,13 @@ import { StudioHero } from "@/components/site/StudioHero";
 import { WorkShowcase } from "@/components/site/WorkShowcase";
 import { shot, workPage } from "@/lib/content";
 import { breadcrumbList, itemList, jsonLd, type Crumb } from "@/lib/schema";
-import { shareMetadata } from "@/lib/seo";
+import { feedTypes, shareMetadata } from "@/lib/seo";
 import { caseStudyPath, projects } from "@/lib/work";
 
 export const metadata: Metadata = {
   title: { absolute: `${workPage.title} | Bellops` },
   description: workPage.description,
-  alternates: { canonical: workPage.path },
+  alternates: { canonical: workPage.path, types: feedTypes },
   ...shareMetadata({
     title: workPage.title,
     description: workPage.description,

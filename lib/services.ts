@@ -8,7 +8,7 @@ import {
 } from "./content";
 import { formatRate } from "./pricing";
 import { breadcrumbList, service as serviceNode, type Crumb } from "./schema";
-import { shareMetadata } from "./seo";
+import { feedTypes, shareMetadata } from "./seo";
 
 export const allServices: readonly Service[] = services.items;
 
@@ -46,7 +46,7 @@ export function serviceMetadata(service: Service): Metadata {
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: service.href },
+    alternates: { canonical: service.href, types: feedTypes },
     ...shareMetadata({ title, description, path: service.href }),
   };
 }

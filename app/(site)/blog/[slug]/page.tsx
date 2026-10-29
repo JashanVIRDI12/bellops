@@ -22,7 +22,7 @@ import {
   jsonLd,
   type Crumb,
 } from "@/lib/schema";
-import { shareMetadata, siteUrl, socialImage } from "@/lib/seo";
+import { feedTypes, shareMetadata, siteUrl, socialImage } from "@/lib/seo";
 import { serviceByHref } from "@/lib/services";
 
 /*
@@ -55,7 +55,7 @@ export async function generateMetadata({
     description: post.description,
     alternates: {
       canonical: path,
-      types: { "application/rss+xml": blogPage.rss },
+      types: feedTypes,
     },
     // Drafts are never indexed, wherever they can be opened.
     ...(post.draft ? { robots: { index: false, follow: false } } : {}),

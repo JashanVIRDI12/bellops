@@ -5,7 +5,7 @@ import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { SpeedInsights } from "@/components/analytics/SpeedInsights";
 import { gaId } from "@/lib/analytics/ga";
 import { site } from "@/lib/content";
-import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
+import { feedTypes, shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
 import "./studio.css";
 
@@ -29,6 +29,8 @@ export const metadata: Metadata = {
     template: "%s · Bellops",
   },
   description: site.description,
+  // The blog's feed, on every page (pages with their own alternates add it too).
+  alternates: { types: feedTypes },
   authors: [{ name: site.name, url: siteUrl }],
   creator: site.name,
   publisher: site.name,

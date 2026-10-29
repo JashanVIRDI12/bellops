@@ -462,7 +462,7 @@ export const aboutPage = {
 /** The blog's index page (posts: lib/blog.ts). */
 export const blogPage = {
   path: "/blog",
-  rss: "/blog/rss.xml",
+  rss: "/rss.xml",
   title: "Blog | Bellops",
   description:
     "Articles from Bellops on 3D websites, website speed and SEO for Indian brands.",

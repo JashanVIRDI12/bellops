@@ -8,3 +8,6 @@ artifacts
 
 # Written by scripts/blog-index.mjs
 lib/blog-index.json
+
+# Blog posts stay exactly as their authors delivered them.
+content/blog/
