@@ -3,6 +3,7 @@ import { Manrope, Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { SpeedInsights } from "@/components/analytics/SpeedInsights";
+import { gaId } from "@/lib/analytics/ga";
 import { site } from "@/lib/content";
 import { shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -66,7 +67,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`}>
       <body className="text-ink font-sans antialiased">
         {children}
-        <GoogleAnalytics />
+        {/* Google Analytics 4, once for every route (lib/analytics/ga.ts).
+            Production builds only, so development never reports to it. */}
+        {gaId && process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId={gaId} />
+        )}
         <MetaPixel />
         <SpeedInsights />
       </body>

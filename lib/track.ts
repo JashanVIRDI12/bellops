@@ -1,29 +1,57 @@
 /*
  * Google Analytics 4 events, in GA's snake_case names (whatsapp_click,
- * generate_lead, cta_click, contact_click). Calls go through the gtag queue
- * that components/analytics/GoogleAnalytics.tsx sets up, so an event sent
- * before gtag.js has loaded still arrives. Where GA is off (Do Not Track,
- * Global Privacy Control, /admin, localhost) there is no queue and nothing
- * is sent.
+ * generate_lead, cta_click, contact_click). Calls go through gtag(), which
+ * Google's tag (components/analytics/GoogleAnalytics.tsx) defines once the
+ * page has hydrated, so the first page view is configured before any event.
+ * An event sent before that (the A/B test's impression on load) waits here
+ * and goes as soon as gtag() exists. Where GA isn't on the page (/admin, or
+ * a build without NEXT_PUBLIC_GA_ID) the queue gives up and nothing is sent.
  *
- * Same signature as @next/third-parties' sendGAEvent, which only works with
- * that package's own GA component (it would skip the opt-outs above).
+ * track() has the same signature as @next/third-parties' sendGAEvent.
  */
 
 import { readDockVariant } from "./ab";
 
 type Gtag = (...args: unknown[]) => void;
 
+/* Tweakable: how long an early event waits for Google's tag (ms). */
+const WAIT_FOR_TAG = 20000;
+
+const waiting: ((gtag: Gtag) => void)[] = [];
+let poll: number | undefined;
+
+const currentGtag = () => (window as Window & { gtag?: Gtag }).gtag;
+
+/** Runs `call` with gtag() now, or once Google's tag has defined it. */
+export function withGtag(call: (gtag: Gtag) => void) {
+  if (typeof window === "undefined") return;
+  const gtag = currentGtag();
+  if (gtag) return call(gtag);
+  waiting.push(call);
+  if (poll !== undefined) return;
+  const started = Date.now();
+  poll = window.setInterval(() => {
+    const ready = currentGtag();
+    if (!ready && Date.now() - started < WAIT_FOR_TAG) return;
+    window.clearInterval(poll);
+    poll = undefined;
+    const calls = waiting.splice(0);
+    if (ready) for (const queued of calls) queued(ready);
+  }, 200);
+}
+
 export const track = (name: string, params: Record<string, string> = {}) => {
   if (typeof window === "undefined") return;
-  const gtag = (window as Window & { gtag?: Gtag }).gtag;
-  gtag?.("event", name, {
-    page_path: window.location.pathname,
-    // Sent with navigator.sendBeacon, so it still arrives when the click
-    // opens WhatsApp and the page goes to the background or unloads.
-    transport_type: "beacon",
-    ...params,
-  });
+  const page_path = window.location.pathname;
+  withGtag((gtag) =>
+    gtag("event", name, {
+      page_path,
+      // Sent with navigator.sendBeacon, so it still arrives when the click
+      // opens WhatsApp and the page goes to the background or unloads.
+      transport_type: "beacon",
+      ...params,
+    }),
+  );
 };
 
 /** Where a link sits: the nearest data-ga-location (header, hero, footer…). */

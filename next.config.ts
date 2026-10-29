@@ -2,7 +2,10 @@ import { execFileSync } from "node:child_process";
 import { watch } from "node:fs";
 import path from "node:path";
 import type { NextConfig } from "next";
-import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
+import {
+  PHASE_DEVELOPMENT_SERVER,
+  PHASE_PRODUCTION_BUILD,
+} from "next/constants";
 import createMDX from "@next/mdx";
 import { MACBOOK_URL, OFFICE_URL } from "./components/experience/scene/models";
 import { projects } from "./lib/work";
@@ -224,5 +227,14 @@ function watchPosts() {
 export default function config(phase: string): NextConfig {
   writeBlogIndex();
   if (phase === PHASE_DEVELOPMENT_SERVER) watchPosts();
+  // Google Analytics comes from NEXT_PUBLIC_GA_ID (lib/analytics/ga.ts). A
+  // build without it still works, with no analytics: say so in the log.
+  if (
+    phase === PHASE_PRODUCTION_BUILD &&
+    !/^G-[A-Z0-9]+$/.test(process.env.NEXT_PUBLIC_GA_ID?.trim() ?? "")
+  )
+    console.warn(
+      "⚠ NEXT_PUBLIC_GA_ID is missing or not a G- ID: this build has no Google Analytics. Set it in .env.local and in Vercel (Production and Preview).",
+    );
   return withMDX(nextConfig);
 }

@@ -9,22 +9,26 @@ import {
 } from "@/lib/ab";
 import { site } from "@/lib/content";
 import { whatsappHref } from "@/lib/contact-links";
+import { withGtag } from "@/lib/track";
 
 /** "Hi Bellops, I'd like a quote for my project." to the studio's number. */
 const href = whatsappHref(site.whatsapp, site.whatsappQuote);
 
-type Gtag = (...args: unknown[]) => void;
-
 /** The cookie doesn't change during a visit: nothing to subscribe to. */
 const noSubscription = () => () => {};
 
-/** A GA4 event for the dock experiment, by beacon. */
+/**
+ * A GA4 event for the dock experiment, by beacon. Sent on load too, so it
+ * may wait for Google's tag (lib/track.ts).
+ */
 const send = (name: string, params: Record<string, string>) =>
-  (window as Window & { gtag?: Gtag }).gtag?.("event", name, {
-    ...params,
-    experiment_id: DOCK_EXPERIMENT_ID,
-    transport_type: "beacon",
-  });
+  withGtag((gtag) =>
+    gtag("event", name, {
+      ...params,
+      experiment_id: DOCK_EXPERIMENT_ID,
+      transport_type: "beacon",
+    }),
+  );
 
 /**
  * WhatsApp, one tap away on phones, on every public page, in the bottom-right
@@ -50,12 +54,11 @@ export function ContactDock() {
 
   useEffect(() => {
     if (!variant) return;
-    // Next tick: Google Analytics sets up gtag in the layout, after this.
+    // Next tick, so a remount (React's development checks) sends it once.
     const timer = window.setTimeout(() => {
+      // The user property first, so the impression carries it.
+      withGtag((gtag) => gtag("set", "user_properties", { ab_dock: variant }));
       send("experiment_impression", { variant });
-      (window as Window & { gtag?: Gtag }).gtag?.("set", "user_properties", {
-        ab_dock: variant,
-      });
     }, 0);
     return () => window.clearTimeout(timer);
   }, [variant]);

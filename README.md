@@ -202,11 +202,16 @@ changes every day, and the city comes from Vercel's coarse IP location.
 Browsers that send Do Not Track or Global Privacy Control, bots and visits
 from localhost (unless `ANALYTICS_IN_DEV=1`) aren't counted.
 
-**Google Analytics.** Google's tag (GA4 property `G-GC08E6VQ91`) also runs,
-loaded once the page is idle so it never holds up the first paint. It sets
-Google's own `_ga` cookies, which the cookie notice covers. It stays off for
-Do Not Track and Global Privacy Control, on `/admin` and on localhost. The
-measurement ID is in `components/analytics/GoogleAnalytics.tsx`.
+**Google Analytics.** Google's tag (GA4 property `G-GC08E6VQ91`) runs on
+every page except `/admin`, through `@next/third-parties`
+(`components/analytics/GoogleAnalytics.tsx`, rendered once in
+`app/layout.tsx`); gtag.js runs after the page has hydrated. The measurement
+ID comes from `NEXT_PUBLIC_GA_ID` (`.env.local`, and Vercel's Production and
+Preview environments): it's read at build time, and a build without it has
+no Google Analytics (the build log warns). Production builds only, so
+`next dev` never reports to it. It sets Google's own `_ga` cookies, which the
+cookie notice covers. Events (`lib/track.ts`) sent before the tag is ready
+wait for it.
 
 How it works: `components/analytics/Tracker.tsx` batches events and sends them
 to `/api/collect` when the page is hidden or a contact button is pressed;
