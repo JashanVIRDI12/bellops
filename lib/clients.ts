@@ -19,8 +19,12 @@ export type Client = {
   logo?: { src: string; width: number; height: number; display: number };
 };
 
-/** Shown after the logos as "+20 more". */
-export const moreClients = 20;
+/**
+ * How many other clients to claim after the logos ("+N more"). Unset until
+ * Jashan confirms the real number (R3 task 16): an unverified count isn't
+ * shown, and the strip ends with the "See all our work" link instead.
+ */
+export const moreClients: number | null = null;
 
 export const clients: readonly Client[] = [
   {

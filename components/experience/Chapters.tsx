@@ -294,9 +294,11 @@ export function Chapters() {
                   </li>
                 );
               })}
-              <li>
-                <span className="tour-more">+{moreClients} more</span>
-              </li>
+              {moreClients !== null && (
+                <li>
+                  <span className="tour-more">+{moreClients} more</span>
+                </li>
+              )}
             </ul>
             <p className="mt-8">
               <Link href={workPage.path} className="tour-link">
