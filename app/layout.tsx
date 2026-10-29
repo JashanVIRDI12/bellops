@@ -3,6 +3,7 @@ import { Manrope, Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { SpeedInsights } from "@/components/analytics/SpeedInsights";
+import { RouteProgress } from "@/components/site/RouteProgress";
 import { gaId } from "@/lib/analytics/ga";
 import { site } from "@/lib/content";
 import { feedTypes, shareMetadata, siteTitle, siteUrl } from "@/lib/seo";
@@ -68,6 +69,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`}>
       <body className="text-ink font-sans antialiased">
+        {/* The first-visit intro (components/site/Splash.tsx) is built but
+            off: on mobile it cost ~1 s of Speed Index on every page and made
+            the home page's LCP worse than before (release-report.md). To try
+            it, render <Splash /> here, first in <body>. */}
+        <RouteProgress />
         {children}
         {/* Google Analytics 4, once for every route (lib/analytics/ga.ts).
             Production builds only, so development never reports to it. */}
