@@ -18,6 +18,7 @@ import { Stills, type StillsMode } from "./Stills";
 import { stillImage } from "./still-image";
 import { useEnvironment } from "./environment-store";
 import { reportScene } from "./scene-signals";
+import { setSceneLoading } from "./scene-loading";
 import { modelsFor, type LiveTier } from "./scene/profile";
 
 // three.js, the models and postprocessing load in their own chunk, and only on
@@ -179,6 +180,20 @@ export function Stage({ projects }: { projects: readonly WorkProject[] }) {
 
   // Downloading is most of the wait, the warm-up the rest.
   const progress = Math.min(1, 0.04 + (loaded / 100) * 0.66 + warmup * 0.3);
+
+  // The loader over the opening scene (SceneLoader.tsx) follows the same
+  // progress, from the moment the 3D starts downloading.
+  // Done once the scene is ready, so a later hand-over to the stills (a slow
+  // device) never brings the loader back.
+  useEffect(() => {
+    setSceneLoading(
+      !started
+        ? { state: "idle" }
+        : ready
+          ? { state: "done" }
+          : { state: "loading", progress },
+    );
+  }, [started, ready, progress]);
 
   return (
     <>

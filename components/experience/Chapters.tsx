@@ -24,6 +24,7 @@ import { formatPrice } from "@/lib/pricing";
 import { threeDPage, threeDRates } from "@/lib/three-d";
 import { caseStudyPath, projectHost, projects } from "@/lib/work";
 import { GlideLink } from "./GlideLink";
+import { SceneLoader } from "./SceneLoader";
 
 /*
  * The tour's text. Each `data-beat` section is one camera shot; its height sets
@@ -568,6 +569,8 @@ function IntroLayer({ part }: { part: "headline" | "rest" }) {
     >
       {!headline && <Scrim />}
       <div className="scene-copy intro-copy">
+        {/* The 3D on its way, above the headline (browser only). */}
+        {!headline && <SceneLoader />}
         {headline ? (
           <h1 className="intro-title font-heading">
             {intro.headingLines.map((line) => (

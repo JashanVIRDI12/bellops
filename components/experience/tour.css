@@ -148,6 +148,71 @@ body:has([data-scene-mood="rain"]) .intro-frame .scene-scrim {
   transition: color 600ms ease;
 }
 
+/* The 3D on its way (SceneLoader.tsx): a label, its percentage and a bar just
+   above the headline, in the opening scene's colours, while the live studio
+   downloads and warms up. Absolutely placed, so the page never moves. */
+.scene-loader {
+  position: absolute;
+  bottom: calc(100% + clamp(1rem, 3svh, 1.75rem));
+  left: 0;
+  display: grid;
+  gap: 0.5rem;
+  width: min(15rem, 70vw);
+  color: var(--intro-fg);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  animation: scene-loader-in 400ms ease-out backwards;
+  transition: opacity 600ms ease 200ms;
+}
+
+.scene-loader[data-done] {
+  opacity: 0;
+}
+
+.scene-loader-text {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.scene-loader-value {
+  color: var(--intro-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.scene-loader-track {
+  position: relative;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--intro-rule);
+}
+
+.scene-loader-bar {
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@keyframes scene-loader-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-loader,
+  .scene-loader-bar {
+    animation: none;
+    transition: none;
+  }
+}
+
 .intro-copy :focus-visible {
   outline-color: var(--intro-focus);
 }
