@@ -261,8 +261,7 @@ Specified in CLAUDE_TASKS_BLOG.md. Each post is one file,
 - **Pages.** `/blog` (newest first; each card's cover is the post's
   `ogImage`), `/blog/<slug>` (contents list, FAQ, BlogPosting +
   BreadcrumbList + FAQPage structured data, plus a Dataset when the
-  frontmatter has `dataset` or `lib/mdx/post-datasets.mjs` has an entry for
-  the slug), `/rss.xml` (published posts; every page links it, and
+  frontmatter has `dataset`), `/rss.xml` (published posts; every page links it, and
   `/blog/rss.xml` redirects there). The sitemap lists `/blog` and published
   posts.
 - **FAQ.** Under a heading that starts with "FAQ": each question in bold,

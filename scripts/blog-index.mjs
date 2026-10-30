@@ -25,7 +25,6 @@ import {
   readingMinutes,
   wordCount,
 } from "../lib/mdx/post-outline.mjs";
-import { postDatasets } from "../lib/mdx/post-datasets.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const postsDir = path.join(root, "content/blog");
@@ -85,11 +84,9 @@ function readPost(fileName) {
     ? publicFile(ogImage, problems, "ogImage")
     : undefined;
 
-  // The post's own `dataset:` frontmatter, else lib/mdx/post-datasets.mjs.
   let dataset;
-  const declared = front.dataset ?? (slug ? postDatasets[slug] : undefined);
-  if (declared !== undefined) {
-    const d = declared;
+  if (front.dataset !== undefined) {
+    const d = front.dataset;
     const fields = ["name", "description", "file", "measurementTechnique"];
     for (const field of fields)
       if (typeof d?.[field] !== "string")

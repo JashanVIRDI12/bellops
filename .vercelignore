@@ -21,3 +21,6 @@ public/minimalistic_modern_office.glb
 
 # The project uses pnpm (pnpm-lock.yaml); skip npm's lockfile.
 package-lock.json
+
+# Release packages (copied into the repo already).
+release-2026-10-29

@@ -11,7 +11,7 @@ tags:
   - Next.js
   - Performance
   - India
-draft: true
+draft: false
 ---
 
 ![Banner: Core Web Vitals with soft navigations, CrUX September 2026 dataset share of origins with good scores](/blog/core-web-vitals-soft-navigations-2026/banner.png)
@@ -53,12 +53,6 @@ Two things in Chrome's own notes stand out:
 - The share of origins with good INP was 85.9% in June, 85.7% in July, 85.3% in August and 85.4% in September 2026 (same source).
 
 Soft-navigation measurement makes INP more honest for app-style sites, because taps on the second, third and fourth view now count against the right URL. Those are often the taps that matter most: size selectors, "Add to cart", filters, pincode checks.
-
-### What our D2C speed study suggests
-
-We don't have field INP data for Indian D2C sites yet. In our lab test of 49 Indian D2C homepages, the closest proxy is Total Blocking Time, which measures how long the main thread is busy and unable to respond. The cohort median TBT was **1,547 ms**, the median Lighthouse performance score was **36**, and the median page made **412** requests ([Bellops D2C speed study](/blog/indian-d2c-website-speed-study); lab test, Lighthouse mobile preset, 27 Oct 2026, run from a non-India server).
-
-TBT is a lab metric and is not the same as INP, so don't convert one into the other. But a homepage that blocks the main thread for over a second and a half in the lab is a strong hint that taps after load will feel slow on a budget Android phone. Many of those brands run React-based storefronts, which is exactly where soft-navigation data will start to show the cost.
 
 ### What to do if your site is built on Next.js or React
 
