@@ -10,6 +10,20 @@
 | 4 | `51f489f` | Loader: route progress bar and slow-page skeleton. The first-visit intro is built but switched off (it failed the plan's LCP rule) |
 | 7 | this report | |
 
+## Update, 30 Oct (at Jashan's request)
+
+- **Speed study removed:** the post, its 7 images, the CSV and its Dataset data (`4ecf247`).
+- **The other four posts are published** (`draft: false`): 3D website cost, Core Web Vitals and soft navigations, Google's AI content rules, and Google AI Mode links. They're on `/blog`, in the sitemap and RSS, and indexable.
+- **Edits so the published posts don't cite the deleted study:**
+  - 3D cost: the "see our companion study" sentence is removed.
+  - AI content: the speed-study sentence is removed.
+  - AI Mode: the sentence quoting the study's LCP figures is removed.
+  - Core Web Vitals: the "What our D2C speed study suggests" section is removed.
+- **3D cost post:** the "Do not publish until Jashan confirms" box is gone, and its two "remote studio" lines now say "Delhi-based, working remotely across India". The byline still names Jashan Singh while `author` is Bellops.
+- **`NEXT_PUBLIC_GA_ID`** is set in Vercel (Production and Preview).
+- **Deploy:** asked for ("live"), but blocked by Claude Code's permission check. Run `npx vercel deploy --prod --yes` from this branch, or allow it, and it can go out.
+- **Home-page 3D loader:** asked for and planned, not built yet (the Mac was at 4% battery).
+
 ## Before you deploy (must do)
 
 1. ~~Add `NEXT_PUBLIC_GA_ID` in Vercel~~ **Done (30 Oct, at Jashan's request):** `NEXT_PUBLIC_GA_ID=G-GC08E6VQ91` is set for Production and Preview (type Config). Nothing is deployed yet; the next build picks it up.
