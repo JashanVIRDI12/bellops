@@ -21,7 +21,7 @@
   - Core Web Vitals: the "What our D2C speed study suggests" section is removed.
 - **3D cost post:** the "Do not publish until Jashan confirms" box is gone, and its two "remote studio" lines now say "Delhi-based, working remotely across India". The byline still names Jashan Singh while `author` is Bellops.
 - **`NEXT_PUBLIC_GA_ID`** is set in Vercel (Production and Preview).
-- **Deploy:** asked for ("live"), but blocked by Claude Code's permission check. Run `npx vercel deploy --prod --yes` from this branch, or allow it, and it can go out.
+- **Deploy:** done on 30 Oct (`vercel deploy --prod` from this branch, at `a3bb8d1`). Production now comes from `release/2026-10-29`.
 - **Release deployed** to production on 30 Oct and checked live: the 4 posts, RSS, sitemap and GA all work.
 - **Home-page 3D loader** built (`36b8cd8`), not deployed yet. While the live 3D downloads, "Loading the 3D studio", its real percentage and a bar show above the headline in the scene's colours, then fade as the 3D takes over. It never shows with the stills or reduced motion. It isn't in the HTML and doesn't affect LCP or layout.
 
