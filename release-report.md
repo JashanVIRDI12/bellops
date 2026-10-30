@@ -12,7 +12,7 @@
 
 ## Before you deploy (must do)
 
-1. **Add `NEXT_PUBLIC_GA_ID=G-GC08E6VQ91` in Vercel**, for both Production and Preview. No GA variable existed anywhere (repo, `.env*`, or Vercel; `vercel env ls` shows only SUPABASE_SECRET_KEY, ADMIN_PASSWORD, SUPABASE_URL). `.vercelignore` keeps `.env.local` off Vercel, so **a deploy without this variable has no Google Analytics at all**. The build log would warn, but nothing would fail. I didn't add it myself, per your rules.
+1. ~~Add `NEXT_PUBLIC_GA_ID` in Vercel~~ **Done (30 Oct, at Jashan's request):** `NEXT_PUBLIC_GA_ID=G-GC08E6VQ91` is set for Production and Preview (type Config). Nothing is deployed yet; the next build picks it up.
 2. Keep the five posts as drafts until the content fixes in "Open items" are done.
 
 ## Open items for Jashan
@@ -211,7 +211,7 @@ Done (verified), from 74f4e2c. Changed in step 2 so its events wait for gtag.
 - **JSON-LD:** validated offline against the schema.org vocabulary (every type, and every property on its type) and Google's required fields for Article, FAQPage, BreadcrumbList and Dataset. Pages checked: `/`, `/blog`, `/blog/indian-d2c-website-speed-study`, `/blog/3d-website-cost-india`, `/blog/core-web-vitals-soft-navigations-2026`. Result: no problems. (The linter does catch planted mistakes, so the clean result means something.) Google's Rich Results Test needs a public URL, so run it once a preview deployment exists.
 - `curl -s localhost:3000/rss.xml | xmllint --noout -`: passes. The sitemap has no drafts.
 - Files changed in the release (excluding `content/blog` and `public/blog`): `.env.example`, `.gitignore`, `.prettierignore`, `README.md`, `app/globals.css`, `app/layout.tsx`, `app/rss.xml/route.ts` (moved from `app/(site)/blog/rss.xml`), `app/(site)/{3d-website-design,about,blog,blog/[slug],contact,services,work,work/[slug]}/page.tsx`, `components/analytics/GoogleAnalytics.tsx`, `components/blog/PostImage.tsx`, `components/experience/{Chapters,ContactDock}.tsx`, `components/site/{DraftPage,PageSkeleton,RouteProgress,Splash}.tsx`, `lib/analytics/ga.ts`, `lib/blog-index.json`, `lib/clients.ts`, `lib/content.ts`, `lib/mdx/{post-datasets,post-outline}.mjs`, `lib/seo.ts`, `lib/services.ts`, `lib/sitemap-dates.json`, `lib/track.ts`, `mdx-components.tsx`, `next.config.ts`, `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `scripts/blog-index.mjs`. Added: five posts in `content/blog/` and 21 files in `public/blog/`.
-- GA4 env var used: **`NEXT_PUBLIC_GA_ID`**, new, set to `G-GC08E6VQ91` in `.env.example` and `.env.local`. Not yet in Vercel.
+- GA4 env var used: **`NEXT_PUBLIC_GA_ID`**, new, set to `G-GC08E6VQ91` in `.env.example`, `.env.local` and Vercel (Production and Preview).
 
 ## Lighthouse mobile (Step 0 and Step 6)
 
