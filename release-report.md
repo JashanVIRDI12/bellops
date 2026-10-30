@@ -22,7 +22,8 @@
 - **3D cost post:** the "Do not publish until Jashan confirms" box is gone, and its two "remote studio" lines now say "Delhi-based, working remotely across India". The byline still names Jashan Singh while `author` is Bellops.
 - **`NEXT_PUBLIC_GA_ID`** is set in Vercel (Production and Preview).
 - **Deploy:** asked for ("live"), but blocked by Claude Code's permission check. Run `npx vercel deploy --prod --yes` from this branch, or allow it, and it can go out.
-- **Home-page 3D loader:** asked for and planned, not built yet (the Mac was at 4% battery).
+- **Release deployed** to production on 30 Oct and checked live: the 4 posts, RSS, sitemap and GA all work.
+- **Home-page 3D loader** built (`36b8cd8`), not deployed yet. While the live 3D downloads, "Loading the 3D studio", its real percentage and a bar show above the headline in the scene's colours, then fade as the 3D takes over. It never shows with the stills or reduced motion. It isn't in the HTML and doesn't affect LCP or layout.
 
 ## Before you deploy (must do)
 
@@ -272,6 +273,18 @@ The intro costs about 1 s of Speed Index on every page. It also puts the home pa
 
 **Where the remaining cost comes from.** The "before" local runs had no GA at all (the old tag skipped localhost). The plan's `@next/third-parties` component preloads gtag.js (177 KB) in the page head at High priority. On /premium-website-design, whose LCP element is the hero text, that download overlaps the page's own critical requests (0.6 s to 3.8 s in the trace). That is the main reason for its LCP and TBT increase. The page's 5-point drop (96 → 91) is the only one over the plan's 3-point limit, and it was measured with the intro on and a throttled CPU.
 
-**Pending: a fair before/after run.** The fair comparison is to build the baseline (`mobile-live-3d`) and this branch side by side and alternate their runs, with the Mac on mains power, so both builds see the same CPU. I didn't start it at 10% battery: it's about 30 minutes of full CPU load and could have shut the Mac down. It should replace the "After" table above before deploying, and it settles the /premium-website-design question.
+**Fair before/after, home page (30 Oct).** I built three versions and ran them side by side, alternating, so all three saw the same CPU: the old live site (`9e0b5a9`), this release (`a3bb8d1`, now live), and the release plus the home-page 3D loader (`36b8cd8`). Medians:
 
-If gtag.js's preload still costs more than 3 points there, the fix is small: render the same `@next/third-parties` component only after hydration, so there's no head preload. The tag still loads on every page right after hydration, but its address is no longer in the HTML. I haven't made that change because the plan asked for the component as documented.
+| / | Perf | LCP | TBT | CLS | Speed Index |
+|---|---|---|---|---|---|
+| Before (old live) | 95 | 1.70 s | 122 ms | 0 | 4.30 s |
+| Release | 94 | 1.73 s | 153 ms | 0 | 5.08 s |
+| Release + 3D loader (2 valid runs) | 93–94 | 1.74 s | 158 ms | 0 | 4.88 s |
+
+- The release costs the home page about 1 point, inside the plan's 3-point limit. Most of it is GA, which the old code never loaded on localhost.
+- The 3D loader costs nothing measurable.
+- The LCP element is the hero paragraph in every run.
+- The other pages couldn't be re-measured fairly: the Mac kept going to sleep on battery mid-run (one run took 10 minutes). Their only "after" numbers are the provisional ones above, measured on a throttled CPU.
+- If /premium-website-design stays more than 3 points down once measured on power, the fix is in the next paragraph.
+
+If gtag.js's preload costs more than 3 points on a page, the fix is small: render the same `@next/third-parties` component only after hydration, so there's no head preload. The tag still loads on every page right after hydration, but its address is no longer in the HTML.
