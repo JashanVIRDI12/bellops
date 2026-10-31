@@ -51,3 +51,13 @@ next-env.d.ts
 
 # Release packages: copied into place, not kept in the repo.
 /release-2026-10-29/
+
+# Working notes and task lists: kept locally, not in the repo.
+/3d-website-design.md
+/AB_TEST_DOCK.md
+/CLAUDE_TASKS.md
+/CLAUDE_TASKS_BLOG.md
+/CLAUDE_TASKS_R3.md
+/blog-3d-website-cost-india.md
+/homepage-rewrite.md
+/live-review-2026-10-27.md
